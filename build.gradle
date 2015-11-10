@@ -1,5 +1,13 @@
 apply plugin: 'java'
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.google.auto.value:auto-value:1.1'
+    compile 'com.squareup.retrofit:converter-jackson:2.0.0-beta2'
+
+    testCompile 'junit:junit:4.12'
 }
