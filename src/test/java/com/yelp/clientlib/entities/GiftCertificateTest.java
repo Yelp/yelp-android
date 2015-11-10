@@ -1,5 +1,7 @@
 package com.yelp.clientlib.entities;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,30 +15,18 @@ public class GiftCertificateTest extends EntityTest {
 
     @Test
     public void testDeserializeFromJson() throws IOException {
-        String giftCertificatesString = this.businessResponseJsonNode
-                .path("gift_certificates").get(0).toString();
+        JsonNode giftCertificatesNode = this.businessResponseJsonNode.path("gift_certificates").get(0);
 
-        try {
-            GiftCertificate giftCertificate = this.objectMapper.readValue(
-                    giftCertificatesString,
-                    GiftCertificate.class
-            );
+        GiftCertificate giftCertificate = this.objectMapper.readValue(
+                giftCertificatesNode.toString(),
+                GiftCertificate.class
+        );
 
-            Assert.assertEquals("ZZy5EwrI3wyHw8y54jZruA", giftCertificate.id());
-            Assert.assertEquals(
-                    "http://www.yelp.com/gift-certificates/some-donut-place-pasadena",
-                    giftCertificate.url()
-            );
-            Assert.assertEquals(
-                    "http://s3-media4.ak.yelpcdn.com/bphoto/Hv5vsWpqeaUKepr9nffJnw/m.jpg",
-                    giftCertificate.imageUrl()
-            );
-            Assert.assertEquals("USD", giftCertificate.currencyCode());
-            Assert.assertEquals("CREDIT", giftCertificate.unusedBalances());
-            Assert.assertTrue(giftCertificate.options().get(0) instanceof GiftCertificateOption);
-
-        } catch (IOException e) {
-            Assert.fail(e.toString());
-        }
+        Assert.assertEquals(giftCertificatesNode.path("id").textValue(), giftCertificate.id());
+        Assert.assertEquals(giftCertificatesNode.path("url").textValue(), giftCertificate.url());
+        Assert.assertEquals(giftCertificatesNode.path("image_url").textValue(), giftCertificate.imageUrl());
+        Assert.assertEquals(giftCertificatesNode.path("currency_code").textValue(), giftCertificate.currencyCode());
+        Assert.assertEquals(giftCertificatesNode.path("unused_balances").textValue(), giftCertificate.unusedBalances());
+        Assert.assertNotNull(giftCertificate.options().get(0));
     }
 }
