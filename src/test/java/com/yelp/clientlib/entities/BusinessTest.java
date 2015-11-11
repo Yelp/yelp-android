@@ -30,6 +30,10 @@ public class BusinessTest extends EntityTest {
         Assert.assertEquals(businessNode.path("name").textValue(), business.name());
         Assert.assertEquals(businessNode.path("phone").textValue(), business.phone());
         Assert.assertEquals(businessNode.path("reservation_url").textValue(), business.reservationUrl());
+        Assert.assertEquals(new Double(businessNode.path("rating").asDouble()), business.rating());
+        Assert.assertEquals(businessNode.path("rating_img_url").textValue(), business.ratingImgUrl());
+        Assert.assertEquals(businessNode.path("rating_img_url_large").textValue(), business.ratingImgUrlLarge());
+        Assert.assertEquals(businessNode.path("rating_img_url_small").textValue(), business.ratingImgUrlSmall());
         Assert.assertEquals(new Integer(businessNode.path("review_count").asInt()), business.reviewCount());
         Assert.assertEquals(businessNode.path("snippet_image_url").textValue(), business.snippetImageUrl());
         Assert.assertEquals(businessNode.path("snippet_text").textValue(), business.snippetText());
@@ -38,7 +42,6 @@ public class BusinessTest extends EntityTest {
         Assert.assertNotNull(business.deals());
         Assert.assertNotNull(business.giftCertificates());
         Assert.assertNotNull(business.location());
-        Assert.assertNotNull(business.rating());
         Assert.assertNotNull(business.reviews());
     }
 }

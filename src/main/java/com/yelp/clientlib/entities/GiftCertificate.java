@@ -1,8 +1,8 @@
 package com.yelp.clientlib.entities;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.yelp.clientlib.annotation.Nullable;
 
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 @AutoValue
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonDeserialize(builder = AutoValue_GiftCertificate.Builder.class)
 public abstract class GiftCertificate implements Serializable {
 
     @Nullable
@@ -31,38 +32,25 @@ public abstract class GiftCertificate implements Serializable {
     @Nullable
     public abstract ArrayList<GiftCertificateOption> options();
 
-    @JsonCreator
-    public static GiftCertificate create(
-            @JsonProperty("currency_code") String currencyCode,
-            @JsonProperty("id") String id,
-            @JsonProperty("image_url") String imageUrl,
-            @JsonProperty("unused_balances") String unusedBalances,
-            @JsonProperty("url") String url,
-            @JsonProperty("options") ArrayList<GiftCertificateOption> options
-    ) {
-        return builder()
-                .currencyCode(currencyCode)
-                .id(id)
-                .imageUrl(imageUrl)
-                .unusedBalances(unusedBalances)
-                .url(url)
-                .options(options)
-                .build();
-    }
-
     @AutoValue.Builder
     public abstract static class Builder {
 
+        @JsonProperty("currency_code")
         public abstract Builder currencyCode(String currencyCode);
 
+        @JsonProperty("id")
         public abstract Builder id(String id);
 
+        @JsonProperty("image_url")
         public abstract Builder imageUrl(String imageUrl);
 
+        @JsonProperty("unused_balances")
         public abstract Builder unusedBalances(String unusedBalanced);
 
+        @JsonProperty("url")
         public abstract Builder url(String url);
 
+        @JsonProperty("options")
         public abstract Builder options(ArrayList<GiftCertificateOption> options);
 
         public abstract GiftCertificate build();

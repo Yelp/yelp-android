@@ -1,13 +1,14 @@
 package com.yelp.clientlib.entities;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import com.yelp.clientlib.annotation.Nullable;
 
 @AutoValue
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonDeserialize(builder = AutoValue_Region.Builder.class)
 public abstract class Region {
 
     @Nullable
@@ -16,21 +17,12 @@ public abstract class Region {
     @Nullable
     public abstract Span span();
 
-    @JsonCreator
-    public static Region create(
-            @JsonProperty("center") Coordinate center,
-            @JsonProperty("span") Span span
-    ) {
-        return builder()
-                .center(center)
-                .span(span)
-                .build();
-    }
-
     @AutoValue.Builder
     public abstract static class Builder {
+        @JsonProperty("center")
         public abstract Builder center(Coordinate center);
 
+        @JsonProperty("span")
         public abstract Builder span(Span span);
 
         public abstract Region build();
