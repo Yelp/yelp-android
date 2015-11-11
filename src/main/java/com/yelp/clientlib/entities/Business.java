@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public abstract class Business implements Serializable {
 
     @Nullable
-    public abstract ArrayList<ArrayList<String>> categories();
+    public abstract ArrayList<Category> categories();
 
     @Nullable
     public abstract String displayPhone();
@@ -96,7 +96,7 @@ public abstract class Business implements Serializable {
     public abstract static class Builder {
 
         @JsonProperty("categories")
-        public abstract Builder categories(ArrayList<ArrayList<String>> categories);
+        public abstract Builder categories(ArrayList<Category> categories);
 
         @JsonProperty("display_phone")
         public abstract Builder displayPhone(String displayPhone);
