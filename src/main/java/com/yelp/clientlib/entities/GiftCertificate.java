@@ -1,8 +1,10 @@
 package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
 import com.yelp.clientlib.annotation.Nullable;
 
@@ -33,24 +35,20 @@ public abstract class GiftCertificate implements Serializable {
     public abstract ArrayList<GiftCertificateOption> options();
 
     @AutoValue.Builder
+    @JsonPOJOBuilder(withPrefix = "")
+    @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
     public abstract static class Builder {
 
-        @JsonProperty("currency_code")
         public abstract Builder currencyCode(String currencyCode);
 
-        @JsonProperty("id")
         public abstract Builder id(String id);
 
-        @JsonProperty("image_url")
         public abstract Builder imageUrl(String imageUrl);
 
-        @JsonProperty("unused_balances")
         public abstract Builder unusedBalances(String unusedBalanced);
 
-        @JsonProperty("url")
         public abstract Builder url(String url);
 
-        @JsonProperty("options")
         public abstract Builder options(ArrayList<GiftCertificateOption> options);
 
         public abstract GiftCertificate build();

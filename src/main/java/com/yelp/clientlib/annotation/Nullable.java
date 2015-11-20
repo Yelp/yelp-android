@@ -1,5 +1,9 @@
 package com.yelp.clientlib.annotation;
 
+/**
+ * Indicate the attribute could be deserialized into null.
+ */
+
 public @interface Nullable {
-    // TODO: Add description about why we need this empty Nullable interface.
+
 }

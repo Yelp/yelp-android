@@ -1,8 +1,10 @@
 package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
 import com.yelp.clientlib.annotation.Nullable;
 
@@ -18,11 +20,12 @@ public abstract class Coordinate {
     public abstract Double longitude();
 
     @AutoValue.Builder
+    @JsonPOJOBuilder(withPrefix = "")
+    @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
     public abstract static class Builder {
-        @JsonProperty("latitude")
+
         public abstract Builder latitude(Double latitude);
 
-        @JsonProperty("longitude")
         public abstract Builder longitude(Double longitude);
 
         public abstract Coordinate build();

@@ -46,9 +46,9 @@ class CategoryDeserializer extends JsonDeserializer<Category> {
     */
 
     @Override
-    public Category deserialize(JsonParser jp, DeserializationContext ctxt)
+    public Category deserialize(JsonParser jsonParser, DeserializationContext context)
             throws IOException, JsonProcessingException {
-        JsonNode node = jp.getCodec().readTree(jp);
+        JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         String name = node.get(0).textValue();
         String alias = node.get(1).textValue();
 

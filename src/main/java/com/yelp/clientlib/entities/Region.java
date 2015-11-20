@@ -1,8 +1,10 @@
 package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
 import com.yelp.clientlib.annotation.Nullable;
 
@@ -18,11 +20,12 @@ public abstract class Region {
     public abstract Span span();
 
     @AutoValue.Builder
+    @JsonPOJOBuilder(withPrefix = "")
+    @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
     public abstract static class Builder {
-        @JsonProperty("center")
+
         public abstract Builder center(Coordinate center);
 
-        @JsonProperty("span")
         public abstract Builder span(Span span);
 
         public abstract Region build();

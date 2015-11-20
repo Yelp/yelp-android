@@ -1,8 +1,10 @@
 package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
 import com.yelp.clientlib.annotation.Nullable;
 
@@ -21,14 +23,14 @@ public abstract class User {
     public abstract String name();
 
     @AutoValue.Builder
+    @JsonPOJOBuilder(withPrefix = "")
+    @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
     public abstract static class Builder {
-        @JsonProperty("id")
+
         public abstract Builder id(String id);
 
-        @JsonProperty("image_url")
         public abstract Builder imageUrl(String imageUrl);
 
-        @JsonProperty("name")
         public abstract Builder name(String name);
 
         public abstract User build();

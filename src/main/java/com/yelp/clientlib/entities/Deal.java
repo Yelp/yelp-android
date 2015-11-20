@@ -1,8 +1,10 @@
 package com.yelp.clientlib.entities;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
 import com.yelp.clientlib.annotation.Nullable;
 
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 
 @AutoValue
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonDeserialize(builder = AutoValue_Deal.Builder.class)
 public abstract class Deal implements Serializable {
 
     @Nullable
@@ -49,38 +52,9 @@ public abstract class Deal implements Serializable {
     @Nullable
     public abstract String whatYouGet();
 
-    @JsonCreator
-    public static Deal create(
-            @JsonProperty("additional_restrictions") String additionalRestrictions,
-            @JsonProperty("currency_code") String currencyCode,
-            @JsonProperty("id") String id,
-            @JsonProperty("image_url") String imageUrl,
-            @JsonProperty("important_restriction") String importantRestriction,
-            @JsonProperty("is_popular") Boolean isPopular,
-            @JsonProperty("options") ArrayList<DealOption> options,
-            @JsonProperty("time_end") Long timeEnd,
-            @JsonProperty("time_start") Long timeStart,
-            @JsonProperty("title") String title,
-            @JsonProperty("url") String url,
-            @JsonProperty("what_you_get") String whatYouGet
-    ) {
-        return builder()
-                .additionalRestrictions(additionalRestrictions)
-                .currencyCode(currencyCode)
-                .id(id)
-                .imageUrl(imageUrl)
-                .importantRestriction(importantRestriction)
-                .isPopular(isPopular)
-                .options(options)
-                .timeEnd(timeEnd)
-                .timeStart(timeStart)
-                .title(title)
-                .url(url)
-                .whatYouGet(whatYouGet)
-                .build();
-    }
-
     @AutoValue.Builder
+    @JsonPOJOBuilder(withPrefix = "")
+    @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
     public abstract static class Builder {
         public abstract Builder additionalRestrictions(String additionalRestrictions);
 

@@ -1,8 +1,10 @@
 package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
 import com.yelp.clientlib.annotation.Nullable;
 
@@ -36,30 +38,24 @@ public abstract class DealOption {
     public abstract String title();
 
     @AutoValue.Builder
+    @JsonPOJOBuilder(withPrefix = "")
+    @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
     public abstract static class Builder {
 
-        @JsonProperty("formatted_original_price")
         public abstract Builder formattedOriginalPrice(String formattedOriginalPrice);
 
-        @JsonProperty("formatted_price")
         public abstract Builder formattedPrice(String formattedPrice);
 
-        @JsonProperty("is_quantity_limited")
         public abstract Builder isQuantityLimited(Boolean isQuantityLimited);
 
-        @JsonProperty("original_price")
         public abstract Builder originalPrice(Integer originalPrice);
 
-        @JsonProperty("price")
         public abstract Builder price(Integer price);
 
-        @JsonProperty("purchase_url")
         public abstract Builder purchaseUrl(String purchaseUrl);
 
-        @JsonProperty("remaining_count")
         public abstract Builder remainingCount(Integer remainingCount);
 
-        @JsonProperty("title")
         public abstract Builder title(String title);
 
         public abstract DealOption build();

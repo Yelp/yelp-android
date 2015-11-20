@@ -1,8 +1,10 @@
 package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
 import com.yelp.clientlib.annotation.Nullable;
 
@@ -44,35 +46,28 @@ public abstract class Location {
     public abstract String stateCode();
 
     @AutoValue.Builder
+    @JsonPOJOBuilder(withPrefix = "")
+    @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
     public abstract static class Builder {
-        @JsonProperty("address")
+
         public abstract Builder address(ArrayList<String> address);
 
-        @JsonProperty("city")
         public abstract Builder city(String city);
 
-        @JsonProperty("coordinate")
         public abstract Builder coordinate(Coordinate coordinate);
 
-        @JsonProperty("country_code")
         public abstract Builder countryCode(String countryCode);
 
-        @JsonProperty("cross_streets")
         public abstract Builder crossStreets(String crossStreets);
 
-        @JsonProperty("display_address")
         public abstract Builder displayAddress(ArrayList<String> displayAddress);
 
-        @JsonProperty("geo_accuracy")
         public abstract Builder geoAccuracy(Double geoAccuracy);
 
-        @JsonProperty("neighborhoods")
         public abstract Builder neighborhoods(ArrayList<String> neighborhoods);
 
-        @JsonProperty("postal_code")
         public abstract Builder postalCode(String postalCode);
 
-        @JsonProperty("state_code")
         public abstract Builder stateCode(String stateCode);
 
         public abstract Location build();

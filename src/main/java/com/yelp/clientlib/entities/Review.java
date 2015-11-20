@@ -1,8 +1,10 @@
 package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
 import com.yelp.clientlib.annotation.Nullable;
 
@@ -36,30 +38,24 @@ public abstract class Review {
     public abstract User user();
 
     @AutoValue.Builder
+    @JsonPOJOBuilder(withPrefix = "")
+    @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
     public abstract static class Builder {
 
-        @JsonProperty("excerpt")
         public abstract Builder excerpt(String excerpt);
 
-        @JsonProperty("id")
         public abstract Builder id(String id);
 
-        @JsonProperty("rating")
         public abstract Builder rating(Double rating);
 
-        @JsonProperty("rating_image_url")
         public abstract Builder ratingImageUrl(String ratingImageUrl);
 
-        @JsonProperty("rating_image_large_url")
         public abstract Builder ratingImageLargeUrl(String ratingImageLargeUrl);
 
-        @JsonProperty("rating_image_small_url")
         public abstract Builder ratingImageSmallUrl(String ratingImageSmallUrl);
 
-        @JsonProperty("time_created")
         public abstract Builder timeCreated(Long timeCreated);
 
-        @JsonProperty("user")
         public abstract Builder user(User user);
 
         public abstract Review build();
