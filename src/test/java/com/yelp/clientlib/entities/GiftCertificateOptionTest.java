@@ -7,18 +7,14 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class GiftCertificateOptionTest extends EntityTest {
-
-    public GiftCertificateOptionTest() throws IOException {
-        super();
-    }
+public class GiftCertificateOptionTest {
 
     @Test
     public void testDeserializeFromJson() throws IOException {
-        JsonNode giftCertificateOptionNode = this.businessResponseJsonNode
+        JsonNode giftCertificateOptionNode = JsonTestUtils.getBusinessResponseJsonNode()
                 .path("gift_certificates").get(0).path("options").get(0);
 
-        GiftCertificateOption giftCertificateOption = this.objectMapper.readValue(
+        GiftCertificateOption giftCertificateOption = JsonTestUtils.deserializeJson(
                 giftCertificateOptionNode.toString(),
                 GiftCertificateOption.class
         );

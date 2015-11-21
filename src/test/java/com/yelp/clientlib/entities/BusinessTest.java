@@ -7,17 +7,13 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class BusinessTest extends EntityTest {
-    public BusinessTest() throws IOException {
-        super();
-    }
+public class BusinessTest {
 
     @Test
     public void testDeserializeFromJson() throws IOException {
-        JsonNode businessNode = this.businessResponseJsonNode;
-        Business business = this.objectMapper.readValue(businessNode.toString(), Business.class);
+        JsonNode businessNode = JsonTestUtils.getBusinessResponseJsonNode();
+        Business business = JsonTestUtils.deserializeJson(businessNode.toString(), Business.class);
 
-        Assert.assertNotNull(business.categories());
         Assert.assertEquals(businessNode.path("display_phone").textValue(), business.displayPhone());
         Assert.assertEquals(businessNode.path("eat24_url").textValue(), business.eat24Url());
         Assert.assertEquals(businessNode.path("id").textValue(), business.id());
@@ -39,9 +35,20 @@ public class BusinessTest extends EntityTest {
         Assert.assertEquals(businessNode.path("snippet_text").textValue(), business.snippetText());
         Assert.assertEquals(businessNode.path("url").textValue(), business.url());
 
+        // The following objects are tested in their own tests.
+        Assert.assertNotNull(business.categories());
         Assert.assertNotNull(business.deals());
         Assert.assertNotNull(business.giftCertificates());
         Assert.assertNotNull(business.location());
         Assert.assertNotNull(business.reviews());
+
+    }
+
+    @Test
+    public void testDeserializeNullableAttributes() throws IOException {
+        String businessJsonString = "{\"name\":\"Yelp\"}";
+        Business business = JsonTestUtils.deserializeJson(businessJsonString, Business.class);
+
+        Assert.assertEquals("Yelp", business.name());
     }
 }

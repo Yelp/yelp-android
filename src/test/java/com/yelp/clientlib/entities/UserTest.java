@@ -1,27 +1,21 @@
 package com.yelp.clientlib.entities;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 
-public class UserTest extends EntityTest {
-
-    public UserTest() throws IOException {
-        super();
-    }
+public class UserTest {
 
     @Test
     public void testDeserializeFromJson() throws IOException {
-        String userString = "{" +
-                "\"id\": \"Bogus_id\"," +
-                "\"image_url\": \"http://yelp.bogus.image.jpg\"," +
-                "\"name\": \"Darwin S.\"" +
-                "}";
-        User user = this.objectMapper.readValue(userString, User.class);
+        JsonNode userNode = JsonTestUtils.getBusinessResponseJsonNode().path("reviews").get(0).path("user");
+        User user = JsonTestUtils.deserializeJson(userNode.toString(), User.class);
 
-        Assert.assertEquals("Bogus_id", user.id());
-        Assert.assertEquals("http://yelp.bogus.image.jpg", user.imageUrl());
-        Assert.assertEquals("Darwin S.", user.name());
+        Assert.assertEquals(userNode.path("id").textValue(), user.id());
+        Assert.assertEquals(userNode.path("image_url").textValue(), user.imageUrl());
+        Assert.assertEquals(userNode.path("name").textValue(), user.name());
     }
 }

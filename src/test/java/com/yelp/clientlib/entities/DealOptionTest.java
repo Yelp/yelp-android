@@ -7,18 +7,13 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class DealOptionTest extends EntityTest {
-
-    public DealOptionTest() throws IOException {
-        super();
-    }
+public class DealOptionTest {
 
     @Test
     public void testDeserializeFromJson() throws IOException {
-        JsonNode dealOptionNode = this.businessResponseJsonNode.path("deals").get(0).path("options").get(0);
-        DealOption dealOption = this.objectMapper.readValue(dealOptionNode.toString(),
-                DealOption.class
-        );
+        JsonNode dealOptionNode = JsonTestUtils.getBusinessResponseJsonNode()
+                .path("deals").get(0).path("options").get(0);
+        DealOption dealOption = JsonTestUtils.deserializeJson(dealOptionNode.toString(), DealOption.class);
 
         Assert.assertEquals(
                 dealOptionNode.path("formatted_original_price").textValue(),

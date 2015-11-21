@@ -7,16 +7,12 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class LocationTest extends EntityTest {
-
-    public LocationTest() throws IOException {
-        super();
-    }
+public class LocationTest {
 
     @Test
     public void testDeserializeFromJson() throws IOException {
-        JsonNode locationNode = this.businessResponseJsonNode.path("location");
-        Location location = this.objectMapper.readValue(locationNode.toString(), Location.class);
+        JsonNode locationNode = JsonTestUtils.getBusinessResponseJsonNode().path("location");
+        Location location = JsonTestUtils.deserializeJson(locationNode.toString(), Location.class);
 
         Assert.assertEquals(1, location.address().size());
         Assert.assertEquals(locationNode.path("city").textValue(), location.city());

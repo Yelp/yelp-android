@@ -7,17 +7,13 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class GiftCertificateTest extends EntityTest {
-
-    public GiftCertificateTest() throws IOException {
-        super();
-    }
+public class GiftCertificateTest {
 
     @Test
     public void testDeserializeFromJson() throws IOException {
-        JsonNode giftCertificatesNode = this.businessResponseJsonNode.path("gift_certificates").get(0);
+        JsonNode giftCertificatesNode = JsonTestUtils.getBusinessResponseJsonNode().path("gift_certificates").get(0);
 
-        GiftCertificate giftCertificate = this.objectMapper.readValue(
+        GiftCertificate giftCertificate = JsonTestUtils.deserializeJson(
                 giftCertificatesNode.toString(),
                 GiftCertificate.class
         );
@@ -27,6 +23,8 @@ public class GiftCertificateTest extends EntityTest {
         Assert.assertEquals(giftCertificatesNode.path("image_url").textValue(), giftCertificate.imageUrl());
         Assert.assertEquals(giftCertificatesNode.path("currency_code").textValue(), giftCertificate.currencyCode());
         Assert.assertEquals(giftCertificatesNode.path("unused_balances").textValue(), giftCertificate.unusedBalances());
+
+        // GiftCertificateOption is tested in it's own tests.
         Assert.assertNotNull(giftCertificate.options().get(0));
     }
 }

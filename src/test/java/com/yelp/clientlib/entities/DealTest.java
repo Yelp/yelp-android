@@ -7,16 +7,12 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class DealTest extends EntityTest {
-
-    public DealTest() throws IOException {
-        super();
-    }
+public class DealTest {
 
     @Test
     public void testDeserializeFromJson() throws IOException {
-        JsonNode dealNode = this.businessResponseJsonNode.path("deals").get(0);
-        Deal deal = this.objectMapper.readValue(dealNode.toString(), Deal.class);
+        JsonNode dealNode = JsonTestUtils.getBusinessResponseJsonNode().path("deals").get(0);
+        Deal deal = JsonTestUtils.deserializeJson(dealNode.toString(), Deal.class);
 
         Assert.assertNull(deal.additionalRestrictions());
         Assert.assertEquals(dealNode.path("currency_code").textValue(), deal.currencyCode());
