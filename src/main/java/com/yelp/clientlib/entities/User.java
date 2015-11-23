@@ -13,7 +13,6 @@ import com.yelp.clientlib.annotation.Nullable;
 @JsonDeserialize(builder = AutoValue_User.Builder.class)
 public abstract class User {
 
-    @Nullable
     public abstract String id();
 
     @Nullable

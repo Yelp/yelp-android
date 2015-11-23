@@ -26,4 +26,9 @@ public class ReviewTest {
         // User is tested in it's own tests.
         Assert.assertNotNull(review.user());
     }
+
+    @Test(expected = IllegalStateException.class)
+    public void testBuildFailedWithNoId() throws IOException {
+        Review.builder().id(null).build();
+    }
 }

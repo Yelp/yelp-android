@@ -18,4 +18,9 @@ public class UserTest {
         Assert.assertEquals(userNode.path("image_url").textValue(), user.imageUrl());
         Assert.assertEquals(userNode.path("name").textValue(), user.name());
     }
+
+    @Test(expected = IllegalStateException.class)
+    public void testBuildFailedWithNoId() throws IOException {
+        User.builder().id(null).build();
+    }
 }

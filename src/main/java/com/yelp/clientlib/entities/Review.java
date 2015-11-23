@@ -13,11 +13,10 @@ import com.yelp.clientlib.annotation.Nullable;
 @JsonDeserialize(builder = AutoValue_Review.Builder.class)
 public abstract class Review {
 
-    @Nullable
-    public abstract String excerpt();
+    public abstract String id();
 
     @Nullable
-    public abstract String id();
+    public abstract String excerpt();
 
     @Nullable
     public abstract Double rating();

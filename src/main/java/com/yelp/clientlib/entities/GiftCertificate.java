@@ -16,11 +16,10 @@ import java.util.ArrayList;
 @JsonDeserialize(builder = AutoValue_GiftCertificate.Builder.class)
 public abstract class GiftCertificate implements Serializable {
 
-    @Nullable
-    public abstract String currencyCode();
+    public abstract String id();
 
     @Nullable
-    public abstract String id();
+    public abstract String currencyCode();
 
     @Nullable
     public abstract String imageUrl();

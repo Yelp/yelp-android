@@ -1,5 +1,6 @@
 package com.yelp.clientlib.entities;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import org.junit.Assert;
@@ -45,10 +46,32 @@ public class BusinessTest {
     }
 
     @Test
-    public void testDeserializeNullableAttributes() throws IOException {
-        String businessJsonString = "{\"name\":\"Yelp\"}";
+    public void testDeserializationWithMissingNullableAttribute() throws IOException {
+        String businessJsonString = "{\"name\":\"Yelp\", \"id\":\"yelp-san-francisco\"}";
         Business business = JsonTestUtils.deserializeJson(businessJsonString, Business.class);
-
         Assert.assertEquals("Yelp", business.name());
+        Assert.assertEquals("yelp-san-francisco", business.id());
+        Assert.assertNull(business.displayPhone());
+    }
+
+    @Test(expected = JsonMappingException.class)
+    public void testDeserializationFailedWithMissingAttributes() throws IOException {
+        String businessJsonString = "{\"name\":\"Yelp\"}";
+        JsonTestUtils.deserializeJson(businessJsonString, Business.class);
+    }
+
+    @Test
+    public void testBuildWithNullableAttributesNotSet() throws IOException {
+        Business.builder().name("Yelp").id("yelp-san-francisco").build();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testBuildFailedWithMissingId() throws IOException {
+        Business.builder().name("Yelp").build();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testBuildFailedWithMissingName() throws IOException {
+        Business.builder().id("yelp-san-francisco").build();
     }
 }

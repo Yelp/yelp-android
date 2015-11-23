@@ -16,6 +16,10 @@ import java.util.ArrayList;
 @JsonDeserialize(builder = AutoValue_Business.Builder.class)
 public abstract class Business implements Serializable {
 
+    public abstract String id();
+
+    public abstract String name();
+
     @Nullable
     public abstract ArrayList<Category> categories();
 
@@ -27,9 +31,6 @@ public abstract class Business implements Serializable {
 
     @Nullable
     public abstract String eat24Url();
-
-    @Nullable
-    public abstract String id();
 
     @Nullable
     public abstract String imageUrl();
@@ -48,9 +49,6 @@ public abstract class Business implements Serializable {
 
     @Nullable
     public abstract String mobileUrl();
-
-    @Nullable
-    public abstract String name();
 
     @Nullable
     public abstract String phone();

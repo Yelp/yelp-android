@@ -27,4 +27,9 @@ public class GiftCertificateTest {
         // GiftCertificateOption is tested in it's own tests.
         Assert.assertNotNull(giftCertificate.options().get(0));
     }
+
+    @Test(expected = IllegalStateException.class)
+    public void testBuildFailedWithNoId() throws IOException {
+        GiftCertificate.builder().id(null).build();
+    }
 }

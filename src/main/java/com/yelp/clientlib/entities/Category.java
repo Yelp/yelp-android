@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
-import com.yelp.clientlib.annotation.Nullable;
 
 import java.io.IOException;
 
@@ -17,10 +16,8 @@ import java.io.IOException;
 @JsonDeserialize(using = CategoryDeserializer.class)
 public abstract class Category {
 
-    @Nullable
     public abstract String alias();
 
-    @Nullable
     public abstract String name();
 
     @AutoValue.Builder
