@@ -1,7 +1,7 @@
 package com.yelp.clientlib.integration;
 
 import com.yelp.clientlib.connection.YelpAPI;
-import com.yelp.clientlib.connection.YelpClient;
+import com.yelp.clientlib.connection.YelpAPIGenerator;
 import com.yelp.clientlib.entities.SearchResponse;
 
 import org.junit.Assert;
@@ -18,7 +18,7 @@ public class SearchIntegrationTest {
         String term = "food";
         String location = "San+Francisco";
 
-        YelpAPI yelpAPI = YelpClient.createAPIStub(
+        YelpAPI yelpAPI = YelpAPIGenerator.createAPIStub(
                 Credential.getConsumerKey(),
                 Credential.getConsumerSecret(),
                 Credential.getToken(),

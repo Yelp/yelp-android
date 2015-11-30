@@ -1,7 +1,7 @@
 package com.yelp.clientlib.integration;
 
 import com.yelp.clientlib.connection.YelpAPI;
-import com.yelp.clientlib.connection.YelpClient;
+import com.yelp.clientlib.connection.YelpAPIGenerator;
 import com.yelp.clientlib.entities.Business;
 
 import org.junit.Assert;
@@ -17,7 +17,7 @@ public class BusinessIntegrationTest {
     public void testGetBusiness() throws IOException {
         String businessId = "yelp-san-francisco";
 
-        YelpAPI yelpAPI = YelpClient.createAPIStub(
+        YelpAPI yelpAPI = YelpAPIGenerator.createAPIStub(
                 Credential.getConsumerKey(),
                 Credential.getConsumerSecret(),
                 Credential.getToken(),

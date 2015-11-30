@@ -20,11 +20,11 @@ import retrofit.Retrofit;
  * Util class to create YelpAPI as the stub to use Yelp API. This is the entry point to use this clientlib.
  * <p>
  * Example:<br />
- * YelpAPI yelpAPI = YelpClient.createAPIStub(consumerKey, consumerSecret, token, tokenSecret);<br />
+ * YelpAPI yelpAPI = YelpAPIGenerator.createAPIStub(consumerKey, consumerSecret, token, tokenSecret);<br />
  * Response<Business> response = yelpAPI.getBusiness(businessId).execute();
  * </p>
  */
-public class YelpClient {
+public class YelpAPIGenerator {
 
     public static String YELP_API_BASE_URL = "https://api.yelp.com";
 
@@ -45,8 +45,8 @@ public class YelpClient {
 }
 
 /**
- * {@link com.squareup.okhttp.Interceptor} which authorizes each out-going requests. It calculates OAuth1.0a
- * Authorization header and attach to each requests.
+ * {@link com.squareup.okhttp.Interceptor} which authorizes each out-going requests. It intercepts each
+ * request and attaches an OAuth1.0a authorization header to the request.
  */
 class OAuth10aInterceptor implements Interceptor {
 
@@ -83,16 +83,24 @@ class OAuth10aInterceptor implements Interceptor {
         return chain.proceed(authorizedRequest);
     }
 
+    /**
+     * Construct the OAuth parameters by following
+     * <a href="https://tools.ietf.org/html/rfc5849#section-3.1">RFC5849-Section-3.1</a>.
+     */
     private Map<String, String> prepareOAuthParams() {
         Map<String, String> oAuthParams = new HashMap<>();
         oAuthParams.put(OAuthConstants.OAUTH_CONSUMER_KEY_NAME, this.consumerKey);
+        oAuthParams.put(OAuthConstants.OAUTH_NONCE_NAME, Long.toString(new Random(System.nanoTime()).nextLong()));
         oAuthParams.put(OAuthConstants.OAUTH_SIGNATURE_METHOD_NAME, OAuthConstants.OAUTH_SIGNATURE_METHOD_VALUE);
         oAuthParams.put(OAuthConstants.OAUTH_TIMESTAMP_NAME, Long.toString(System.currentTimeMillis() / 1000L));
-        oAuthParams.put(OAuthConstants.OAUTH_NONCE_NAME, Long.toString(new Random(System.nanoTime()).nextLong()));
         oAuthParams.put(OAuthConstants.OAUTH_TOKEN_NAME, this.token);
         return oAuthParams;
     }
 
+    /**
+     * Construct the request parameters to calculate the OAuth signature by following
+     * <a href="https://tools.ietf.org/html/rfc5849#section-3.4.1.3">RFC5849-Section-3.4.1.3</a>.
+     */
     private Map<String, String> prepareRequestParams(Request request, Map<String, String> oAuthParams) {
         Map<String, String> requestParams = new HashMap<>();
         requestParams.putAll(oAuthParams);
@@ -105,6 +113,10 @@ class OAuth10aInterceptor implements Interceptor {
         return requestParams;
     }
 
+    /**
+     * Construct the OAuth header for the request by following
+     * <a href="https://tools.ietf.org/html/rfc5849#section-3.1">RFC5849-Section-3.1</a>.
+     */
     private String getAuthHeaderValue(Map<String, String> oAuthParams) {
         StringBuilder sb = new StringBuilder();
         sb.append("OAuth ");
