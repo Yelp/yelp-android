@@ -14,8 +14,7 @@ public interface YelpAPI {
     Call<Business> getBusiness(@Path("businessId") String businessId);
 
     /**
-     * TODO: This is a temporary endpoint to test Retrofit with query params. It will be refactored in the later
-     * branches.
+     * TODO: This is a temporary endpoint to test Retrofit with query params. It will be refactored in later branches.
      */
     @GET("/v2/search")
     Call<SearchResponse> searchByLocation(@Query("term") String term, @Query("location") String location);
