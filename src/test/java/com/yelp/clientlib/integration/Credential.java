@@ -15,6 +15,9 @@ import org.junit.Assert;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Util class to get test credentials from credentials.yaml file.
+ */
 @AutoValue
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(builder = AutoValue_Credential.Builder.class)
