@@ -17,4 +17,14 @@ public class SpanTest {
         Assert.assertEquals(new Double(spanNode.path("latitude_delta").asDouble()), span.latitudeDelta());
         Assert.assertEquals(new Double(spanNode.path("longitude_delta").asDouble()), span.longitudeDelta());
     }
+
+    @Test(expected = IllegalStateException.class)
+    public void testBuildFailedWithNoLatitudeDelta() throws IOException {
+        Span.builder().longitudeDelta(50.123123).build();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testBuildFailedWithNoLongitude() throws IOException {
+        Span.builder().latitudeDelta(50.123123).build();
+    }
 }

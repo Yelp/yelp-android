@@ -6,17 +6,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
-import com.yelp.clientlib.annotation.Nullable;
 
 @AutoValue
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(builder = AutoValue_Span.Builder.class)
 public abstract class Span {
 
-    @Nullable
     public abstract Double latitudeDelta();
 
-    @Nullable
     public abstract Double longitudeDelta();
 
     @AutoValue.Builder

@@ -18,4 +18,16 @@ public class RegionTest {
         Assert.assertNotNull(region.center());
         Assert.assertNotNull(region.span());
     }
+
+    @Test(expected = IllegalStateException.class)
+    public void testBuildFailedWithNoCenter() throws IOException {
+        Span span = Span.builder().latitudeDelta(50.123).longitudeDelta(50.123).build();
+        Region.builder().span(span).build();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testBuildFailedWithNoSpan() throws IOException {
+        Coordinate center = Coordinate.builder().latitude(123.123123).longitude(123.123123).build();
+        Region.builder().center(center).build();
+    }
 }
