@@ -23,7 +23,7 @@ public class ReviewTest {
         Assert.assertEquals(reviewNode.path("rating_image_url").textValue(), review.ratingImageUrl());
         Assert.assertEquals(new Long(reviewNode.path("time_created").asLong()), review.timeCreated());
 
-        // User is tested in it's own tests.
+        // User is tested in it's own test.
         Assert.assertNotNull(review.user());
     }
 

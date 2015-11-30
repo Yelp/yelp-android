@@ -24,7 +24,7 @@ public class GiftCertificateTest {
         Assert.assertEquals(giftCertificatesNode.path("currency_code").textValue(), giftCertificate.currencyCode());
         Assert.assertEquals(giftCertificatesNode.path("unused_balances").textValue(), giftCertificate.unusedBalances());
 
-        // GiftCertificateOption is tested in it's own tests.
+        // GiftCertificateOption is tested in it's own test.
         Assert.assertNotNull(giftCertificate.options().get(0));
     }
 

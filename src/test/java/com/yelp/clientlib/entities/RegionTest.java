@@ -14,7 +14,7 @@ public class RegionTest {
         JsonNode regionNode = JsonTestUtils.getSearchResponseJsonNode().path("region");
         Region region = JsonTestUtils.deserializeJson(regionNode.toString(), Region.class);
 
-        // Coordinate and Span are tested in it's own tests.
+        // Coordinate and Span are tested in their own tests.
         Assert.assertNotNull(region.center());
         Assert.assertNotNull(region.span());
     }

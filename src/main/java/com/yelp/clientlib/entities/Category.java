@@ -35,13 +35,12 @@ public abstract class Category {
     }
 }
 
+/**
+ * Custom deserializer for Category. The JSON string returned for Category is formatted as an array like
+ * "["Bar", "bar"]" which does not fit into the default Jackson object deserializer which expects "{" as the first
+ * character.
+ */
 class CategoryDeserializer extends JsonDeserializer<Category> {
-    /* We need this custom deserializer for Category. The JSON string returned is "["Bar", "bar"]" which starts with
-    the array annotation: "[" but the default deserializer expects a "{".
-
-    TODO: add a proper description for the reason why we need a custom deserializer here.
-    */
-
     @Override
     public Category deserialize(JsonParser jsonParser, DeserializationContext context)
             throws IOException, JsonProcessingException {
