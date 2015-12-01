@@ -1,0 +1,49 @@
+{
+  "is_claimed": true,
+  "rating": 0.0,
+  "mobile_url": "http://m.yelp.com/biz/yelp-fantastic-san-francisco",
+  "rating_img_url": "http://media4.fl.yelpcdn.com/assets/2/www/img/04ae5eda5622/ico/stars/v1/stars_0.png",
+  "review_count": 0,
+  "name": "Yelp Fantastic",
+  "rating_img_url_small": "http://media4.fl.yelpcdn.com/assets/2/www/img/d3cd853a8cb7/ico/stars/v1/stars_small_0.png",
+  "url": "http://www.yelp.com/biz/yelp-fantastic-san-francisco",
+  "categories": [
+    [
+      "Local Flavor",
+      "localflavor"
+    ],
+    [
+      "Mass Media",
+      "massmedia"
+    ]
+  ],
+  "phone": "4156069349",
+  "location": {
+    "cross_streets": "Natoma St & Minna St",
+    "city": "San Francisco",
+    "display_address": [
+      "140 New Montgomery St",
+      "Financial District",
+      "San Francisco, CA 94105"
+    ],
+    "geo_accuracy": 9.5,
+    "neighborhoods": [
+      "Financial District",
+      "SoMa"
+    ],
+    "postal_code": "94105",
+    "country_code": "US",
+    "address": [
+      "140 New Montgomery St"
+    ],
+    "coordinate": {
+      "latitude": 37.7867703362929,
+      "longitude": -122.399958372115
+    },
+    "state_code": "CA"
+  },
+  "display_phone": "+1-415-908-3801",
+  "rating_img_url_large": "http://media2.fl.yelpcdn.com/assets/2/www/img/1d04a136ee3e/ico/stars/v1/stars_large_0.png",
+  "id": "yelp-fantastic-san-francisco",
+  "is_closed": false
+}
