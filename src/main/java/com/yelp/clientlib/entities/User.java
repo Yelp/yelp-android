@@ -8,52 +8,34 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
 import com.yelp.clientlib.annotation.Nullable;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 @AutoValue
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonDeserialize(builder = AutoValue_GiftCertificate.Builder.class)
-public abstract class GiftCertificate implements Serializable {
+@JsonDeserialize(builder = AutoValue_User.Builder.class)
+public abstract class User {
 
     public abstract String id();
-
-    @Nullable
-    public abstract String currencyCode();
 
     @Nullable
     public abstract String imageUrl();
 
     @Nullable
-    public abstract String unusedBalances();
-
-    @Nullable
-    public abstract String url();
-
-    @Nullable
-    public abstract ArrayList<GiftCertificateOption> options();
+    public abstract String name();
 
     @AutoValue.Builder
     @JsonPOJOBuilder(withPrefix = "")
     @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
     public abstract static class Builder {
 
-        public abstract Builder currencyCode(String currencyCode);
-
         public abstract Builder id(String id);
 
         public abstract Builder imageUrl(String imageUrl);
 
-        public abstract Builder unusedBalances(String unusedBalanced);
+        public abstract Builder name(String name);
 
-        public abstract Builder url(String url);
-
-        public abstract Builder options(ArrayList<GiftCertificateOption> options);
-
-        public abstract GiftCertificate build();
+        public abstract User build();
     }
 
     public static Builder builder() {
-        return new AutoValue_GiftCertificate.Builder();
+        return new AutoValue_User.Builder();
     }
 }

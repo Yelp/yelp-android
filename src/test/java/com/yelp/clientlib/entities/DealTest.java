@@ -1,44 +1,30 @@
 package com.yelp.clientlib.entities;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 
-public class DealTest extends EntityTest {
-
-    public DealTest() throws IOException {
-        super();
-    }
+public class DealTest {
 
     @Test
     public void testDeserializeFromJson() throws IOException {
-        String dealString = this.businessResponseJsonNode.path("deals").get(0).toString();
+        JsonNode dealNode = JsonTestUtils.getBusinessResponseJsonNode().path("deals").get(0);
+        Deal deal = JsonTestUtils.deserializeJson(dealNode.toString(), Deal.class);
 
-        try {
-            Deal deal = this.objectMapper.readValue(dealString, Deal.class);
-
-            Assert.assertNull(deal.additionalRestrictions());
-            Assert.assertEquals("USD", deal.currencyCode());
-            Assert.assertNull(deal.id());
-            Assert.assertEquals(
-                    "http://s3-media4.ak.yelpcdn.com/dphoto/ShQGf5qi-52HwPiKyZTZ3w/m.jpg",
-                    deal.imageUrl()
-            );
-            Assert.assertNull(deal.importantRestriction());
-            Assert.assertEquals(true, deal.isPopular());
-            Assert.assertTrue(deal.options().get(0) instanceof DealOption);
-            Assert.assertNull(deal.timeEnd());
-            Assert.assertEquals(new Long(1317414369), deal.timeStart());
-            Assert.assertEquals("$10 for $20 voucher", deal.title());
-            Assert.assertEquals(
-                    "http://www.yelp.com/biz/urban-curry-san-francisco?deal=1",
-                    deal.url()
-            );
-            Assert.assertNull(deal.whatYouGet());
-
-        } catch (IOException e) {
-            Assert.fail(e.toString());
-        }
+        Assert.assertNull(deal.additionalRestrictions());
+        Assert.assertEquals(dealNode.path("currency_code").textValue(), deal.currencyCode());
+        Assert.assertNull(deal.id());
+        Assert.assertEquals(dealNode.path("image_url").textValue(), deal.imageUrl());
+        Assert.assertNull(deal.importantRestriction());
+        Assert.assertEquals(dealNode.path("is_popular").asBoolean(), deal.isPopular());
+        Assert.assertNotNull(deal.options().get(0));
+        Assert.assertNull(deal.timeEnd());
+        Assert.assertEquals(new Long(dealNode.path("time_start").asLong()), deal.timeStart());
+        Assert.assertEquals(dealNode.path("title").textValue(), deal.title());
+        Assert.assertEquals(dealNode.path("url").textValue(), deal.url());
+        Assert.assertNull(deal.whatYouGet());
     }
 }

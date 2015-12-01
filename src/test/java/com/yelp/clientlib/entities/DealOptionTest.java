@@ -1,37 +1,30 @@
 package com.yelp.clientlib.entities;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 
-public class DealOptionTest extends EntityTest {
-
-    public DealOptionTest() throws IOException {
-        super();
-    }
+public class DealOptionTest {
 
     @Test
     public void testDeserializeFromJson() throws IOException {
-        String dealOptionString = this.businessResponseJsonNode
-                .path("deals").get(0).path("options").get(0).toString();
-        try {
-            DealOption dealOption = this.objectMapper.readValue(dealOptionString, DealOption.class);
+        JsonNode dealOptionNode = JsonTestUtils.getBusinessResponseJsonNode()
+                .path("deals").get(0).path("options").get(0);
+        DealOption dealOption = JsonTestUtils.deserializeJson(dealOptionNode.toString(), DealOption.class);
 
-            Assert.assertEquals("$20", dealOption.formattedOriginalPrice());
-            Assert.assertEquals("$10", dealOption.formattedPrice());
-            Assert.assertEquals(true, dealOption.isQuantityLimited());
-            Assert.assertEquals(new Integer(2000), dealOption.originalPrice());
-            Assert.assertEquals(new Integer(1000), dealOption.price());
-            Assert.assertEquals(
-                    "http://www.yelp.com/deal/cC24ccQGIH8mowfu5Vbe0Q/view",
-                    dealOption.purchaseUrl()
-            );
-            Assert.assertEquals(new Integer(36), dealOption.remainingCount());
-            Assert.assertEquals("$10 for $20 voucher", dealOption.title());
-
-        } catch (IOException e) {
-            Assert.fail(e.toString());
-        }
+        Assert.assertEquals(
+                dealOptionNode.path("formatted_original_price").textValue(),
+                dealOption.formattedOriginalPrice()
+        );
+        Assert.assertEquals(dealOptionNode.path("formatted_price").textValue(), dealOption.formattedPrice());
+        Assert.assertEquals(dealOptionNode.path("is_quantity_limited").asBoolean(), dealOption.isQuantityLimited());
+        Assert.assertEquals(new Integer(dealOptionNode.path("original_price").asInt()), dealOption.originalPrice());
+        Assert.assertEquals(new Integer(dealOptionNode.path("price").asInt()), dealOption.price());
+        Assert.assertEquals(dealOptionNode.path("purchase_url").textValue(), dealOption.purchaseUrl());
+        Assert.assertEquals(new Integer(dealOptionNode.path("remaining_count").asInt()), dealOption.remainingCount());
+        Assert.assertEquals(dealOptionNode.path("title").textValue(), dealOption.title());
     }
 }

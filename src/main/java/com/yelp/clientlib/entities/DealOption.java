@@ -1,13 +1,16 @@
 package com.yelp.clientlib.entities;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
 import com.yelp.clientlib.annotation.Nullable;
 
 @AutoValue
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonDeserialize(builder = AutoValue_DealOption.Builder.class)
 public abstract class DealOption {
 
     @Nullable
@@ -34,31 +37,11 @@ public abstract class DealOption {
     @Nullable
     public abstract String title();
 
-    @JsonCreator
-    public static DealOption create(
-            @JsonProperty("formatted_original_price") String formattedOriginalPrice,
-            @JsonProperty("formatted_price") String formattedPrice,
-            @JsonProperty("is_quantity_limited") Boolean isQuantityLimited,
-            @JsonProperty("original_price") Integer originalPrice,
-            @JsonProperty("price") Integer price,
-            @JsonProperty("purchase_url") String purchaseUrl,
-            @JsonProperty("remaining_count") Integer remainingCount,
-            @JsonProperty("title") String title
-    ) {
-        return builder()
-                .formattedOriginalPrice(formattedOriginalPrice)
-                .formattedPrice(formattedPrice)
-                .isQuantityLimited(isQuantityLimited)
-                .originalPrice(originalPrice)
-                .price(price)
-                .purchaseUrl(purchaseUrl)
-                .remainingCount(remainingCount)
-                .title(title)
-                .build();
-    }
-
     @AutoValue.Builder
+    @JsonPOJOBuilder(withPrefix = "")
+    @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
     public abstract static class Builder {
+
         public abstract Builder formattedOriginalPrice(String formattedOriginalPrice);
 
         public abstract Builder formattedPrice(String formattedPrice);
