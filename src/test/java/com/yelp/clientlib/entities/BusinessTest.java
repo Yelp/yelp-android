@@ -54,6 +54,25 @@ public class BusinessTest {
         Assert.assertNull(business.displayPhone());
     }
 
+    @Test
+    public void testDeserializationWithUTF8Characters() throws IOException {
+        String businessJsonString = "{\"name\":\"Gööd Füsiön Fööd\", \"id\":\"gööd-füsiön-fööd-san-francisco\"}";
+        Business business = JsonTestUtils.deserializeJson(businessJsonString, Business.class);
+        Assert.assertEquals("Gööd Füsiön Fööd", business.name());
+        Assert.assertEquals("gööd-füsiön-fööd-san-francisco", business.id());
+    }
+
+    @Test
+    public void testDeserializationWithNoReviewBusinessHasNullForReview() throws IOException {
+        JsonNode businessNode = JsonTestUtils.getJsonNodeFromFile("noReviewBusinessResponse.json");
+        Business business = JsonTestUtils.deserializeJson(businessNode.toString(), Business.class);
+        Assert.assertNull(business.reviews());
+        Assert.assertEquals(new Integer(0), business.reviewCount());
+        Assert.assertEquals(businessNode.path("id").textValue(), business.id());
+        Assert.assertEquals(businessNode.path("rating_img_url").textValue(), business.ratingImgUrl());
+        Assert.assertEquals(businessNode.path("rating_img_url_small").textValue(), business.ratingImgUrlSmall());
+    }
+
     @Test(expected = JsonMappingException.class)
     public void testDeserializationFailedWithMissingAttributes() throws IOException {
         String businessJsonString = "{\"name\":\"Yelp\"}";
