@@ -38,6 +38,5 @@ public abstract class SearchResponse implements Serializable {
 
     public static Builder builder() {
         return new AutoValue_SearchResponse.Builder();
-
     }
 }

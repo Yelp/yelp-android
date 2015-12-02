@@ -1,7 +1,7 @@
 package com.yelp.clientlib.integration;
 
 import com.yelp.clientlib.connection.YelpAPI;
-import com.yelp.clientlib.connection.YelpAPIGenerator;
+import com.yelp.clientlib.connection.YelpAPIFactory;
 import com.yelp.clientlib.entities.Business;
 
 import org.junit.Assert;
@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import retrofit.Response;
 
 public class BusinessIntegrationTest {
 
@@ -17,15 +16,14 @@ public class BusinessIntegrationTest {
     public void testGetBusiness() throws IOException {
         String businessId = "yelp-san-francisco";
 
-        YelpAPI yelpAPI = YelpAPIGenerator.createAPIStub(
+        YelpAPI yelpAPI = YelpAPIFactory.createAPI(
                 Credential.getConsumerKey(),
                 Credential.getConsumerSecret(),
                 Credential.getToken(),
                 Credential.getTokenSecret()
         );
 
-        Response<Business> response = yelpAPI.getBusiness(businessId).execute();
-        Business business = response.body();
+        Business business = yelpAPI.getBusiness(businessId);
 
         Assert.assertNotNull(business);
         Assert.assertEquals(businessId, business.id());
