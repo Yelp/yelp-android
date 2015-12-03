@@ -13,7 +13,6 @@ import java.util.ArrayList;
 @AutoValue
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(builder = AutoValue_SearchResponse.Builder.class)
-
 public abstract class SearchResponse implements Serializable {
 
     public abstract ArrayList<Business> businesses();

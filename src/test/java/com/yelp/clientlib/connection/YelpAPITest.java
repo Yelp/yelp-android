@@ -98,8 +98,7 @@ public class YelpAPITest {
     }
 
     /**
-     * APIFactory which API base url can be set. Set the apiBaseUrl to a mocked web server so the requests are
-     * directed to it.
+     * APIFactory which API base url can be set. Set apiBaseUrl to a mocked web server so requests are directed to it.
      */
     class TestAPIFactory extends YelpAPIFactory {
         private String apiBaseUrl;

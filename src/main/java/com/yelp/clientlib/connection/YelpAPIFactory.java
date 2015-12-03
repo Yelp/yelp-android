@@ -32,8 +32,8 @@ public class YelpAPIFactory {
         OkHttpClient httpClient = new OkHttpClient();
         httpClient.interceptors().add(new SigningInterceptor(consumer));
 
-        client = new OkClient(httpClient);
-        converter = new JacksonConverter();
+        this.client = new OkClient(httpClient);
+        this.converter = new JacksonConverter();
     }
 
     public YelpAPI createAPI() {
