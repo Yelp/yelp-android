@@ -12,5 +12,6 @@ dependencies {
     compile 'se.akerfeldt:okhttp-signpost:1.0.0'
 
     testCompile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.6.3'
+    testCompile 'com.squareup.okhttp:mockwebserver:2.6.0'
     testCompile 'junit:junit:4.12'
 }

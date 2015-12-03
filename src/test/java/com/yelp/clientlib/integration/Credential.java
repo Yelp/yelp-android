@@ -17,6 +17,8 @@ import java.io.IOException;
 
 /**
  * Util class to get test credentials from credentials.yaml file.
+ *
+ * TODO: Move this class to other directory so src/java/test only contains unit-tests related files.
  */
 @AutoValue
 @JsonIgnoreProperties(ignoreUnknown = true)

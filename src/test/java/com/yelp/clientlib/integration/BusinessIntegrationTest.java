@@ -9,6 +9,9 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+/**
+ * TODO: Move this class to other directory so src/java/test only contains unit-tests related files.
+ */
 
 public class BusinessIntegrationTest {
 
@@ -16,12 +19,12 @@ public class BusinessIntegrationTest {
     public void testGetBusiness() throws IOException {
         String businessId = "yelp-san-francisco";
 
-        YelpAPI yelpAPI = YelpAPIFactory.createAPI(
+        YelpAPI yelpAPI = new YelpAPIFactory(
                 Credential.getConsumerKey(),
                 Credential.getConsumerSecret(),
                 Credential.getToken(),
                 Credential.getTokenSecret()
-        );
+        ).createAPI();
 
         Business business = yelpAPI.getBusiness(businessId);
 
