@@ -12,7 +12,6 @@ import java.io.IOException;
 /**
  * TODO: Move this class to other directory so src/java/test only contains unit-tests related files.
  */
-
 public class BusinessIntegrationTest {
 
     @Test

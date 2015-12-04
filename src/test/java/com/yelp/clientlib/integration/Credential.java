@@ -16,7 +16,10 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Util class to get test credentials from credentials.yaml file.
+ * Util class to get test credentials from credentials.yaml file. <br />
+ * JSON annotations are used by Jackson {@link ObjectMapper} to determine field name mappings. To consume YAML files,
+ * {@link YAMLFactory} is passed into {@link ObjectMapper} to parse YAML formatted data. Refer to
+ * <a href="https://github.com/FasterXML/jackson-dataformat-yamlr">jackson-dataformat-yaml</a> for more information.
  *
  * TODO: Move this class to other directory so src/java/test only contains unit-tests related files.
  */
