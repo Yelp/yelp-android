@@ -7,6 +7,7 @@ import com.squareup.okhttp.mockwebserver.RecordedRequest;
 import com.yelp.clientlib.entities.Business;
 import com.yelp.clientlib.entities.JsonTestUtils;
 import com.yelp.clientlib.entities.SearchResponse;
+import com.yelp.clientlib.util.AsyncTestUtil;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -14,11 +15,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class YelpAPITest {
-
     private MockWebServer mockServer;
     private YelpAPI yelpAPI;
+    private JsonNode businessJsonNode;
+    private JsonNode searchResponseJsonNode;
 
     @Before
     public void setup() throws IOException {
@@ -34,6 +41,9 @@ public class YelpAPITest {
                 mockServer.url("/").toString()
         );
         yelpAPI = yelpAPIFactory.createAPI();
+
+        businessJsonNode = JsonTestUtils.getBusinessResponseJsonNode();
+        searchResponseJsonNode = JsonTestUtils.getSearchResponseJsonNode();
     }
 
     @After
@@ -43,33 +53,62 @@ public class YelpAPITest {
 
     @Test
     public void testGetBusiness() throws InterruptedException, IOException {
-        JsonNode businessJsonNode = JsonTestUtils.getBusinessResponseJsonNode();
+        String testBusinessId = "test-business-id";
+        setUpMockServer(businessJsonNode.toString());
+
+        Business business = yelpAPI.getBusiness(testBusinessId);
+
+        verifyRequestForGetBusiness(testBusinessId);
+        verifyResponseDeserializationForGetBusiness(business);
+    }
+
+    @Test
+    public void testGetBusinessAsynchronous() throws IOException, InterruptedException {
+        String testBusinessId = "test-business-id";
+        setUpMockServer(businessJsonNode.toString());
+
+        final ArrayList<Business> returnedBusinessWrapper = new ArrayList<>();
+        Callback<Business> businessCallback = new Callback<Business>() {
+            @Override
+            public void success(Business business, Response response) {
+                returnedBusinessWrapper.add(business);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+            }
+        };
+
+        yelpAPI.getBusiness(testBusinessId, businessCallback);
+        AsyncTestUtil.waitAndCheckAsyncRequestStatus(returnedBusinessWrapper);
+
+        verifyRequestForGetBusiness(testBusinessId);
+        verifyResponseDeserializationForGetBusiness(returnedBusinessWrapper.get(0));
+    }
+
+    private void setUpMockServer(String responseBody) {
         MockResponse mockResponse = new MockResponse()
                 .addHeader("Content-Type", "application/json; charset=utf-8")
-                .setBody(businessJsonNode.toString());
+                .setBody(responseBody);
         mockServer.enqueue(mockResponse);
+    }
 
-        Business business = yelpAPI.getBusiness("test-business-id");
-
+    private void verifyRequestForGetBusiness(String businessId) throws InterruptedException {
         RecordedRequest recordedRequest = mockServer.takeRequest();
         verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
 
-        // Verify basic HTTP elements.
         Assert.assertEquals("GET", recordedRequest.getMethod());
-        Assert.assertEquals("/v2/business/test-business-id", recordedRequest.getPath());
+        Assert.assertEquals("/v2/business/" + businessId, recordedRequest.getPath());
         Assert.assertEquals(0, recordedRequest.getBodySize());
+    }
 
-        // Verify the response is deserialized.
+    private void verifyResponseDeserializationForGetBusiness(Business business) {
         Assert.assertEquals(businessJsonNode.path("id").textValue(), business.id());
     }
 
     @Test
     public void testSearchByLocation() throws IOException, InterruptedException {
-        JsonNode searchResponseJsonNode = JsonTestUtils.getSearchResponseJsonNode();
-        MockResponse mockResponse = new MockResponse()
-                .addHeader("Content-Type", "application/json; charset=utf-8")
-                .setBody(searchResponseJsonNode.toString());
-        mockServer.enqueue(mockResponse);
+        setUpMockServer(searchResponseJsonNode.toString());
 
         SearchResponse searchResponse = yelpAPI.searchByLocation("food", "Boston");
 
