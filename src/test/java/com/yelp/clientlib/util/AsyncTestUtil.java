@@ -8,12 +8,11 @@ import java.util.concurrent.TimeUnit;
 
 
 public class AsyncTestUtil {
-
-    public static int defaultAsyncRequestTimeoutMilliseconds = 1000;
+    public static final int DEFAULT_ASYNC_TIMEOUT_MILLISECONDS = 1000;
 
     public static void waitAndCheckAsyncRequestStatus(ArrayList returnedObjectWrapper)
             throws InterruptedException {
-        waitAndCheckAsyncRequestStatus(returnedObjectWrapper, defaultAsyncRequestTimeoutMilliseconds);
+        waitAndCheckAsyncRequestStatus(returnedObjectWrapper, DEFAULT_ASYNC_TIMEOUT_MILLISECONDS);
     }
 
     public static void waitAndCheckAsyncRequestStatus(ArrayList returnedObjectWrapper, int timeoutMilliseconds)
