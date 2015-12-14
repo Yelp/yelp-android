@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-
 public class AsyncTestUtil {
     public static final int DEFAULT_ASYNC_TIMEOUT_MILLISECONDS = 1000;
 
