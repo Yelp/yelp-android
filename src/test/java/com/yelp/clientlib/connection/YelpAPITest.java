@@ -86,26 +86,6 @@ public class YelpAPITest {
         verifyResponseDeserializationForGetBusiness(returnedBusinessWrapper.get(0));
     }
 
-    private void setUpMockServer(String responseBody) {
-        MockResponse mockResponse = new MockResponse()
-                .addHeader("Content-Type", "application/json; charset=utf-8")
-                .setBody(responseBody);
-        mockServer.enqueue(mockResponse);
-    }
-
-    private void verifyRequestForGetBusiness(String businessId) throws InterruptedException {
-        RecordedRequest recordedRequest = mockServer.takeRequest();
-        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
-
-        Assert.assertEquals("GET", recordedRequest.getMethod());
-        Assert.assertEquals("/v2/business/" + businessId, recordedRequest.getPath());
-        Assert.assertEquals(0, recordedRequest.getBodySize());
-    }
-
-    private void verifyResponseDeserializationForGetBusiness(Business business) {
-        Assert.assertEquals(businessJsonNode.path("id").textValue(), business.id());
-    }
-
     @Test
     public void testSearchByLocation() throws IOException, InterruptedException {
         setUpMockServer(searchResponseJsonNode.toString());
@@ -125,6 +105,26 @@ public class YelpAPITest {
 
         // Verify the deserialized response.
         Assert.assertEquals(new Integer(searchResponseJsonNode.path("total").asInt()), searchResponse.total());
+    }
+
+    private void setUpMockServer(String responseBody) {
+        MockResponse mockResponse = new MockResponse()
+                .addHeader("Content-Type", "application/json; charset=utf-8")
+                .setBody(responseBody);
+        mockServer.enqueue(mockResponse);
+    }
+
+    private void verifyRequestForGetBusiness(String businessId) throws InterruptedException {
+        RecordedRequest recordedRequest = mockServer.takeRequest();
+        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
+
+        Assert.assertEquals("GET", recordedRequest.getMethod());
+        Assert.assertEquals("/v2/business/" + businessId, recordedRequest.getPath());
+        Assert.assertEquals(0, recordedRequest.getBodySize());
+    }
+
+    private void verifyResponseDeserializationForGetBusiness(Business business) {
+        Assert.assertEquals(businessJsonNode.path("id").textValue(), business.id());
     }
 
     private void verifyAuthorizationHeader(String authHeader) {

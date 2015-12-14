@@ -48,7 +48,6 @@ public class BusinessIntegrationTest {
             @Override
             public void success(Business business, Response response) {
                 returnedBusinessWrapper.add(business);
-
             }
 
             @Override
