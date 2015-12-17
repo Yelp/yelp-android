@@ -17,9 +17,10 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import retrofit.Call;
 import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 public class YelpAPITest {
     private MockWebServer mockServer;
@@ -52,11 +53,12 @@ public class YelpAPITest {
     }
 
     @Test
-    public void testGetBusiness() throws InterruptedException, IOException {
+    public void testGetBusiness() throws IOException, InterruptedException {
         String testBusinessId = "test-business-id";
         setUpMockServer(businessJsonNode.toString());
 
-        Business business = yelpAPI.getBusiness(testBusinessId);
+        Call<Business> call = yelpAPI.getBusiness(testBusinessId);
+        Business business = call.execute().body();
 
         verifyRequestForGetBusiness(testBusinessId);
         verifyResponseDeserializationForGetBusiness(business);
@@ -70,17 +72,21 @@ public class YelpAPITest {
         final ArrayList<Business> returnedBusinessWrapper = new ArrayList<>();
         Callback<Business> businessCallback = new Callback<Business>() {
             @Override
-            public void success(Business business, Response response) {
-                returnedBusinessWrapper.add(business);
+            public void onResponse(Response<Business> response, Retrofit retrofit) {
+                returnedBusinessWrapper.add(response.body());
+                AsyncTestUtil.callBackIsDone(this);
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Throwable t) {
+                AsyncTestUtil.callBackIsDone(this);
             }
         };
 
-        yelpAPI.getBusiness(testBusinessId, businessCallback);
-        AsyncTestUtil.waitAndCheckAsyncRequestStatus(returnedBusinessWrapper);
+        Call<Business> call = yelpAPI.getBusiness(testBusinessId);
+        call.enqueue(businessCallback);
+
+        AsyncTestUtil.waitForCallBack(businessCallback);
 
         verifyRequestForGetBusiness(testBusinessId);
         verifyResponseDeserializationForGetBusiness(returnedBusinessWrapper.get(0));
@@ -90,7 +96,8 @@ public class YelpAPITest {
     public void testSearchByLocation() throws IOException, InterruptedException {
         setUpMockServer(searchResponseJsonNode.toString());
 
-        SearchResponse searchResponse = yelpAPI.searchByLocation("food", "Boston");
+        Call<SearchResponse> call = yelpAPI.searchByLocation("food", "Boston");
+        SearchResponse searchResponse = call.execute().body();
 
         RecordedRequest recordedRequest = mockServer.takeRequest();
         verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));

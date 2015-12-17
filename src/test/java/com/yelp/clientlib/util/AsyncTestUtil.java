@@ -1,27 +1,29 @@
 package com.yelp.clientlib.util;
 
-import org.junit.Assert;
-
-import java.util.ArrayList;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import retrofit.Callback;
 
 public class AsyncTestUtil {
     public static final int DEFAULT_ASYNC_TIMEOUT_MILLISECONDS = 1000;
 
-    public static void waitAndCheckAsyncRequestStatus(ArrayList returnedObjectWrapper)
-            throws InterruptedException {
-        waitAndCheckAsyncRequestStatus(returnedObjectWrapper, DEFAULT_ASYNC_TIMEOUT_MILLISECONDS);
+    /**
+     * Don't use in production, this function doesn't check condition when the thread is woke up.
+     */
+    public static void waitForCallBack(Callback callback) throws InterruptedException {
+        waitForCallBack(callback, DEFAULT_ASYNC_TIMEOUT_MILLISECONDS);
     }
 
-    public static void waitAndCheckAsyncRequestStatus(ArrayList returnedObjectWrapper, int timeoutMilliseconds)
-            throws InterruptedException {
-        CountDownLatch countDownTimer = new CountDownLatch(1);
+    /**
+     * Don't use in production, this function doesn't check condition when the thread is woke up.
+     */
+    public static void waitForCallBack(Callback callback, int timeoutMilliseconds) throws InterruptedException {
+        synchronized (callback) {
+            callback.wait(timeoutMilliseconds);
+        }
+    }
 
-        countDownTimer.await(timeoutMilliseconds, TimeUnit.MILLISECONDS);
-        Assert.assertFalse(
-                String.format("No response got in %d milliseconds.", timeoutMilliseconds),
-                returnedObjectWrapper.isEmpty()
-        );
+    public static void callBackIsDone(Callback callback) {
+        synchronized (callback) {
+            callback.notifyAll();
+        }
     }
 }

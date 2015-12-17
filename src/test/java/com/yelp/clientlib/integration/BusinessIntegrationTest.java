@@ -12,9 +12,10 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import retrofit.Call;
 import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 /**
  * TODO: Move this class to other directory so src/java/test only contains unit-tests related files.
@@ -35,30 +36,40 @@ public class BusinessIntegrationTest {
 
     @Test
     public void testGetBusiness() throws IOException {
-        Business business = yelpAPI.getBusiness(businessId);
+        Call<Business> call = yelpAPI.getBusiness(businessId);
+        Response<Business> response = call.execute();
+        Assert.assertEquals(200, response.code());
 
+        Business business = response.body();
         Assert.assertNotNull(business);
         Assert.assertEquals(businessId, business.id());
     }
 
     @Test
     public void testGetBusinessAsynchronous() throws IOException, InterruptedException {
-        final ArrayList<Business> returnedBusinessWrapper = new ArrayList<>();
+        final ArrayList<Response<Business>> responseWrapper = new ArrayList<>();
         Callback<Business> businessCallback = new Callback<Business>() {
             @Override
-            public void success(Business business, Response response) {
-                returnedBusinessWrapper.add(business);
+            public void onResponse(Response<Business> response, Retrofit retrofit) {
+                responseWrapper.add(response);
+                AsyncTestUtil.callBackIsDone(this);
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Throwable t) {
+                AsyncTestUtil.callBackIsDone(this);
             }
         };
 
-        yelpAPI.getBusiness(businessId, businessCallback);
-        AsyncTestUtil.waitAndCheckAsyncRequestStatus(returnedBusinessWrapper);
+        Call<Business> call = yelpAPI.getBusiness(businessId);
+        call.enqueue(businessCallback);
 
-        Business business = returnedBusinessWrapper.get(0);
+        AsyncTestUtil.waitForCallBack(businessCallback);
+
+        Response<Business> response = responseWrapper.get(0);
+        Assert.assertEquals(200, response.code());
+
+        Business business = response.body();
         Assert.assertNotNull(business);
         Assert.assertEquals(businessId, business.id());
     }

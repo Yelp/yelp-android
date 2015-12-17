@@ -9,6 +9,9 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import retrofit.Call;
+import retrofit.Response;
+
 /**
  * TODO: Move this class to other directory so src/java/test only contains unit-tests related files.
  */
@@ -26,8 +29,11 @@ public class SearchIntegrationTest {
                 Credential.getTokenSecret()
         ).createAPI();
 
-        SearchResponse searchResponse = yelpAPI.searchByLocation(term, location);
+        Call<SearchResponse> call = yelpAPI.searchByLocation(term, location);
+        Response<SearchResponse> response = call.execute();
+        Assert.assertEquals(200, response.code());
 
+        SearchResponse searchResponse = response.body();
         Assert.assertNotNull(searchResponse);
     }
 }
