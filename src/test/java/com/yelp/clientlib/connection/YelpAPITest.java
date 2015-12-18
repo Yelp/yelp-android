@@ -74,12 +74,12 @@ public class YelpAPITest {
             @Override
             public void onResponse(Response<Business> response, Retrofit retrofit) {
                 returnedBusinessWrapper.add(response.body());
-                AsyncTestUtil.callBackIsDone(this);
+                AsyncTestUtil.notifyCallBackIsDone(this);
             }
 
             @Override
             public void onFailure(Throwable t) {
-                AsyncTestUtil.callBackIsDone(this);
+                AsyncTestUtil.notifyCallBackIsDone(this);
             }
         };
 

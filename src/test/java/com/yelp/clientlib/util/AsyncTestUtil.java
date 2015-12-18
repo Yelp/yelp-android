@@ -21,7 +21,7 @@ public class AsyncTestUtil {
         }
     }
 
-    public static void callBackIsDone(Callback callback) {
+    public static void notifyCallBackIsDone(Callback callback) {
         synchronized (callback) {
             callback.notifyAll();
         }
