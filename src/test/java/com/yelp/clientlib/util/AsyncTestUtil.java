@@ -1,29 +1,73 @@
 package com.yelp.clientlib.util;
 
-import retrofit.Callback;
+import com.squareup.okhttp.Dispatcher;
+import com.squareup.okhttp.OkHttpClient;
+import com.yelp.clientlib.connection.YelpAPIFactory;
+
+import org.junit.Assert;
+
+import java.util.List;
+import java.util.concurrent.AbstractExecutorService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import junitx.util.PrivateAccessor;
 
 public class AsyncTestUtil {
-    public static final int DEFAULT_ASYNC_TIMEOUT_MILLISECONDS = 1000;
 
     /**
-     * Don't use in production, this function doesn't check condition when the thread is woke up.
+     * Make a {@link YelpAPIFactory} to send HTTP requests in main thread so we can verify the test results easily.
+     * Retrofit uses {@link OkHttpClient} for the underlying HTTP calls, this method replaces the {@link Dispatcher}
+     * in {@link OkHttpClient} so an {@link ExecutorService} runs jobs in main thread will be used to send HTTP
+     * requests.
      */
-    public static void waitForCallBack(Callback callback) throws InterruptedException {
-        waitForCallBack(callback, DEFAULT_ASYNC_TIMEOUT_MILLISECONDS);
+    public static YelpAPIFactory setToRunInMainThread(YelpAPIFactory yelpAPIFactory) {
+        Dispatcher synchronousDispatcher = new Dispatcher(newSynchronousExecutorService());
+
+        try {
+            OkHttpClient httpClient = (OkHttpClient) PrivateAccessor.getField(yelpAPIFactory, "httpClient");
+            httpClient.setDispatcher(synchronousDispatcher);
+        } catch (NoSuchFieldException e) {
+            Assert.fail(e.toString());
+        }
+
+        return yelpAPIFactory;
     }
 
     /**
-     * Don't use in production, this function doesn't check condition when the thread is woke up.
+     * Create an {@link ExecutorService} which runs jobs in main thread.
      */
-    public static void waitForCallBack(Callback callback, int timeoutMilliseconds) throws InterruptedException {
-        synchronized (callback) {
-            callback.wait(timeoutMilliseconds);
-        }
-    }
+    public static ExecutorService newSynchronousExecutorService() {
+        return new AbstractExecutorService() {
+            @Override
+            public void execute(Runnable command) {
+                command.run();
+            }
 
-    public static void notifyCallBackIsDone(Callback callback) {
-        synchronized (callback) {
-            callback.notifyAll();
-        }
+            @Override
+            public void shutdown() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public List<Runnable> shutdownNow() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public boolean isShutdown() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public boolean isTerminated() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
+                throw new UnsupportedOperationException();
+            }
+        };
     }
 }

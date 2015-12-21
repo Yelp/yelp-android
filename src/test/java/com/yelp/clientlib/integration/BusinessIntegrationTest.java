@@ -26,12 +26,17 @@ public class BusinessIntegrationTest {
 
     @Before
     public void setUp() {
-        yelpAPI = new YelpAPIFactory(
+        YelpAPIFactory yelpAPIFactory = new YelpAPIFactory(
                 Credential.getConsumerKey(),
                 Credential.getConsumerSecret(),
                 Credential.getToken(),
                 Credential.getTokenSecret()
-        ).createAPI();
+        );
+
+        // Make API requests to be executed in main thread so we can verify it easily.
+        yelpAPIFactory = AsyncTestUtil.setToRunInMainThread(yelpAPIFactory);
+
+        yelpAPI = yelpAPIFactory.createAPI();
     }
 
     @Test
@@ -46,25 +51,22 @@ public class BusinessIntegrationTest {
     }
 
     @Test
-    public void testGetBusinessAsynchronous() throws IOException, InterruptedException {
+    public void testGetBusinessAsynchronous() {
         final ArrayList<Response<Business>> responseWrapper = new ArrayList<>();
         Callback<Business> businessCallback = new Callback<Business>() {
             @Override
             public void onResponse(Response<Business> response, Retrofit retrofit) {
                 responseWrapper.add(response);
-                AsyncTestUtil.notifyCallBackIsDone(this);
             }
 
             @Override
             public void onFailure(Throwable t) {
-                AsyncTestUtil.notifyCallBackIsDone(this);
+
             }
         };
 
         Call<Business> call = yelpAPI.getBusiness(businessId);
         call.enqueue(businessCallback);
-
-        AsyncTestUtil.waitForCallBack(businessCallback);
 
         Response<Business> response = responseWrapper.get(0);
         Assert.assertEquals(200, response.code());

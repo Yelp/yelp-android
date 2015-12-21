@@ -15,4 +15,5 @@ dependencies {
     testCompile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.6.3'
     testCompile 'com.squareup.okhttp:mockwebserver:2.6.0'
     testCompile 'junit:junit:4.12'
+    testCompile 'junit-addons:junit-addons:1.4'
 }

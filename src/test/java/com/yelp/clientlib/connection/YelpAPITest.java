@@ -41,6 +41,10 @@ public class YelpAPITest {
                 "tokenSecret",
                 mockServer.url("/").toString()
         );
+
+        // Make API requests to be executed in main thread so we can verify it easily.
+        yelpAPIFactory = AsyncTestUtil.setToRunInMainThread(yelpAPIFactory);
+
         yelpAPI = yelpAPIFactory.createAPI();
 
         businessJsonNode = JsonTestUtils.getBusinessResponseJsonNode();
@@ -74,19 +78,16 @@ public class YelpAPITest {
             @Override
             public void onResponse(Response<Business> response, Retrofit retrofit) {
                 returnedBusinessWrapper.add(response.body());
-                AsyncTestUtil.notifyCallBackIsDone(this);
             }
 
             @Override
             public void onFailure(Throwable t) {
-                AsyncTestUtil.notifyCallBackIsDone(this);
+
             }
         };
 
         Call<Business> call = yelpAPI.getBusiness(testBusinessId);
         call.enqueue(businessCallback);
-
-        AsyncTestUtil.waitForCallBack(businessCallback);
 
         verifyRequestForGetBusiness(testBusinessId);
         verifyResponseDeserializationForGetBusiness(returnedBusinessWrapper.get(0));
