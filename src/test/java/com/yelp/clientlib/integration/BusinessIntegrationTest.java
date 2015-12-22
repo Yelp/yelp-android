@@ -3,6 +3,8 @@ package com.yelp.clientlib.integration;
 import com.yelp.clientlib.connection.YelpAPI;
 import com.yelp.clientlib.connection.YelpAPIFactory;
 import com.yelp.clientlib.entities.Business;
+import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
+import com.yelp.clientlib.exception.exceptions.YelpAPIError;
 import com.yelp.clientlib.util.AsyncTestUtil;
 
 import org.junit.Assert;
@@ -74,5 +76,43 @@ public class BusinessIntegrationTest {
         Business business = response.body();
         Assert.assertNotNull(business);
         Assert.assertEquals(businessId, business.id());
+    }
+
+    @Test
+    public void testGetBusinessWith400Response() throws IOException {
+        Call<Business> call = yelpAPI.getBusiness("I-dont-think-this-biz-really-exists");
+
+        try {
+            call.execute();
+        } catch (YelpAPIError apiError) {
+            Assert.assertEquals(400, apiError.getCode());
+            Assert.assertEquals("Bad Request", apiError.getMessage());
+            Assert.assertEquals("BUSINESS_UNAVAILABLE", apiError.getErrorId());
+            Assert.assertTrue(apiError.getText().contains("Business information is unavailable"));
+        }
+    }
+
+    @Test
+    public void testGetBusinessAsynchronousWith400Response() throws IOException {
+        Callback<Business> businessCallback = new Callback<Business>() {
+            @Override
+            public void onResponse(Response<Business> response, Retrofit retrofit) {
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Assert.assertTrue(t instanceof BusinessUnavailable);
+
+                YelpAPIError apiError = (YelpAPIError) t;
+                Assert.assertEquals(400, apiError.getCode());
+                Assert.assertEquals("Bad Request", apiError.getMessage());
+                Assert.assertEquals("BUSINESS_UNAVAILABLE", apiError.getErrorId());
+                Assert.assertTrue(apiError.getText().contains("Business information is unavailable"));
+            }
+        };
+
+        Call<Business> call = yelpAPI.getBusiness("I-dont-think-this-biz-really-exists");
+        call.enqueue(businessCallback);
     }
 }
