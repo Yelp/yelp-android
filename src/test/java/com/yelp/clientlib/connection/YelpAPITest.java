@@ -101,7 +101,7 @@ public class YelpAPITest {
         Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone);
         SearchResponse searchResponse = call.execute().body();
 
-        verifyRequestForGetPhoneSearch(testPhone);
+        verifyRequestForGetPhoneSearch(testPhone, null, null);
         verifyResponseDeserializationForSearchResponse(searchResponse);
     }
 
@@ -126,7 +126,7 @@ public class YelpAPITest {
         Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone);
         call.enqueue(businessCallback);
 
-        verifyRequestForGetPhoneSearch(testPhone);
+        verifyRequestForGetPhoneSearch(testPhone, null, null);
         verifyResponseDeserializationForSearchResponse(responseWrapper.get(0));
     }
 
@@ -144,15 +144,16 @@ public class YelpAPITest {
         verifyResponseDeserializationForSearchResponse(searchResponse);
     }
 
-    private void verifyRequestForGetPhoneSearch(String phone) throws InterruptedException {
-        RecordedRequest recordedRequest = mockServer.takeRequest();
-        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
+    @Test
+    public void testGetPhoneSearchWithNullParams() throws IOException, InterruptedException {
+        String testPhone = "1234567899";
+        setUpMockServer(searchResponseJsonNode.toString());
 
-        Assert.assertEquals("GET", recordedRequest.getMethod());
-        String path = recordedRequest.getPath();
-        Assert.assertTrue(path.startsWith("/v2/phone_search"));
-        Assert.assertTrue(path.contains("phone=" + phone));
-        Assert.assertEquals(0, recordedRequest.getBodySize());
+        Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone, null, null);
+        SearchResponse searchResponse = call.execute().body();
+
+        verifyRequestForGetPhoneSearch(testPhone, null, null);
+        verifyResponseDeserializationForSearchResponse(searchResponse);
     }
 
     private void verifyRequestForGetPhoneSearch(String phone, String category, String countryCode)
@@ -164,8 +165,8 @@ public class YelpAPITest {
         String path = recordedRequest.getPath();
         Assert.assertTrue(path.startsWith("/v2/phone_search"));
         Assert.assertTrue(path.contains("phone=" + phone));
-        Assert.assertTrue(path.contains("category=" + category));
-        Assert.assertTrue(path.contains("cc=" + countryCode));
+        Assert.assertEquals(category != null, path.contains("category=" + category));
+        Assert.assertEquals(countryCode != null, path.contains("cc=" + countryCode));
         Assert.assertEquals(0, recordedRequest.getBodySize());
     }
 
