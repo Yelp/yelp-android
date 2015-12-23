@@ -16,6 +16,13 @@ public interface YelpAPI {
     @GET("/v2/phone_search")
     Call<SearchResponse> getPhoneSearch(@Query("phone") String phone);
 
+    @GET("/v2/phone_search")
+    Call<SearchResponse> getPhoneSearch(
+            @Query("phone") String phone,
+            @Query("category") String category,
+            @Query("cc") String countryCode
+    );
+
     /**
      * TODO: This is a temporary endpoint to test Retrofit with query params. It will be refactored in later branches.
      */

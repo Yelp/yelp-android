@@ -130,6 +130,20 @@ public class YelpAPITest {
         verifyResponseDeserializationForSearchResponse(responseWrapper.get(0));
     }
 
+    @Test
+    public void testGetPhoneSearchWithParams() throws IOException, InterruptedException {
+        String testPhone = "1234567899";
+        String testCategory = "restaurant";
+        String testCountryCode = "US";
+        setUpMockServer(searchResponseJsonNode.toString());
+
+        Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone, testCategory, testCountryCode);
+        SearchResponse searchResponse = call.execute().body();
+
+        verifyRequestForGetPhoneSearch(testPhone, testCategory, testCountryCode);
+        verifyResponseDeserializationForSearchResponse(searchResponse);
+    }
+
     private void verifyRequestForGetPhoneSearch(String phone) throws InterruptedException {
         RecordedRequest recordedRequest = mockServer.takeRequest();
         verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
@@ -138,6 +152,20 @@ public class YelpAPITest {
         String path = recordedRequest.getPath();
         Assert.assertTrue(path.startsWith("/v2/phone_search"));
         Assert.assertTrue(path.contains("phone=" + phone));
+        Assert.assertEquals(0, recordedRequest.getBodySize());
+    }
+
+    private void verifyRequestForGetPhoneSearch(String phone, String category, String countryCode)
+            throws InterruptedException {
+        RecordedRequest recordedRequest = mockServer.takeRequest();
+        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
+
+        Assert.assertEquals("GET", recordedRequest.getMethod());
+        String path = recordedRequest.getPath();
+        Assert.assertTrue(path.startsWith("/v2/phone_search"));
+        Assert.assertTrue(path.contains("phone=" + phone));
+        Assert.assertTrue(path.contains("category=" + category));
+        Assert.assertTrue(path.contains("cc=" + countryCode));
         Assert.assertEquals(0, recordedRequest.getBodySize());
     }
 

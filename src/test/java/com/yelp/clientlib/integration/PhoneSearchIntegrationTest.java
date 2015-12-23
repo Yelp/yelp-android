@@ -53,6 +53,30 @@ public class PhoneSearchIntegrationTest {
     }
 
     @Test
+    public void testGetPhoneSearchWithCategory() throws IOException {
+        Call<SearchResponse> call = yelpAPI.getPhoneSearch(phone, "massmedia", null);
+        Response<SearchResponse> response = call.execute();
+        Assert.assertEquals(200, response.code());
+
+        SearchResponse searchResponse = response.body();
+        Assert.assertNotNull(searchResponse);
+        Business business = searchResponse.businesses().get(0);
+        Assert.assertEquals(phone, business.phone());
+    }
+
+    @Test
+    public void testGetPhoneSearchWithCountryCode() throws IOException {
+        Call<SearchResponse> call = yelpAPI.getPhoneSearch(phone, null, "US");
+        Response<SearchResponse> response = call.execute();
+        Assert.assertEquals(200, response.code());
+
+        SearchResponse searchResponse = response.body();
+        Assert.assertNotNull(searchResponse);
+        Business business = searchResponse.businesses().get(0);
+        Assert.assertEquals(phone, business.phone());
+    }
+
+    @Test
     public void testGetPhoneSearchAsynchronous() {
         final ArrayList<Response<SearchResponse>> responseWrapper = new ArrayList<>();
         Callback<SearchResponse> searchCallback = new Callback<SearchResponse>() {
