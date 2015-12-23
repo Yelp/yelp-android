@@ -15,7 +15,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * TODO: Add descriptions.
+ * Enum to list out every YelpAPIErrors could be raised by parsing error responses.
+ *
+ * {@link #parseError(int, String, String)} should be used to construct an YelpAPIError from a JSON formatted
+ * response body string. Any un-defined error will cause an {@link UnexpectedAPIError} be raised.
  */
 public enum YelpAPIErrors {
 
