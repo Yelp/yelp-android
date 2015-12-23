@@ -25,7 +25,7 @@ public abstract class YelpAPIError extends IOException {
         return errorId;
     }
 
-    public YelpAPIError(int code, String message, String errorId, String text){
+    public YelpAPIError(int code, String message, String errorId, String text) {
         this.code = code;
         this.message = message;
         this.errorId = errorId;

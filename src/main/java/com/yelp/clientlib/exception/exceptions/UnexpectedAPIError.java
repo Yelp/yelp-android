@@ -1,7 +1,7 @@
 package com.yelp.clientlib.exception.exceptions;
 
-public class UnexpectedAPIError extends YelpAPIError{
-    public UnexpectedAPIError(int code, String message){
+public class UnexpectedAPIError extends YelpAPIError {
+    public UnexpectedAPIError(int code, String message) {
         this(code, message, null, null);
     }
 

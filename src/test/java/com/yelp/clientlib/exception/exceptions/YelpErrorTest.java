@@ -9,7 +9,7 @@ import java.io.IOException;
 public class YelpErrorTest {
 
     @Test
-    public void testConstructorNoCauseNoMessage(){
+    public void testConstructorNoCauseNoMessage() {
         YelpError error = new YelpError();
 
         Assert.assertNull(error.getMessage());
@@ -17,7 +17,7 @@ public class YelpErrorTest {
     }
 
     @Test
-    public void testConstructorNoPassInCause(){
+    public void testConstructorNoPassInCause() {
         String errorMessage = "It's a good error";
         YelpError error = new YelpError(errorMessage);
 
@@ -26,7 +26,7 @@ public class YelpErrorTest {
     }
 
     @Test
-    public void testConstructorNoPassInMessageUseInnerErrorString(){
+    public void testConstructorNoPassInMessageUseInnerErrorString() {
         Throwable innerError = new IOException();
         YelpError error = new YelpError(innerError);
 
@@ -35,7 +35,7 @@ public class YelpErrorTest {
     }
 
     @Test
-    public void testConstructorWithCauseAndMessage(){
+    public void testConstructorWithCauseAndMessage() {
         String errorMessage = "It's a good error";
         Throwable innerError = new IOException();
         YelpError error = new YelpError(errorMessage, innerError);
