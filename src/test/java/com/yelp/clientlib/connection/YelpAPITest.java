@@ -5,6 +5,7 @@ import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
 import com.yelp.clientlib.entities.Business;
+import com.yelp.clientlib.entities.BusinessOptions;
 import com.yelp.clientlib.entities.JsonTestUtils;
 import com.yelp.clientlib.entities.SearchResponse;
 import com.yelp.clientlib.util.AsyncTestUtil;
@@ -16,6 +17,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -94,6 +96,38 @@ public class YelpAPITest {
     }
 
     @Test
+    public void testGetBusinessWithOptions() throws IOException, InterruptedException {
+        String testBusinessId = "test-business-id";
+
+        BusinessOptions options = new BusinessOptions();
+        options.setCountryCode("US");
+        options.setLanguage("en");
+        options.setLanguageFilter(true);
+        options.setActionLinks(true);
+
+        setUpMockServer(businessJsonNode.toString());
+
+        Call<Business> call = yelpAPI.getBusiness(testBusinessId, options);
+        Business business = call.execute().body();
+
+        verifyRequestForGetBusiness(testBusinessId, options);
+        verifyResponseDeserializationForGetBusiness(business);
+    }
+
+    @Test
+    public void testGetBusinessWithNonSetOptions() throws IOException, InterruptedException {
+        setUpMockServer(businessJsonNode.toString());
+
+        String testBusinessId = "test-business-id";
+        BusinessOptions options = new BusinessOptions();
+        Call<Business> call = yelpAPI.getBusiness(testBusinessId, options);
+        Business business = call.execute().body();
+
+        verifyRequestForGetBusiness(testBusinessId);
+        verifyResponseDeserializationForGetBusiness(business);
+    }
+
+    @Test
     public void testSearchByLocation() throws IOException, InterruptedException {
         setUpMockServer(searchResponseJsonNode.toString());
 
@@ -128,6 +162,22 @@ public class YelpAPITest {
 
         Assert.assertEquals("GET", recordedRequest.getMethod());
         Assert.assertEquals("/v2/business/" + businessId, recordedRequest.getPath());
+        Assert.assertEquals(0, recordedRequest.getBodySize());
+    }
+
+    private void verifyRequestForGetBusiness(String businessId, BusinessOptions options)
+            throws InterruptedException {
+        RecordedRequest recordedRequest = mockServer.takeRequest();
+        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
+
+        Assert.assertEquals("GET", recordedRequest.getMethod());
+
+        String path = recordedRequest.getPath();
+        Assert.assertTrue(path.startsWith("/v2/business/" + businessId));
+        for (Map.Entry<String, String> param : options.entrySet()) {
+            Assert.assertTrue(path.contains(param.getKey() + "=" + param.getValue()));
+        }
+
         Assert.assertEquals(0, recordedRequest.getBodySize());
     }
 
