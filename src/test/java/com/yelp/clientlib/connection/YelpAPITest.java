@@ -69,7 +69,7 @@ public class YelpAPITest {
     }
 
     @Test
-    public void testGetBusinessAsynchronous() throws IOException, InterruptedException {
+    public void testGetBusinessAsynchronous() throws InterruptedException {
         String testBusinessId = "test-business-id";
         setUpMockServer(businessJsonNode.toString());
 
@@ -106,15 +106,15 @@ public class YelpAPITest {
     }
 
     @Test
-    public void testGetPhoneSearchAsynchronous() throws IOException, InterruptedException {
+    public void testGetPhoneSearchAsynchronous() throws InterruptedException {
         String testPhone = "1234567899";
         setUpMockServer(searchResponseJsonNode.toString());
 
-        final ArrayList<SearchResponse> returnedResponseWrapper = new ArrayList<>();
+        final ArrayList<SearchResponse> responseWrapper = new ArrayList<>();
         Callback<SearchResponse> businessCallback = new Callback<SearchResponse>() {
             @Override
             public void onResponse(Response<SearchResponse> response, Retrofit retrofit) {
-                returnedResponseWrapper.add(response.body());
+                responseWrapper.add(response.body());
             }
 
             @Override
@@ -127,7 +127,7 @@ public class YelpAPITest {
         call.enqueue(businessCallback);
 
         verifyRequestForGetPhoneSearch(testPhone);
-        verifyResponseDeserializationForSearchResponse(returnedResponseWrapper.get(0));
+        verifyResponseDeserializationForSearchResponse(responseWrapper.get(0));
     }
 
     private void verifyRequestForGetPhoneSearch(String phone) throws InterruptedException {

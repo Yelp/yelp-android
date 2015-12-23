@@ -75,6 +75,7 @@ public class PhoneSearchIntegrationTest {
 
         SearchResponse searchResponse = response.body();
         Assert.assertNotNull(searchResponse);
+
         Business business = searchResponse.businesses().get(0);
         Assert.assertEquals(phone, business.phone());
     }
