@@ -1,6 +1,7 @@
 package com.yelp.clientlib.exception;
 
 import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
+import com.yelp.clientlib.exception.exceptions.InternalError;
 import com.yelp.clientlib.exception.exceptions.UnexpectedAPIError;
 import com.yelp.clientlib.exception.exceptions.YelpAPIError;
 import com.yelp.clientlib.exception.exceptions.YelpError;
@@ -20,9 +21,10 @@ public class YelpAPIErrorsTest {
     @Test
     public void testParseNullResponseBody() throws YelpError {
         int errorCode = 500;
-        String errorMessage = "INTERNAL_ERROR";
+        String errorMessage = "Internal Server Error";
 
         YelpAPIError error = YelpAPIErrors.parseError(errorCode, errorMessage, null);
+        Assert.assertTrue(error instanceof UnexpectedAPIError);
         Assert.assertEquals(errorCode, error.getCode());
         Assert.assertEquals(errorMessage, error.getMessage());
         Assert.assertNull(error.getText());
@@ -32,7 +34,7 @@ public class YelpAPIErrorsTest {
     @Test
     public void testParseBusinessUnavailable() throws YelpError {
         int errorCode = 400;
-        String errorMessage = "BAD_REQUEST";
+        String errorMessage = "Bad Request";
         String errorId = "BUSINESS_UNAVAILABLE";
         String errorText = "Business information is unavailable";
         String errorJsonBody = generateErrorJsonString(errorId, errorText);
@@ -46,9 +48,25 @@ public class YelpAPIErrorsTest {
     }
 
     @Test
+    public void testParseInternalError() throws YelpError {
+        int errorCode = 500;
+        String errorMessage = "Internal Server Error";
+        String errorId = "INTERNAL_ERROR";
+        String errorText = "Some internal error happened";
+        String errorJsonBody = generateErrorJsonString(errorId, errorText);
+
+        YelpAPIError error = YelpAPIErrors.parseError(errorCode, errorMessage, errorJsonBody);
+        Assert.assertTrue(error instanceof InternalError);
+        Assert.assertEquals(errorCode, error.getCode());
+        Assert.assertEquals(errorMessage, error.getMessage());
+        Assert.assertEquals(errorId, error.getErrorId());
+        Assert.assertEquals(errorText, error.getText());
+    }
+
+    @Test
     public void testParseUnexpectedAPIError() throws YelpError {
         int errorCode = 400;
-        String errorMessage = "BAD_REQUEST";
+        String errorMessage = "Bad Request";
         String errorId = "COULD_BE_ANY_THING_NOT_DEFINED";
         String errorText = "Woops, there is something unexpected happened";
         String errorJsonBody = generateErrorJsonString(errorId, errorText);
@@ -64,7 +82,7 @@ public class YelpAPIErrorsTest {
     @Test(expected = YelpError.class)
     public void testParseInvalidJsonBody() throws YelpError {
         int errorCode = 500;
-        String errorMessage = "INTERNAL_ERROR";
+        String errorMessage = "Internal Server Error";
         String errorHTMLBody = "<html><title>This is not JSON</title></html>";
 
         YelpAPIErrors.parseError(errorCode, errorMessage, errorHTMLBody);
@@ -87,7 +105,7 @@ public class YelpAPIErrorsTest {
 
         PowerMock.replay(YelpAPIErrors.class);
 
-        YelpAPIErrors.parseError(500, "INTERNAL_ERROR", errorJsonBody);
+        YelpAPIErrors.parseError(500, "Internal Server Error", errorJsonBody);
     }
 
     private String generateErrorJsonString(String errorId, String text) {

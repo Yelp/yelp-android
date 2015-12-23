@@ -29,7 +29,7 @@ public enum YelpAPIErrors {
     private final Class<? extends YelpAPIError> errorClass;
 
     static {
-        // Initiate errorNameSet so we can easily lookup errorClass by using errorId.
+        // Initiate errorNameSet so we can easily check existence of errorClasses by using errorIds.
         for (YelpAPIErrors error : EnumSet.allOf(YelpAPIErrors.class)) {
             errorNameSet.add(error.name());
         }

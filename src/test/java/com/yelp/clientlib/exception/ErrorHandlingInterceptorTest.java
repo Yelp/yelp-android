@@ -31,7 +31,7 @@ public class ErrorHandlingInterceptorTest {
      * Ensure the interceptor does nothing besides proceeding the request if the request is done successfully.
      */
     @Test
-    public void testSuccessfulResponseNotDoingAnythingExceptProceedingRequests() throws IOException {
+    public void testSuccessfulRequestNotDoingAnythingExceptProceedingRequests() throws IOException {
         Request mockRequest = PowerMock.createMock(Request.class);
         Response mockResponse = PowerMock.createMock(Response.class);
         Interceptor.Chain mockChain = PowerMock.createMock(Interceptor.Chain.class);
@@ -52,7 +52,7 @@ public class ErrorHandlingInterceptorTest {
      * Ensure the interceptor raises exceptions if requests are failed.
      */
     @Test
-    public void testFailedResponsesRaiseException() throws IOException {
+    public void testFailedRequestsRaiseException() throws IOException {
         PowerMock.mockStatic(YelpAPIErrors.class);
         Request mockRequest = PowerMock.createMock(Request.class);
         Response mockResponse = PowerMock.createNiceMock(Response.class);

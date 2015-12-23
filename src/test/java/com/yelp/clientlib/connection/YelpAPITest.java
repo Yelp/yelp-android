@@ -104,9 +104,9 @@ public class YelpAPITest {
         setUpMockServerResponse(400, errorResponseBodyString);
 
         Call<Business> call = yelpAPI.getBusiness(testBusinessId);
-        try{
+        try {
             call.execute().body();
-        }catch(BusinessUnavailable e){
+        } catch (BusinessUnavailable e) {
             Assert.assertEquals(400, e.getCode());
             Assert.assertEquals("BUSINESS_UNAVAILABLE", e.getErrorId());
             Assert.assertEquals("Business information is unavailable", e.getText());
