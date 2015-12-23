@@ -94,6 +94,58 @@ public class YelpAPITest {
     }
 
     @Test
+    public void testGetPhoneSearch() throws IOException, InterruptedException {
+        String testPhone = "1234567899";
+        setUpMockServer(searchResponseJsonNode.toString());
+
+        Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone);
+        SearchResponse searchResponse = call.execute().body();
+
+        verifyRequestForGetPhoneSearch(testPhone);
+        verifyResponseDeserializationForSearchResponse(searchResponse);
+    }
+
+    @Test
+    public void testGetPhoneSearchAsynchronous() throws IOException, InterruptedException {
+        String testPhone = "1234567899";
+        setUpMockServer(searchResponseJsonNode.toString());
+
+        final ArrayList<SearchResponse> returnedResponseWrapper = new ArrayList<>();
+        Callback<SearchResponse> businessCallback = new Callback<SearchResponse>() {
+            @Override
+            public void onResponse(Response<SearchResponse> response, Retrofit retrofit) {
+                returnedResponseWrapper.add(response.body());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        };
+
+        Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone);
+        call.enqueue(businessCallback);
+
+        verifyRequestForGetPhoneSearch(testPhone);
+        verifyResponseDeserializationForSearchResponse(returnedResponseWrapper.get(0));
+    }
+
+    private void verifyRequestForGetPhoneSearch(String phone) throws InterruptedException {
+        RecordedRequest recordedRequest = mockServer.takeRequest();
+        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
+
+        Assert.assertEquals("GET", recordedRequest.getMethod());
+        String path = recordedRequest.getPath();
+        Assert.assertTrue(path.startsWith("/v2/phone_search"));
+        Assert.assertTrue(path.contains("phone=" + phone));
+        Assert.assertEquals(0, recordedRequest.getBodySize());
+    }
+
+    private void verifyResponseDeserializationForSearchResponse(SearchResponse searchResponse) {
+        Assert.assertEquals(new Integer(searchResponseJsonNode.path("total").asInt()), searchResponse.total());
+    }
+
+    @Test
     public void testSearchByLocation() throws IOException, InterruptedException {
         setUpMockServer(searchResponseJsonNode.toString());
 

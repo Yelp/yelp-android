@@ -13,6 +13,9 @@ public interface YelpAPI {
     @GET("/v2/business/{businessId}")
     Call<Business> getBusiness(@Path("businessId") String businessId);
 
+    @GET("/v2/phone_search")
+    Call<SearchResponse> getPhoneSearch(@Query("phone") String phone);
+
     /**
      * TODO: This is a temporary endpoint to test Retrofit with query params. It will be refactored in later branches.
      */
