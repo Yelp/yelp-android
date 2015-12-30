@@ -4,15 +4,19 @@ import java.util.HashMap;
 
 public class QueryParams extends HashMap<String, Object> {
 
-    String getString(String key) {
+    public void set(String key, Object value) {
+        put(key, value);
+    }
+
+    public String getString(String key) {
         return (String) this.get(key);
     }
 
-    Integer getInteger(String key) {
+    public Integer getInteger(String key) {
         return (Integer) this.get(key);
     }
 
-    Boolean getBoolean(String key) {
+    public Boolean getBoolean(String key) {
         return (Boolean) this.get(key);
     }
 }

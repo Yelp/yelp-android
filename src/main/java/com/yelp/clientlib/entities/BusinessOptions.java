@@ -8,19 +8,19 @@ public class BusinessOptions extends QueryParams {
     public final static String ACTION_LINKS = "actionlinks";
 
     public void setCountryCode(String countryCode) {
-        put(COUNTRY_CODE, countryCode);
+        set(COUNTRY_CODE, countryCode);
     }
 
     public void setLanguage(String language) {
-        put(LANGUAGE, language);
+        set(LANGUAGE, language);
     }
 
     public void setLanguageFilter(Boolean languageFilter) {
-        put(LANGUAGE_FILTER, languageFilter);
+        set(LANGUAGE_FILTER, languageFilter);
     }
 
     public void setActionLinks(Boolean actionLinks) {
-        put(ACTION_LINKS, actionLinks);
+        set(ACTION_LINKS, actionLinks);
     }
 
     public String getCountryCode() {
