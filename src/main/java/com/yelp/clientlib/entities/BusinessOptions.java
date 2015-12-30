@@ -1,8 +1,6 @@
 package com.yelp.clientlib.entities;
 
-import java.util.HashMap;
-
-public class BusinessOptions extends HashMap<String, String> {
+public class BusinessOptions extends QueryParams {
 
     public final static String COUNTRY_CODE = "cc";
     public final static String LANGUAGE = "lang";
@@ -10,34 +8,34 @@ public class BusinessOptions extends HashMap<String, String> {
     public final static String ACTION_LINKS = "actionlinks";
 
     public void setCountryCode(String countryCode) {
-        this.put(COUNTRY_CODE, countryCode);
+        put(COUNTRY_CODE, countryCode);
     }
 
     public void setLanguage(String language) {
-        this.put(LANGUAGE, language);
+        put(LANGUAGE, language);
     }
 
-    public void setLanguageFilter(Boolean useLanguageFilter) {
-        this.put(LANGUAGE_FILTER, useLanguageFilter ? "true" : "false");
+    public void setLanguageFilter(Boolean languageFilter) {
+        put(LANGUAGE_FILTER, languageFilter);
     }
 
-    public void setActionLinks(Boolean includeActionLinks) {
-        this.put(ACTION_LINKS, includeActionLinks ? "true" : "false");
+    public void setActionLinks(Boolean actionLinks) {
+        put(ACTION_LINKS, actionLinks);
     }
 
     public String getCountryCode() {
-        return this.get(COUNTRY_CODE);
+        return getString(COUNTRY_CODE);
     }
 
     public String getLanguage() {
-        return this.get(LANGUAGE);
+        return getString(LANGUAGE);
     }
 
     public Boolean getLanguageFilter() {
-        return Boolean.valueOf(this.get(LANGUAGE_FILTER));
+        return getBoolean(LANGUAGE_FILTER);
     }
 
     public Boolean getActionLinks() {
-        return Boolean.valueOf(this.get(ACTION_LINKS));
+        return getBoolean(ACTION_LINKS);
     }
 }

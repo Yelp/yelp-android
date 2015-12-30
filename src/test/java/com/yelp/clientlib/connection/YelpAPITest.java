@@ -174,8 +174,8 @@ public class YelpAPITest {
 
         String path = recordedRequest.getPath();
         Assert.assertTrue(path.startsWith("/v2/business/" + businessId));
-        for (Map.Entry<String, String> param : options.entrySet()) {
-            Assert.assertTrue(path.contains(param.getKey() + "=" + param.getValue()));
+        for (Map.Entry<String, Object> param : options.entrySet()) {
+            Assert.assertTrue(path.contains(param.getKey() + "=" + param.getValue().toString()));
         }
 
         Assert.assertEquals(0, recordedRequest.getBodySize());

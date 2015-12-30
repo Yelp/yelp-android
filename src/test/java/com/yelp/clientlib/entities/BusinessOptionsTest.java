@@ -29,7 +29,7 @@ public class BusinessOptionsTest {
         BusinessOptions options = new BusinessOptions();
         Assert.assertNull(options.getCountryCode());
         Assert.assertNull(options.getLanguage());
-        Assert.assertFalse(options.getLanguageFilter());
-        Assert.assertFalse(options.getActionLinks());
+        Assert.assertNull(options.getLanguageFilter());
+        Assert.assertNull(options.getActionLinks());
     }
 }
