@@ -1,7 +1,7 @@
 package com.yelp.clientlib.connection;
 
 import com.yelp.clientlib.entities.Business;
-import com.yelp.clientlib.entities.BusinessOptions;
+import com.yelp.clientlib.entities.options.BusinessOptions;
 import com.yelp.clientlib.entities.SearchResponse;
 
 import retrofit.Call;

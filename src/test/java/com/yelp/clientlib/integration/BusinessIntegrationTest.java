@@ -3,7 +3,7 @@ package com.yelp.clientlib.integration;
 import com.yelp.clientlib.connection.YelpAPI;
 import com.yelp.clientlib.connection.YelpAPIFactory;
 import com.yelp.clientlib.entities.Business;
-import com.yelp.clientlib.entities.BusinessOptions;
+import com.yelp.clientlib.entities.options.BusinessOptions;
 import com.yelp.clientlib.util.AsyncTestUtil;
 
 import org.junit.Assert;
@@ -53,11 +53,12 @@ public class BusinessIntegrationTest {
 
     @Test
     public void testGetBusinessWithOptions() throws IOException {
-        BusinessOptions options = new BusinessOptions();
-        options.setLanguage("en");
-        options.setCountryCode("US");
-        options.setLanguageFilter(true);
-        options.setActionLinks(true);
+        BusinessOptions options = BusinessOptions.builder()
+                .language("en")
+                .countryCode("US")
+                .languageFilter(true)
+                .languageFilter(true)
+                .build();
 
         Call<Business> call = yelpAPI.getBusiness(businessId, options);
         Response<Business> response = call.execute();

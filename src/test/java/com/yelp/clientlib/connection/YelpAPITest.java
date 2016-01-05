@@ -5,9 +5,9 @@ import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
 import com.yelp.clientlib.entities.Business;
-import com.yelp.clientlib.entities.BusinessOptions;
 import com.yelp.clientlib.entities.JsonTestUtils;
 import com.yelp.clientlib.entities.SearchResponse;
+import com.yelp.clientlib.entities.options.BusinessOptions;
 import com.yelp.clientlib.util.AsyncTestUtil;
 
 import org.junit.After;
@@ -99,11 +99,11 @@ public class YelpAPITest {
     public void testGetBusinessWithOptions() throws IOException, InterruptedException {
         String testBusinessId = "test-business-id";
 
-        BusinessOptions options = new BusinessOptions();
-        options.setCountryCode("US");
-        options.setLanguage("en");
-        options.setLanguageFilter(true);
-        options.setActionLinks(true);
+        BusinessOptions options = BusinessOptions.builder()
+                .countryCode("US")
+                .language("en")
+                .languageFilter(true)
+                .actionLinks(true).build();
 
         setUpMockServer(businessJsonNode.toString());
 
