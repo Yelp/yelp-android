@@ -1,5 +1,11 @@
 package com.yelp.clientlib.entities;
 
+/**
+ * Query options for Business Endpoints.
+ *
+ * @see <a href="https://www.yelp.com/developers/documentation/v2/business#lParam">https://www.yelp
+ * .com/developers/documentation/v2/business#lParam</a>
+ */
 public class BusinessOptions extends QueryParams {
 
     public final static String COUNTRY_CODE = "cc";

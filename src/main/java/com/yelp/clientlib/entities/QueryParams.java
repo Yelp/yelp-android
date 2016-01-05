@@ -2,6 +2,9 @@ package com.yelp.clientlib.entities;
 
 import java.util.HashMap;
 
+/**
+ * Base class for query params be used as {@link retrofit.http.QueryMap}.
+ */
 public class QueryParams extends HashMap<String, Object> {
 
     public void set(String key, Object value) {
