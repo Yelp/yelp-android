@@ -63,7 +63,7 @@ public class BusinessIntegrationTest {
 
             @Override
             public void onFailure(Throwable t) {
-
+                Assert.fail("Unexpected failure: " + toString());
             }
         };
 
@@ -97,7 +97,7 @@ public class BusinessIntegrationTest {
         Callback<Business> businessCallback = new Callback<Business>() {
             @Override
             public void onResponse(Response<Business> response, Retrofit retrofit) {
-
+                Assert.fail("Expected failure not returned.");
             }
 
             @Override

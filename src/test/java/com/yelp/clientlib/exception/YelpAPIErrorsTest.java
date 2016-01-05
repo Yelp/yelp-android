@@ -6,11 +6,9 @@ import com.yelp.clientlib.exception.exceptions.UnexpectedAPIError;
 import com.yelp.clientlib.exception.exceptions.YelpAPIError;
 import com.yelp.clientlib.exception.exceptions.YelpError;
 
-import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -86,26 +84,6 @@ public class YelpAPIErrorsTest {
         String errorHTMLBody = "<html><title>This is not JSON</title></html>";
 
         YelpAPIErrors.parseError(errorCode, errorMessage, errorHTMLBody);
-    }
-
-    /**
-     * This case should never happen, but here we make sure it's working even if ReflectiveOperationException
-     * really happens by accident.
-     */
-    @Test(expected = YelpError.class)
-    public void testParseErrorReflectiveOperationExceptionRaiseYelpError() throws Exception {
-        String errorJsonBody = generateErrorJsonString("INTERNAL_ERROR", "Darwin bites the cable.");
-
-        PowerMock.mockStaticPartial(YelpAPIErrors.class, "newError");
-        PowerMock.expectPrivate(
-                YelpAPIErrors.class,
-                "newError",
-                EasyMock.anyInt(), EasyMock.anyString(), EasyMock.anyString(), EasyMock.anyString()
-        ).andThrow(new ReflectiveOperationException());
-
-        PowerMock.replay(YelpAPIErrors.class);
-
-        YelpAPIErrors.parseError(500, "Internal Server Error", errorJsonBody);
     }
 
     private String generateErrorJsonString(String errorId, String text) {

@@ -83,7 +83,7 @@ public class YelpAPITest {
 
             @Override
             public void onFailure(Throwable t) {
-
+                Assert.fail("Unexpected failure: " + toString());
             }
         };
 
@@ -97,10 +97,7 @@ public class YelpAPITest {
     @Test
     public void testGetBusiness400Response() throws IOException, InterruptedException {
         String testBusinessId = "test-business-id";
-        String errorResponseBodyString = "{\"error\": {" +
-                "\"id\": \"BUSINESS_UNAVAILABLE\", " +
-                "\"text\": \"Business information is unavailable\"" +
-                "}}";
+        String errorResponseBodyString = JsonTestUtils.getJsonNodeFromFile("sampleFailureResponse.json").toString();
         setUpMockServerResponse(400, errorResponseBodyString);
 
         Call<Business> call = yelpAPI.getBusiness(testBusinessId);
