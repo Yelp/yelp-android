@@ -119,6 +119,7 @@ public class YelpAPITest {
 
         String testBusinessId = "test-business-id";
         BusinessOptions options = new BusinessOptions();
+
         Call<Business> call = yelpAPI.getBusiness(testBusinessId, options);
         Business business = call.execute().body();
 
@@ -131,6 +132,7 @@ public class YelpAPITest {
         setUpMockServer(businessJsonNode.toString());
 
         String testBusinessId = "test-business-id";
+
         Call<Business> call = yelpAPI.getBusiness(testBusinessId, null);
         Business business = call.execute().body();
 
