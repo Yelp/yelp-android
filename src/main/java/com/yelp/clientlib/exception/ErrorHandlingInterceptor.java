@@ -14,10 +14,11 @@ public class ErrorHandlingInterceptor implements Interceptor {
         Response response = chain.proceed(chain.request());
 
         if (!response.isSuccessful()) {
-            throw YelpAPIErrors.parseError(
+            throw APIErrorUtils.parseError(
                     response.code(),
                     response.message(),
-                    response.body() != null ? response.body().string() : null);
+                    response.body() != null ? response.body().string() : null
+            );
         }
         return response;
     }

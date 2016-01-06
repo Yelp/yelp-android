@@ -17,7 +17,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.io.IOException;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({YelpAPIErrors.class, Request.class, Response.class})
+@PrepareForTest({APIErrorUtils.class, Request.class, Response.class})
 public class ErrorHandlingInterceptorTest {
 
     Interceptor errorHandlingInterceptor;
@@ -53,7 +53,7 @@ public class ErrorHandlingInterceptorTest {
      */
     @Test
     public void testFailedRequestsRaiseException() throws IOException {
-        PowerMock.mockStatic(YelpAPIErrors.class);
+        PowerMock.mockStatic(APIErrorUtils.class);
         Request mockRequest = PowerMock.createMock(Request.class);
         Response mockResponse = PowerMock.createNiceMock(Response.class);
         Interceptor.Chain mockChain = PowerMock.createMock(Interceptor.Chain.class);
@@ -64,15 +64,15 @@ public class ErrorHandlingInterceptorTest {
         EasyMock.expect(mockResponse.isSuccessful()).andReturn(false);
 
         EasyMock.expect(
-                YelpAPIErrors.parseError(EasyMock.anyInt(), EasyMock.anyString(), EasyMock.anyString())
+                APIErrorUtils.parseError(EasyMock.anyInt(), EasyMock.anyString(), EasyMock.anyString())
         ).andReturn(mockYelpAPIError);
 
-        PowerMock.replay(mockChain, mockResponse, mockYelpAPIError, YelpAPIErrors.class);
+        PowerMock.replay(mockChain, mockResponse, mockYelpAPIError, APIErrorUtils.class);
 
         try {
             errorHandlingInterceptor.intercept(mockChain);
         } catch (YelpAPIError apiError) {
-            PowerMock.verify(mockChain, mockResponse, mockYelpAPIError, YelpAPIErrors.class);
+            PowerMock.verify(mockChain, mockResponse, mockYelpAPIError, APIErrorUtils.class);
             Assert.assertEquals(mockYelpAPIError, apiError);
         }
     }
