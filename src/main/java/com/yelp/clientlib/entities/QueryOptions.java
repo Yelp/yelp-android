@@ -5,7 +5,7 @@ import java.util.HashMap;
 /**
  * Base class for query options.
  *
- * Every query options class should extend from this base class to be consumed by Retrofit as a query parameter map.
+ * Every query options class should extend this base class to be consumed by Retrofit as a query parameter map.
  * @see {@link retrofit.http.QueryMap}
  */
 public class QueryOptions extends HashMap<String, Object> {

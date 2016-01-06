@@ -97,15 +97,14 @@ public class YelpAPITest {
 
     @Test
     public void testGetBusinessWithOptions() throws IOException, InterruptedException {
-        String testBusinessId = "test-business-id";
+        setUpMockServer(businessJsonNode.toString());
 
+        String testBusinessId = "test-business-id";
         BusinessOptions options = BusinessOptions.builder()
                 .countryCode("US")
                 .language("en")
                 .languageFilter(true)
                 .actionLinks(true).build();
-
-        setUpMockServer(businessJsonNode.toString());
 
         Call<Business> call = yelpAPI.getBusiness(testBusinessId, options);
         Business business = call.execute().body();
@@ -121,6 +120,18 @@ public class YelpAPITest {
         String testBusinessId = "test-business-id";
         BusinessOptions options = new BusinessOptions();
         Call<Business> call = yelpAPI.getBusiness(testBusinessId, options);
+        Business business = call.execute().body();
+
+        verifyRequestForGetBusiness(testBusinessId);
+        verifyResponseDeserializationForGetBusiness(business);
+    }
+
+    @Test
+    public void testGetBusinessWithNullOptions() throws IOException, InterruptedException {
+        setUpMockServer(businessJsonNode.toString());
+
+        String testBusinessId = "test-business-id";
+        Call<Business> call = yelpAPI.getBusiness(testBusinessId, null);
         Business business = call.execute().body();
 
         verifyRequestForGetBusiness(testBusinessId);

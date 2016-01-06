@@ -3,7 +3,7 @@ package com.yelp.clientlib.entities;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class QueryParamsTest {
+public class QueryOptionsTest {
 
     @Test
     public void testGetString() {
