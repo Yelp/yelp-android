@@ -24,10 +24,7 @@ public class APIErrorUtilsTest {
 
         YelpAPIError error = APIErrorUtils.parseError(errorCode, errorMessage, null);
         Assert.assertTrue(error instanceof UnexpectedAPIError);
-        Assert.assertEquals(errorCode, error.getCode());
-        Assert.assertEquals(errorMessage, error.getMessage());
-        Assert.assertNull(error.getText());
-        Assert.assertNull(error.getErrorId());
+        verifyError(error, errorCode, errorMessage, null, null);
     }
 
     @Test
@@ -40,10 +37,7 @@ public class APIErrorUtilsTest {
 
         YelpAPIError error = APIErrorUtils.parseError(errorCode, errorMessage, errorJsonBody);
         Assert.assertTrue(error instanceof BusinessUnavailable);
-        Assert.assertEquals(errorCode, error.getCode());
-        Assert.assertEquals(errorMessage, error.getMessage());
-        Assert.assertEquals("BUSINESS_UNAVAILABLE", error.getErrorId());
-        Assert.assertEquals("Business information is unavailable", error.getText());
+        verifyError(error, errorCode, errorMessage, errorId, errorText);
     }
 
     @Test
@@ -56,10 +50,7 @@ public class APIErrorUtilsTest {
 
         YelpAPIError error = APIErrorUtils.parseError(errorCode, errorMessage, errorJsonBody);
         Assert.assertTrue(error instanceof InternalError);
-        Assert.assertEquals(errorCode, error.getCode());
-        Assert.assertEquals(errorMessage, error.getMessage());
-        Assert.assertEquals(errorId, error.getErrorId());
-        Assert.assertEquals(errorText, error.getText());
+        verifyError(error, errorCode, errorMessage, errorId, errorText);
     }
 
     @Test
@@ -72,10 +63,7 @@ public class APIErrorUtilsTest {
 
         YelpAPIError error = APIErrorUtils.parseError(errorCode, errorMessage, errorJsonBody);
         Assert.assertTrue(error instanceof UnexpectedAPIError);
-        Assert.assertEquals(errorCode, error.getCode());
-        Assert.assertEquals(errorMessage, error.getMessage());
-        Assert.assertEquals(errorId, error.getErrorId());
-        Assert.assertEquals(errorText, error.getText());
+        verifyError(error, errorCode, errorMessage, errorId, errorText);
     }
 
     @Test(expected = IOException.class)
@@ -85,6 +73,18 @@ public class APIErrorUtilsTest {
         String errorHTMLBody = "<html><title>This is not JSON</title></html>";
 
         APIErrorUtils.parseError(errorCode, errorMessage, errorHTMLBody);
+    }
+
+    private void verifyError(
+            YelpAPIError error,
+            int expectCode,
+            String expectMessage,
+            String expectId,
+            String expectText) {
+        Assert.assertEquals(expectCode, error.getCode());
+        Assert.assertEquals(expectMessage, error.getMessage());
+        Assert.assertEquals(expectId, error.getErrorId());
+        Assert.assertEquals(expectText, error.getText());
     }
 
     private String generateErrorJsonString(String errorId, String text) {
