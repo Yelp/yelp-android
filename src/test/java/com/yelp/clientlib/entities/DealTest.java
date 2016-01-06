@@ -18,7 +18,7 @@ public class DealTest {
         Assert.assertEquals(dealNode.path("currency_code").textValue(), deal.currencyCode());
         Assert.assertNull(deal.id());
         Assert.assertEquals(dealNode.path("image_url").textValue(), deal.imageUrl());
-        Assert.assertNull(deal.importantRestriction());
+        Assert.assertNull(deal.importantRestrictions());
         Assert.assertEquals(dealNode.path("is_popular").asBoolean(), deal.isPopular());
         Assert.assertNotNull(deal.options().get(0));
         Assert.assertNull(deal.timeEnd());

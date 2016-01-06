@@ -8,6 +8,9 @@ import com.yelp.clientlib.entities.Business;
 import com.yelp.clientlib.entities.JsonTestUtils;
 import com.yelp.clientlib.entities.SearchResponse;
 import com.yelp.clientlib.entities.options.BusinessOptions;
+import com.yelp.clientlib.entities.options.SearchCoordinate;
+import com.yelp.clientlib.entities.options.SearchLocation;
+import com.yelp.clientlib.entities.options.SearchOptions;
 import com.yelp.clientlib.util.AsyncTestUtil;
 
 import org.junit.After;
@@ -144,7 +147,10 @@ public class YelpAPITest {
     public void testSearchByLocation() throws IOException, InterruptedException {
         setUpMockServer(searchResponseJsonNode.toString());
 
-        Call<SearchResponse> call = yelpAPI.searchByLocation("food", "Boston");
+        SearchOptions options = new SearchOptions();
+        options.setTerm("food");
+
+        Call<SearchResponse> call = yelpAPI.search("Boston", null, options);
         SearchResponse searchResponse = call.execute().body();
 
         RecordedRequest recordedRequest = mockServer.takeRequest();
@@ -161,6 +167,69 @@ public class YelpAPITest {
         // Verify the deserialized response.
         Assert.assertEquals(new Integer(searchResponseJsonNode.path("total").asInt()), searchResponse.total());
     }
+
+    @Test
+    public void testSearchByLocationWithCoordinates() throws IOException, InterruptedException {
+        setUpMockServer(searchResponseJsonNode.toString());
+
+        SearchOptions options = new SearchOptions();
+        options.setTerm("food");
+
+        SearchCoordinate coordinate = SearchCoordinate.builder()
+                .latitude(11.111111)
+                .longitude(22.222222)
+                .build();
+
+        Call<SearchResponse> call = yelpAPI.search("Boston", coordinate, options);
+        SearchResponse searchResponse = call.execute().body();
+
+        RecordedRequest recordedRequest = mockServer.takeRequest();
+        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
+
+        // Verify basic HTTP elements.
+        Assert.assertEquals("GET", recordedRequest.getMethod());
+        String path = recordedRequest.getPath();
+        Assert.assertTrue(path.startsWith("/v2/search"));
+        Assert.assertTrue(path.contains("term=food"));
+        Assert.assertTrue(path.contains("location=Boston"));
+        Assert.assertTrue(path.contains("cll=11.111111,22.222222"));
+        Assert.assertEquals(0, recordedRequest.getBodySize());
+
+        // Verify the deserialized response.
+        Assert.assertEquals(new Integer(searchResponseJsonNode.path("total").asInt()), searchResponse.total());
+    }
+
+
+    @Test
+    public void testSearchBySearchLocation() throws IOException, InterruptedException {
+        setUpMockServer(searchResponseJsonNode.toString());
+
+        SearchOptions options = new SearchOptions();
+        options.setTerm("food");
+
+        SearchLocation location = SearchLocation.builder()
+                .latitude(11.111111)
+                .longitude(22.222222)
+                .build();
+
+        Call<SearchResponse> call = yelpAPI.search(location, options);
+        SearchResponse searchResponse = call.execute().body();
+
+        RecordedRequest recordedRequest = mockServer.takeRequest();
+        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
+
+        // Verify basic HTTP elements.
+        Assert.assertEquals("GET", recordedRequest.getMethod());
+        String path = recordedRequest.getPath();
+        Assert.assertTrue(path.startsWith("/v2/search"));
+        Assert.assertTrue(path.contains("term=food"));
+        Assert.assertTrue(path.contains("ll=11.111111,22.222222"));
+        Assert.assertEquals(0, recordedRequest.getBodySize());
+
+        // Verify the deserialized response.
+        Assert.assertEquals(new Integer(searchResponseJsonNode.path("total").asInt()), searchResponse.total());
+    }
+
 
     private void setUpMockServer(String responseBody) {
         MockResponse mockResponse = new MockResponse()

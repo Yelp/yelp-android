@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
+import com.yelp.clientlib.annotation.Nullable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public abstract class SearchResponse implements Serializable {
 
         public abstract Builder businesses(ArrayList<Business> businesses);
 
+        @Nullable
         public abstract Builder region(Region region);
 
         public abstract Builder total(Integer total);

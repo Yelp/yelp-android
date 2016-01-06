@@ -29,7 +29,7 @@ public abstract class Deal implements Serializable {
     public abstract String imageUrl();
 
     @Nullable
-    public abstract String importantRestriction();
+    public abstract String importantRestrictions();
 
     @Nullable
     public abstract Boolean isPopular();
@@ -64,7 +64,7 @@ public abstract class Deal implements Serializable {
 
         public abstract Builder imageUrl(String imageUrl);
 
-        public abstract Builder importantRestriction(String importantRestriction);
+        public abstract Builder importantRestrictions(String importantRestrictions);
 
         public abstract Builder isPopular(Boolean isPopular);
 
