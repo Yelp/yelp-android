@@ -63,7 +63,7 @@ public class BusinessIntegrationTest {
 
             @Override
             public void onFailure(Throwable t) {
-                Assert.fail("Unexpected failure: " + toString());
+                Assert.fail("Unexpected failure: " + t.toString());
             }
         };
 
