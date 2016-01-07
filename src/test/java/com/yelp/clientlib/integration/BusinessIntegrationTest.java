@@ -59,21 +59,6 @@ public class BusinessIntegrationTest {
         params.put("lang", "en");
         params.put("lang_filter", "true");
         params.put("actionlinks", "true");
-        params.put("whatsoever", "well");
-
-        Call<Business> call = yelpAPI.getBusiness(businessId, params);
-        Response<Business> response = call.execute();
-        Assert.assertEquals(200, response.code());
-
-        Business business = response.body();
-        Assert.assertNotNull(business);
-        Assert.assertEquals(businessId, business.id());
-    }
-
-    @Test
-    public void testGetBusinessParamsBeURLEncoded() throws IOException {
-        Map<String, String> params = new HashMap<>();
-        params.put("whatsoever", "well it's encoded");
 
         Call<Business> call = yelpAPI.getBusiness(businessId, params);
         Response<Business> response = call.execute();
