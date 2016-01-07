@@ -12,6 +12,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -54,7 +56,10 @@ public class PhoneSearchIntegrationTest {
 
     @Test
     public void testGetPhoneSearchWithCategory() throws IOException {
-        Call<SearchResponse> call = yelpAPI.getPhoneSearch(phone, "massmedia", null);
+        Map<String, String> params = new HashMap<>();
+        params.put("category", "massmedia");
+
+        Call<SearchResponse> call = yelpAPI.getPhoneSearch(phone, params);
         Response<SearchResponse> response = call.execute();
         Assert.assertEquals(200, response.code());
 
@@ -66,7 +71,10 @@ public class PhoneSearchIntegrationTest {
 
     @Test
     public void testGetPhoneSearchWithCountryCode() throws IOException {
-        Call<SearchResponse> call = yelpAPI.getPhoneSearch(phone, null, "US");
+        Map<String, String> params = new HashMap<>();
+        params.put("cc", "US");
+
+        Call<SearchResponse> call = yelpAPI.getPhoneSearch(phone, params);
         Response<SearchResponse> response = call.execute();
         Assert.assertEquals(200, response.code());
 
@@ -87,7 +95,7 @@ public class PhoneSearchIntegrationTest {
 
             @Override
             public void onFailure(Throwable t) {
-
+                Assert.fail("Unexpected failure: " + t.toString());
             }
         };
 

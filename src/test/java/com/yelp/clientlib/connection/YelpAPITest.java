@@ -16,6 +16,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -101,7 +103,7 @@ public class YelpAPITest {
         Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone);
         SearchResponse searchResponse = call.execute().body();
 
-        verifyRequestForGetPhoneSearch(testPhone, null, null);
+        verifyRequestForGetPhoneSearch(testPhone, null);
         verifyResponseDeserializationForSearchResponse(searchResponse);
     }
 
@@ -126,47 +128,70 @@ public class YelpAPITest {
         Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone);
         call.enqueue(businessCallback);
 
-        verifyRequestForGetPhoneSearch(testPhone, null, null);
+        verifyRequestForGetPhoneSearch(testPhone, null);
         verifyResponseDeserializationForSearchResponse(responseWrapper.get(0));
     }
 
     @Test
     public void testGetPhoneSearchWithParams() throws IOException, InterruptedException {
-        String testPhone = "1234567899";
-        String testCategory = "restaurant";
-        String testCountryCode = "US";
         setUpMockServer(searchResponseJsonNode.toString());
 
-        Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone, testCategory, testCountryCode);
+        String testPhone = "1234567899";
+        Map<String, String> params = new HashMap<>();
+        params.put("category", "restaurant");
+        params.put("cc", "US");
+
+        Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone, params);
         SearchResponse searchResponse = call.execute().body();
 
-        verifyRequestForGetPhoneSearch(testPhone, testCategory, testCountryCode);
+        verifyRequestForGetPhoneSearch(testPhone, params);
+        verifyResponseDeserializationForSearchResponse(searchResponse);
+    }
+
+    @Test
+    public void testGetPhoneSearchWithEmptyParams() throws IOException, InterruptedException {
+        setUpMockServer(searchResponseJsonNode.toString());
+
+        String testPhone = "1234567899";
+        Map<String, String> params = new HashMap<>();
+
+        Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone, params);
+        SearchResponse searchResponse = call.execute().body();
+
+        verifyRequestForGetPhoneSearch(testPhone, params);
         verifyResponseDeserializationForSearchResponse(searchResponse);
     }
 
     @Test
     public void testGetPhoneSearchWithNullParams() throws IOException, InterruptedException {
-        String testPhone = "1234567899";
         setUpMockServer(searchResponseJsonNode.toString());
 
-        Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone, null, null);
+        String testPhone = "1234567899";
+
+        Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone, null);
         SearchResponse searchResponse = call.execute().body();
 
-        verifyRequestForGetPhoneSearch(testPhone, null, null);
+        verifyRequestForGetPhoneSearch(testPhone, null);
         verifyResponseDeserializationForSearchResponse(searchResponse);
     }
 
-    private void verifyRequestForGetPhoneSearch(String phone, String category, String countryCode)
+    private void verifyRequestForGetPhoneSearch(String phone, Map<String, String> params)
             throws InterruptedException {
         RecordedRequest recordedRequest = mockServer.takeRequest();
         verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
 
         Assert.assertEquals("GET", recordedRequest.getMethod());
+
         String path = recordedRequest.getPath();
         Assert.assertTrue(path.startsWith("/v2/phone_search"));
         Assert.assertTrue(path.contains("phone=" + phone));
-        Assert.assertEquals(category != null, path.contains("category=" + category));
-        Assert.assertEquals(countryCode != null, path.contains("cc=" + countryCode));
+
+        if(params!=null) {
+            for (Map.Entry<String, String> param : params.entrySet()) {
+                Assert.assertTrue(path.contains(param.getKey() + "=" + param.getValue()));
+            }
+        }
+
         Assert.assertEquals(0, recordedRequest.getBodySize());
     }
 
