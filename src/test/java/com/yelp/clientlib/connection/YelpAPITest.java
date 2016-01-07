@@ -16,6 +16,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -69,7 +71,7 @@ public class YelpAPITest {
     }
 
     @Test
-    public void testGetBusinessAsynchronous() throws IOException, InterruptedException {
+    public void testGetBusinessAsynchronous() throws InterruptedException {
         String testBusinessId = "test-business-id";
         setUpMockServer(businessJsonNode.toString());
 
@@ -82,7 +84,7 @@ public class YelpAPITest {
 
             @Override
             public void onFailure(Throwable t) {
-
+                Assert.fail("Unexpected failure: " + t.toString());
             }
         };
 
@@ -91,6 +93,67 @@ public class YelpAPITest {
 
         verifyRequestForGetBusiness(testBusinessId);
         verifyResponseDeserializationForGetBusiness(returnedBusinessWrapper.get(0));
+    }
+
+    @Test
+    public void testGetBusinessWithParams() throws IOException, InterruptedException {
+        setUpMockServer(businessJsonNode.toString());
+
+        String testBusinessId = "test-business-id";
+        Map<String, String> params = new HashMap<>();
+        params.put("cc", "US");
+        params.put("lang", "en");
+        params.put("lang_filter", "true");
+        params.put("actionlinks", "true");
+
+        Call<Business> call = yelpAPI.getBusiness(testBusinessId, params);
+        Business business = call.execute().body();
+
+        verifyRequestForGetBusiness(testBusinessId, params);
+        verifyResponseDeserializationForGetBusiness(business);
+    }
+
+    @Test
+    public void testGetBusinessParamsBeURLEncoded() throws IOException, InterruptedException {
+        setUpMockServer(businessJsonNode.toString());
+
+        String testBusinessId = "test-business-id";
+        Map<String, String> params = new HashMap<>();
+        String key = "the key";
+        String value = "the value";
+        params.put(key, value);
+        String expectedEncodedParamString = "the%20key=the%20value";
+
+        Call<Business> call = yelpAPI.getBusiness(testBusinessId, params);
+        call.execute().body();
+
+        RecordedRequest recordedRequest = mockServer.takeRequest();
+        Assert.assertTrue(recordedRequest.getPath().contains(expectedEncodedParamString));
+    }
+
+    @Test
+    public void testGetBusinessWithEmptyParams() throws IOException, InterruptedException {
+        setUpMockServer(businessJsonNode.toString());
+
+        String testBusinessId = "test-business-id";
+        Call<Business> call = yelpAPI.getBusiness(testBusinessId, new HashMap<String, String>());
+        Business business = call.execute().body();
+
+        verifyRequestForGetBusiness(testBusinessId);
+        verifyResponseDeserializationForGetBusiness(business);
+    }
+
+    @Test
+    public void testGetBusinessWithNullParams() throws IOException, InterruptedException {
+        setUpMockServer(businessJsonNode.toString());
+
+        String testBusinessId = "test-business-id";
+
+        Call<Business> call = yelpAPI.getBusiness(testBusinessId, null);
+        Business business = call.execute().body();
+
+        verifyRequestForGetBusiness(testBusinessId);
+        verifyResponseDeserializationForGetBusiness(business);
     }
 
     @Test
@@ -128,6 +191,22 @@ public class YelpAPITest {
 
         Assert.assertEquals("GET", recordedRequest.getMethod());
         Assert.assertEquals("/v2/business/" + businessId, recordedRequest.getPath());
+        Assert.assertEquals(0, recordedRequest.getBodySize());
+    }
+
+    private void verifyRequestForGetBusiness(String businessId, Map<String, String> params)
+            throws InterruptedException {
+        RecordedRequest recordedRequest = mockServer.takeRequest();
+        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
+
+        Assert.assertEquals("GET", recordedRequest.getMethod());
+
+        String path = recordedRequest.getPath();
+        Assert.assertTrue(path.startsWith("/v2/business/" + businessId));
+        for (Map.Entry<String, String> param : params.entrySet()) {
+            Assert.assertTrue(path.contains(param.getKey() + "=" + param.getValue()));
+        }
+
         Assert.assertEquals(0, recordedRequest.getBodySize());
     }
 
