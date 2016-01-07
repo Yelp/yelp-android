@@ -55,23 +55,9 @@ public class PhoneSearchIntegrationTest {
     }
 
     @Test
-    public void testGetPhoneSearchWithCategory() throws IOException {
+    public void testGetPhoneSearchWithParams() throws IOException {
         Map<String, String> params = new HashMap<>();
         params.put("category", "massmedia");
-
-        Call<SearchResponse> call = yelpAPI.getPhoneSearch(phone, params);
-        Response<SearchResponse> response = call.execute();
-        Assert.assertEquals(200, response.code());
-
-        SearchResponse searchResponse = response.body();
-        Assert.assertNotNull(searchResponse);
-        Business business = searchResponse.businesses().get(0);
-        Assert.assertEquals(phone, business.phone());
-    }
-
-    @Test
-    public void testGetPhoneSearchWithCountryCode() throws IOException {
-        Map<String, String> params = new HashMap<>();
         params.put("cc", "US");
 
         Call<SearchResponse> call = yelpAPI.getPhoneSearch(phone, params);

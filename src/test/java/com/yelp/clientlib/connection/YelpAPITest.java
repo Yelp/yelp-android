@@ -155,7 +155,7 @@ public class YelpAPITest {
         verifyRequestForGetBusiness(testBusinessId);
         verifyResponseDeserializationForGetBusiness(business);
     }
-    
+
     @Test
     public void testGetPhoneSearch() throws IOException, InterruptedException {
         String testPhone = "1234567899";
@@ -236,30 +236,6 @@ public class YelpAPITest {
         verifyResponseDeserializationForSearchResponse(searchResponse);
     }
 
-    private void verifyRequestForGetPhoneSearch(String phone, Map<String, String> params)
-            throws InterruptedException {
-        RecordedRequest recordedRequest = mockServer.takeRequest();
-        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
-
-        Assert.assertEquals("GET", recordedRequest.getMethod());
-
-        String path = recordedRequest.getPath();
-        Assert.assertTrue(path.startsWith("/v2/phone_search"));
-        Assert.assertTrue(path.contains("phone=" + phone));
-
-        if(params!=null) {
-            for (Map.Entry<String, String> param : params.entrySet()) {
-                Assert.assertTrue(path.contains(param.getKey() + "=" + param.getValue()));
-            }
-        }
-
-        Assert.assertEquals(0, recordedRequest.getBodySize());
-    }
-
-    private void verifyResponseDeserializationForSearchResponse(SearchResponse searchResponse) {
-        Assert.assertEquals(new Integer(searchResponseJsonNode.path("total").asInt()), searchResponse.total());
-    }
-
     @Test
     public void testSearchByLocation() throws IOException, InterruptedException {
         setUpMockServer(searchResponseJsonNode.toString());
@@ -290,12 +266,7 @@ public class YelpAPITest {
     }
 
     private void verifyRequestForGetBusiness(String businessId) throws InterruptedException {
-        RecordedRequest recordedRequest = mockServer.takeRequest();
-        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
-
-        Assert.assertEquals("GET", recordedRequest.getMethod());
-        Assert.assertEquals("/v2/business/" + businessId, recordedRequest.getPath());
-        Assert.assertEquals(0, recordedRequest.getBodySize());
+        verifyRequestForGetBusiness(businessId, null);
     }
 
     private void verifyRequestForGetBusiness(String businessId, Map<String, String> params)
@@ -307,8 +278,30 @@ public class YelpAPITest {
 
         String path = recordedRequest.getPath();
         Assert.assertTrue(path.startsWith("/v2/business/" + businessId));
-        for (Map.Entry<String, String> param : params.entrySet()) {
-            Assert.assertTrue(path.contains(param.getKey() + "=" + param.getValue()));
+        if (params != null) {
+            for (Map.Entry<String, String> param : params.entrySet()) {
+                Assert.assertTrue(path.contains(param.getKey() + "=" + param.getValue()));
+            }
+        }
+
+        Assert.assertEquals(0, recordedRequest.getBodySize());
+    }
+
+    private void verifyRequestForGetPhoneSearch(String phone, Map<String, String> params)
+            throws InterruptedException {
+        RecordedRequest recordedRequest = mockServer.takeRequest();
+        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
+
+        Assert.assertEquals("GET", recordedRequest.getMethod());
+
+        String path = recordedRequest.getPath();
+        Assert.assertTrue(path.startsWith("/v2/phone_search"));
+        Assert.assertTrue(path.contains("phone=" + phone));
+
+        if (params != null) {
+            for (Map.Entry<String, String> param : params.entrySet()) {
+                Assert.assertTrue(path.contains(param.getKey() + "=" + param.getValue()));
+            }
         }
 
         Assert.assertEquals(0, recordedRequest.getBodySize());
@@ -316,6 +309,10 @@ public class YelpAPITest {
 
     private void verifyResponseDeserializationForGetBusiness(Business business) {
         Assert.assertEquals(businessJsonNode.path("id").textValue(), business.id());
+    }
+
+    private void verifyResponseDeserializationForSearchResponse(SearchResponse searchResponse) {
+        Assert.assertEquals(new Integer(searchResponseJsonNode.path("total").asInt()), searchResponse.total());
     }
 
     private void verifyAuthorizationHeader(String authHeader) {
