@@ -164,7 +164,7 @@ public class YelpAPITest {
         Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone);
         SearchResponse searchResponse = call.execute().body();
 
-        verifyRequestForGetPhoneSearch(testPhone, null);
+        verifyRequestForGetPhoneSearch(testPhone);
         verifyResponseDeserializationForSearchResponse(searchResponse);
     }
 
@@ -189,7 +189,7 @@ public class YelpAPITest {
         Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone);
         call.enqueue(businessCallback);
 
-        verifyRequestForGetPhoneSearch(testPhone, null);
+        verifyRequestForGetPhoneSearch(testPhone);
         verifyResponseDeserializationForSearchResponse(responseWrapper.get(0));
     }
 
@@ -219,7 +219,7 @@ public class YelpAPITest {
         Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone, params);
         SearchResponse searchResponse = call.execute().body();
 
-        verifyRequestForGetPhoneSearch(testPhone, params);
+        verifyRequestForGetPhoneSearch(testPhone);
         verifyResponseDeserializationForSearchResponse(searchResponse);
     }
 
@@ -232,7 +232,7 @@ public class YelpAPITest {
         Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone, null);
         SearchResponse searchResponse = call.execute().body();
 
-        verifyRequestForGetPhoneSearch(testPhone, null);
+        verifyRequestForGetPhoneSearch(testPhone);
         verifyResponseDeserializationForSearchResponse(searchResponse);
     }
 
@@ -271,33 +271,29 @@ public class YelpAPITest {
 
     private void verifyRequestForGetBusiness(String businessId, Map<String, String> params)
             throws InterruptedException {
-        RecordedRequest recordedRequest = mockServer.takeRequest();
-        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
+        verifyRequest("/v2/business/" + businessId, params);
+    }
 
-        Assert.assertEquals("GET", recordedRequest.getMethod());
-
-        String path = recordedRequest.getPath();
-        Assert.assertTrue(path.startsWith("/v2/business/" + businessId));
-        if (params != null) {
-            for (Map.Entry<String, String> param : params.entrySet()) {
-                Assert.assertTrue(path.contains(param.getKey() + "=" + param.getValue()));
-            }
-        }
-
-        Assert.assertEquals(0, recordedRequest.getBodySize());
+    private void verifyRequestForGetPhoneSearch(String phone) throws InterruptedException {
+        verifyRequestForGetPhoneSearch(phone, null);
     }
 
     private void verifyRequestForGetPhoneSearch(String phone, Map<String, String> params)
             throws InterruptedException {
+        params = (params == null) ? new HashMap<String, String>() : new HashMap<>(params);
+        params.put("phone", phone);
+
+        verifyRequest("/v2/phone_search", params);
+    }
+
+    private void verifyRequest(String pathPrefix, Map<String, String> params) throws InterruptedException {
         RecordedRequest recordedRequest = mockServer.takeRequest();
         verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
 
         Assert.assertEquals("GET", recordedRequest.getMethod());
 
         String path = recordedRequest.getPath();
-        Assert.assertTrue(path.startsWith("/v2/phone_search"));
-        Assert.assertTrue(path.contains("phone=" + phone));
-
+        Assert.assertTrue(path.startsWith(pathPrefix));
         if (params != null) {
             for (Map.Entry<String, String> param : params.entrySet()) {
                 Assert.assertTrue(path.contains(param.getKey() + "=" + param.getValue()));
