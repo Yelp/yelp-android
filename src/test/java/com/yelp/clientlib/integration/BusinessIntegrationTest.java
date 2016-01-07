@@ -11,6 +11,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -42,6 +44,23 @@ public class BusinessIntegrationTest {
     @Test
     public void testGetBusiness() throws IOException {
         Call<Business> call = yelpAPI.getBusiness(businessId);
+        Response<Business> response = call.execute();
+        Assert.assertEquals(200, response.code());
+
+        Business business = response.body();
+        Assert.assertNotNull(business);
+        Assert.assertEquals(businessId, business.id());
+    }
+
+    @Test
+    public void testGetBusinessWithParams() throws IOException {
+        Map<String, String> params = new HashMap<>();
+        params.put("cc", "US");
+        params.put("lang", "en");
+        params.put("lang_filter", "true");
+        params.put("actionlinks", "true");
+
+        Call<Business> call = yelpAPI.getBusiness(businessId, params);
         Response<Business> response = call.execute();
         Assert.assertEquals(200, response.code());
 
