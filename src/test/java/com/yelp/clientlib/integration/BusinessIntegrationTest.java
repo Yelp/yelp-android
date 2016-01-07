@@ -3,7 +3,6 @@ package com.yelp.clientlib.integration;
 import com.yelp.clientlib.connection.YelpAPI;
 import com.yelp.clientlib.connection.YelpAPIFactory;
 import com.yelp.clientlib.entities.Business;
-import com.yelp.clientlib.entities.options.BusinessOptions;
 import com.yelp.clientlib.util.AsyncTestUtil;
 
 import org.junit.Assert;
@@ -12,6 +11,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -52,15 +53,29 @@ public class BusinessIntegrationTest {
     }
 
     @Test
-    public void testGetBusinessWithOptions() throws IOException {
-        BusinessOptions options = BusinessOptions.builder()
-                .language("en")
-                .countryCode("US")
-                .languageFilter(true)
-                .languageFilter(true)
-                .build();
+    public void testGetBusinessWithParams() throws IOException {
+        Map<String, String> params = new HashMap<>();
+        params.put("cc", "US");
+        params.put("lang", "en");
+        params.put("lang_filter", "true");
+        params.put("actionlinks", "true");
+        params.put("whatsoever", "well");
 
-        Call<Business> call = yelpAPI.getBusiness(businessId, options);
+        Call<Business> call = yelpAPI.getBusiness(businessId, params);
+        Response<Business> response = call.execute();
+        Assert.assertEquals(200, response.code());
+
+        Business business = response.body();
+        Assert.assertNotNull(business);
+        Assert.assertEquals(businessId, business.id());
+    }
+
+    @Test
+    public void testGetBusinessParamsBeURLEncoded() throws IOException {
+        Map<String, String> params = new HashMap<>();
+        params.put("whatsoever", "well it's encoded");
+
+        Call<Business> call = yelpAPI.getBusiness(businessId, params);
         Response<Business> response = call.execute();
         Assert.assertEquals(200, response.code());
 

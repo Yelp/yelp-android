@@ -7,7 +7,6 @@ import com.squareup.okhttp.mockwebserver.RecordedRequest;
 import com.yelp.clientlib.entities.Business;
 import com.yelp.clientlib.entities.JsonTestUtils;
 import com.yelp.clientlib.entities.SearchResponse;
-import com.yelp.clientlib.entities.options.BusinessOptions;
 import com.yelp.clientlib.util.AsyncTestUtil;
 
 import org.junit.After;
@@ -17,6 +16,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import retrofit.Call;
@@ -71,7 +71,7 @@ public class YelpAPITest {
     }
 
     @Test
-    public void testGetBusinessAsynchronous() throws IOException, InterruptedException {
+    public void testGetBusinessAsynchronous() throws InterruptedException {
         String testBusinessId = "test-business-id";
         setUpMockServer(businessJsonNode.toString());
 
@@ -84,7 +84,7 @@ public class YelpAPITest {
 
             @Override
             public void onFailure(Throwable t) {
-
+                Assert.fail("Unexpected failure: " + t.toString());
             }
         };
 
@@ -96,31 +96,47 @@ public class YelpAPITest {
     }
 
     @Test
-    public void testGetBusinessWithOptions() throws IOException, InterruptedException {
+    public void testGetBusinessWithParams() throws IOException, InterruptedException {
         setUpMockServer(businessJsonNode.toString());
 
         String testBusinessId = "test-business-id";
-        BusinessOptions options = BusinessOptions.builder()
-                .countryCode("US")
-                .language("en")
-                .languageFilter(true)
-                .actionLinks(true).build();
+        Map<String, String> params = new HashMap<>();
+        params.put("cc", "US");
+        params.put("lang", "en");
+        params.put("lang_filter", "true");
+        params.put("actionlinks", "true");
 
-        Call<Business> call = yelpAPI.getBusiness(testBusinessId, options);
+        Call<Business> call = yelpAPI.getBusiness(testBusinessId, params);
         Business business = call.execute().body();
 
-        verifyRequestForGetBusiness(testBusinessId, options);
+        verifyRequestForGetBusiness(testBusinessId, params);
         verifyResponseDeserializationForGetBusiness(business);
     }
 
     @Test
-    public void testGetBusinessWithNonSetOptions() throws IOException, InterruptedException {
+    public void testGetBusinessParamsBeURLEncoded() throws IOException, InterruptedException {
         setUpMockServer(businessJsonNode.toString());
 
         String testBusinessId = "test-business-id";
-        BusinessOptions options = new BusinessOptions();
+        Map<String, String> params = new HashMap<>();
+        String key = "the key";
+        String value = "the value";
+        params.put(key, value);
+        String expectedEncodedParamString = "the%20key=the%20value";
 
-        Call<Business> call = yelpAPI.getBusiness(testBusinessId, options);
+        Call<Business> call = yelpAPI.getBusiness(testBusinessId, params);
+        call.execute().body();
+
+        RecordedRequest recordedRequest = mockServer.takeRequest();
+        Assert.assertTrue(recordedRequest.getPath().contains(expectedEncodedParamString));
+    }
+
+    @Test
+    public void testGetBusinessWithEmptyParams() throws IOException, InterruptedException {
+        setUpMockServer(businessJsonNode.toString());
+
+        String testBusinessId = "test-business-id";
+        Call<Business> call = yelpAPI.getBusiness(testBusinessId, new HashMap<String, String>());
         Business business = call.execute().body();
 
         verifyRequestForGetBusiness(testBusinessId);
@@ -128,7 +144,7 @@ public class YelpAPITest {
     }
 
     @Test
-    public void testGetBusinessWithNullOptions() throws IOException, InterruptedException {
+    public void testGetBusinessWithNullParams() throws IOException, InterruptedException {
         setUpMockServer(businessJsonNode.toString());
 
         String testBusinessId = "test-business-id";
@@ -178,7 +194,7 @@ public class YelpAPITest {
         Assert.assertEquals(0, recordedRequest.getBodySize());
     }
 
-    private void verifyRequestForGetBusiness(String businessId, BusinessOptions options)
+    private void verifyRequestForGetBusiness(String businessId, Map<String, String> params)
             throws InterruptedException {
         RecordedRequest recordedRequest = mockServer.takeRequest();
         verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
@@ -187,8 +203,8 @@ public class YelpAPITest {
 
         String path = recordedRequest.getPath();
         Assert.assertTrue(path.startsWith("/v2/business/" + businessId));
-        for (Map.Entry<String, Object> param : options.entrySet()) {
-            Assert.assertTrue(path.contains(param.getKey() + "=" + param.getValue().toString()));
+        for (Map.Entry<String, String> param : params.entrySet()) {
+            Assert.assertTrue(path.contains(param.getKey() + "=" + param.getValue()));
         }
 
         Assert.assertEquals(0, recordedRequest.getBodySize());
