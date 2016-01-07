@@ -6,6 +6,7 @@ import com.yelp.clientlib.entities.Business;
 import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
 import com.yelp.clientlib.exception.exceptions.YelpAPIError;
 import com.yelp.clientlib.util.AsyncTestUtil;
+import com.yelp.clientlib.util.ErrorTestUtil;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -85,10 +86,14 @@ public class BusinessIntegrationTest {
         try {
             call.execute();
         } catch (YelpAPIError apiError) {
-            Assert.assertEquals(400, apiError.getCode());
-            Assert.assertEquals("Bad Request", apiError.getMessage());
-            Assert.assertEquals("BUSINESS_UNAVAILABLE", apiError.getErrorId());
-            Assert.assertTrue(apiError.getText().contains("Business information is unavailable"));
+            Assert.assertTrue(apiError instanceof BusinessUnavailable);
+            ErrorTestUtil.verifyErrorContent(
+                    apiError,
+                    400,
+                    "Bad Request",
+                    "BUSINESS_UNAVAILABLE",
+                    "Business information is unavailable"
+            );
         }
     }
 
@@ -103,12 +108,13 @@ public class BusinessIntegrationTest {
             @Override
             public void onFailure(Throwable t) {
                 Assert.assertTrue(t instanceof BusinessUnavailable);
-
-                YelpAPIError apiError = (YelpAPIError) t;
-                Assert.assertEquals(400, apiError.getCode());
-                Assert.assertEquals("Bad Request", apiError.getMessage());
-                Assert.assertEquals("BUSINESS_UNAVAILABLE", apiError.getErrorId());
-                Assert.assertTrue(apiError.getText().contains("Business information is unavailable"));
+                ErrorTestUtil.verifyErrorContent(
+                        (YelpAPIError) t,
+                        400,
+                        "Bad Request",
+                        "BUSINESS_UNAVAILABLE",
+                        "Business information is unavailable"
+                );
             }
         };
 

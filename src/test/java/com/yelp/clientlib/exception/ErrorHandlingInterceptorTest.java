@@ -9,7 +9,7 @@ import com.squareup.okhttp.ResponseBody;
 import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
 import com.yelp.clientlib.exception.exceptions.InternalError;
 import com.yelp.clientlib.exception.exceptions.UnexpectedAPIError;
-import com.yelp.clientlib.exception.exceptions.YelpAPIError;
+import com.yelp.clientlib.util.ErrorTestUtil;
 
 import org.easymock.EasyMock;
 import org.junit.Assert;
@@ -63,7 +63,7 @@ public class ErrorHandlingInterceptorTest {
         try {
             errorHandlingInterceptor.intercept(mockChain);
         } catch (UnexpectedAPIError error) {
-            verifyError(error, errorCode, errorMessage, null, null);
+            ErrorTestUtil.verifyErrorContent(error, errorCode, errorMessage, null, null);
             return;
         }
 
@@ -82,7 +82,7 @@ public class ErrorHandlingInterceptorTest {
         try {
             errorHandlingInterceptor.intercept(mockChain);
         } catch (BusinessUnavailable error) {
-            verifyError(error, errorCode, errorMessage, errorId, errorText);
+            ErrorTestUtil.verifyErrorContent(error, errorCode, errorMessage, errorId, errorText);
             return;
         }
 
@@ -101,7 +101,7 @@ public class ErrorHandlingInterceptorTest {
         try {
             errorHandlingInterceptor.intercept(mockChain);
         } catch (InternalError error) {
-            verifyError(error, errorCode, errorMessage, errorId, errorText);
+            ErrorTestUtil.verifyErrorContent(error, errorCode, errorMessage, errorId, errorText);
             return;
         }
 
@@ -120,7 +120,7 @@ public class ErrorHandlingInterceptorTest {
         try {
             errorHandlingInterceptor.intercept(mockChain);
         } catch (UnexpectedAPIError error) {
-            verifyError(error, errorCode, errorMessage, errorId, errorText);
+            ErrorTestUtil.verifyErrorContent(error, errorCode, errorMessage, errorId, errorText);
             return;
         }
 
@@ -158,22 +158,8 @@ public class ErrorHandlingInterceptorTest {
         return mockChain;
     }
 
-    private void verifyError(
-            YelpAPIError error,
-            int expectCode,
-            String expectMessage,
-            String expectId,
-            String expectText
-    ) {
-        Assert.assertEquals(expectCode, error.getCode());
-        Assert.assertEquals(expectMessage, error.getMessage());
-        Assert.assertEquals(expectId, error.getErrorId());
-        Assert.assertEquals(expectText, error.getText());
-    }
-
     private String generateErrorJsonString(String errorId, String text) {
         String errorJsonStringFormat = "{\"error\": {\"id\": \"%s\", \"text\": \"%s\"}}";
         return String.format(errorJsonStringFormat, errorId, text);
     }
-
 }

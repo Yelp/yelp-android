@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.Response;
 import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
+import com.yelp.clientlib.exception.exceptions.InternalError;
 import com.yelp.clientlib.exception.exceptions.UnexpectedAPIError;
 import com.yelp.clientlib.exception.exceptions.YelpAPIError;
 
@@ -52,7 +53,7 @@ public class ErrorHandlingInterceptor implements Interceptor {
             case "BUSINESS_UNAVAILABLE":
                 return new BusinessUnavailable(code, message, errorId, text);
             case "INTERNAL_ERROR":
-                return new com.yelp.clientlib.exception.exceptions.InternalError(code, message, errorId, text);
+                return new InternalError(code, message, errorId, text);
             default:
                 return new UnexpectedAPIError(code, message, errorId, text);
         }
