@@ -4,7 +4,7 @@ import com.google.auto.value.AutoValue;
 import com.yelp.clientlib.annotation.Nullable;
 
 @AutoValue
-public abstract class SearchLocation {
+public abstract class CoordinateOptions {
 
     public abstract Double latitude();
 
@@ -47,10 +47,10 @@ public abstract class SearchLocation {
 
         public abstract Builder altitudeAccuracy(Double altitudeAccuracy);
 
-        public abstract SearchLocation build();
+        public abstract CoordinateOptions build();
     }
 
     public static Builder builder() {
-        return new AutoValue_SearchLocation.Builder();
+        return new AutoValue_CoordinateOptions.Builder();
     }
 }

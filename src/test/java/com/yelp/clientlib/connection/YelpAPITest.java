@@ -7,9 +7,7 @@ import com.squareup.okhttp.mockwebserver.RecordedRequest;
 import com.yelp.clientlib.entities.Business;
 import com.yelp.clientlib.entities.JsonTestUtils;
 import com.yelp.clientlib.entities.SearchResponse;
-import com.yelp.clientlib.entities.options.SearchCoordinate;
-import com.yelp.clientlib.entities.options.SearchLocation;
-import com.yelp.clientlib.entities.options.SearchOptions;
+import com.yelp.clientlib.entities.options.CoordinateOptions;
 import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
 import com.yelp.clientlib.util.AsyncTestUtil;
 import com.yelp.clientlib.util.ErrorTestUtil;
@@ -265,87 +263,38 @@ public class YelpAPITest {
     public void testSearchByLocation() throws IOException, InterruptedException {
         setUpMockServerResponse(200, "OK", searchResponseJsonNode.toString());
 
-        SearchOptions options = new SearchOptions();
-        options.setTerm("food");
+        Map<String, String> params = new HashMap<>();
+        params.put("term", "yelp");
 
-        Call<SearchResponse> call = yelpAPI.search("Boston", null, options);
+        Call<SearchResponse> call = yelpAPI.search("Boston", params);
         SearchResponse searchResponse = call.execute().body();
 
-        RecordedRequest recordedRequest = mockServer.takeRequest();
-        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
+        Map<String, String> expectedCalledParams = new HashMap<>(params);
+        expectedCalledParams.put("location", "Boston");
 
-        // Verify basic HTTP elements.
-        Assert.assertEquals("GET", recordedRequest.getMethod());
-        String path = recordedRequest.getPath();
-        Assert.assertTrue(path.startsWith("/v2/search"));
-        Assert.assertTrue(path.contains("term=food"));
-        Assert.assertTrue(path.contains("location=Boston"));
-        Assert.assertEquals(0, recordedRequest.getBodySize());
-
-        // Verify the deserialized response.
-        Assert.assertEquals(new Integer(searchResponseJsonNode.path("total").asInt()), searchResponse.total());
+        verifyRequestForSearch(expectedCalledParams);
+        verifyResponseDeserializationForSearchResponse(searchResponse);
     }
 
     @Test
-    public void testSearchByLocationWithCoordinates() throws IOException, InterruptedException {
+    public void testSearchByCoordinateOptions() throws IOException, InterruptedException {
         setUpMockServerResponse(200, "OK", searchResponseJsonNode.toString());
 
-        SearchOptions options = new SearchOptions();
-        options.setTerm("food");
+        Map<String, String> params = new HashMap<>();
+        params.put("term", "yelp");
 
-        SearchCoordinate coordinate = SearchCoordinate.builder()
+        CoordinateOptions coordinate = CoordinateOptions.builder()
                 .latitude(11.111111)
                 .longitude(22.222222)
                 .build();
 
-        Call<SearchResponse> call = yelpAPI.search("Boston", coordinate, options);
+        Call<SearchResponse> call = yelpAPI.search(coordinate, params);
         SearchResponse searchResponse = call.execute().body();
 
-        RecordedRequest recordedRequest = mockServer.takeRequest();
-        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
-
-        // Verify basic HTTP elements.
-        Assert.assertEquals("GET", recordedRequest.getMethod());
-        String path = recordedRequest.getPath();
-        Assert.assertTrue(path.startsWith("/v2/search"));
-        Assert.assertTrue(path.contains("term=food"));
-        Assert.assertTrue(path.contains("location=Boston"));
-        Assert.assertTrue(path.contains("cll=11.111111,22.222222"));
-        Assert.assertEquals(0, recordedRequest.getBodySize());
-
-        // Verify the deserialized response.
-        Assert.assertEquals(new Integer(searchResponseJsonNode.path("total").asInt()), searchResponse.total());
-    }
-
-
-    @Test
-    public void testSearchBySearchLocation() throws IOException, InterruptedException {
-        setUpMockServerResponse(200, "OK", searchResponseJsonNode.toString());
-
-        SearchOptions options = new SearchOptions();
-        options.setTerm("food");
-
-        SearchLocation location = SearchLocation.builder()
-                .latitude(11.111111)
-                .longitude(22.222222)
-                .build();
-
-        Call<SearchResponse> call = yelpAPI.search(location, options);
-        SearchResponse searchResponse = call.execute().body();
-
-        RecordedRequest recordedRequest = mockServer.takeRequest();
-        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
-
-        // Verify basic HTTP elements.
-        Assert.assertEquals("GET", recordedRequest.getMethod());
-        String path = recordedRequest.getPath();
-        Assert.assertTrue(path.startsWith("/v2/search"));
-        Assert.assertTrue(path.contains("term=food"));
-        Assert.assertTrue(path.contains("ll=11.111111,22.222222"));
-        Assert.assertEquals(0, recordedRequest.getBodySize());
-
-        // Verify the deserialized response.
-        Assert.assertEquals(new Integer(searchResponseJsonNode.path("total").asInt()), searchResponse.total());
+        Map<String, String> expectedCalledParams = new HashMap<>(params);
+        expectedCalledParams.put("ll", "11.111111,22.222222");
+        verifyRequestForSearch(expectedCalledParams);
+        verifyResponseDeserializationForSearchResponse(searchResponse);
     }
 
 
@@ -370,12 +319,15 @@ public class YelpAPITest {
         verifyRequestForGetPhoneSearch(phone, null);
     }
 
-    private void verifyRequestForGetPhoneSearch(String phone, Map<String, String> params)
-            throws InterruptedException {
+    private void verifyRequestForGetPhoneSearch(String phone, Map<String, String> params) throws InterruptedException {
         params = (params == null) ? new HashMap<String, String>() : new HashMap<>(params);
         params.put("phone", phone);
 
         verifyRequest("/v2/phone_search", params);
+    }
+
+    private void verifyRequestForSearch(Map<String, String> params) throws InterruptedException {
+        verifyRequest("/v2/search", params);
     }
 
     private void verifyRequest(String pathPrefix, Map<String, String> params) throws InterruptedException {

@@ -3,9 +3,7 @@ package com.yelp.clientlib.integration;
 import com.yelp.clientlib.connection.YelpAPI;
 import com.yelp.clientlib.connection.YelpAPIFactory;
 import com.yelp.clientlib.entities.SearchResponse;
-import com.yelp.clientlib.entities.options.SearchCoordinate;
-import com.yelp.clientlib.entities.options.SearchLocation;
-import com.yelp.clientlib.entities.options.SearchOptions;
+import com.yelp.clientlib.entities.options.CoordinateOptions;
 import com.yelp.clientlib.util.AsyncTestUtil;
 
 import org.junit.Assert;
@@ -13,6 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit.Call;
 import retrofit.Response;
@@ -40,11 +40,11 @@ public class SearchIntegrationTest {
     }
 
     @Test
-    public void testSearchByLocationWithNoCoordinate() throws IOException {
-        SearchOptions options = new SearchOptions();
-        options.setTerm("yelp");
+    public void testSearchByLocation() throws IOException {
+        Map<String, String> params = new HashMap<>();
+        params.put("term", "yelp");
 
-        Call<SearchResponse> call = yelpAPI.search("San Francisco", null, options);
+        Call<SearchResponse> call = yelpAPI.search("San Francisco", params);
         Response<SearchResponse> response = call.execute();
         Assert.assertEquals(200, response.code());
 
@@ -53,15 +53,12 @@ public class SearchIntegrationTest {
     }
 
     @Test
-    public void testSearchByLocationWithCoordinate() throws IOException {
-        SearchCoordinate coordinate = SearchCoordinate.builder()
-                .latitude(37.7867703362929)
-                .longitude(-122.399958372115).build();
+    public void testSearchByLocationWithOptionalCoordinate() throws IOException {
+        Map<String, String> params = new HashMap<>();
+        params.put("term", "yelp");
+        params.put("cll", "37.7867703362929,-122.399958372115");
 
-        SearchOptions options = new SearchOptions();
-        options.setTerm("yelp");
-
-        Call<SearchResponse> call = yelpAPI.search("San Francisco", coordinate, options);
+        Call<SearchResponse> call = yelpAPI.search("San Francisco", params);
         Response<SearchResponse> response = call.execute();
         Assert.assertEquals(200, response.code());
 
@@ -71,15 +68,15 @@ public class SearchIntegrationTest {
 
 
     @Test
-    public void testSearchBySearchLocation() throws IOException {
-        SearchLocation searchLocation = SearchLocation.builder()
+    public void testSearchByCoordinateOptions() throws IOException {
+        CoordinateOptions location = CoordinateOptions.builder()
                 .latitude(37.7867703362929)
                 .longitude(-122.399958372115).build();
 
-        SearchOptions options = new SearchOptions();
-        options.setTerm("yelp");
+        Map<String, String> params = new HashMap<>();
+        params.put("term", "yelp");
 
-        Call<SearchResponse> call = yelpAPI.search(searchLocation, options);
+        Call<SearchResponse> call = yelpAPI.search(location, params);
         Response<SearchResponse> response = call.execute();
         Assert.assertEquals(200, response.code());
 

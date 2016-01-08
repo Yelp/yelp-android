@@ -1,10 +1,9 @@
 package com.yelp.clientlib.entities.options;
 
-
 import org.junit.Assert;
 import org.junit.Test;
 
-public class SearchLocationTest {
+public class CoordinateOptionsTest {
     Double latitude = 11.11111;
     Double longitude = 22.11111;
     Double accuracy = 9.5;
@@ -13,7 +12,7 @@ public class SearchLocationTest {
 
     @Test
     public void testBuilder() {
-        SearchLocation location = SearchLocation.builder()
+        CoordinateOptions coordinate = CoordinateOptions.builder()
                 .latitude(latitude)
                 .longitude(longitude)
                 .accuracy(accuracy)
@@ -21,37 +20,37 @@ public class SearchLocationTest {
                 .altitudeAccuracy(altitudeAccuracy)
                 .build();
 
-        Assert.assertEquals(latitude, location.latitude());
-        Assert.assertEquals(longitude, location.longitude());
-        Assert.assertEquals(accuracy, location.accuracy());
-        Assert.assertEquals(altitude, location.altitude());
-        Assert.assertEquals(altitudeAccuracy, location.altitudeAccuracy());
+        Assert.assertEquals(latitude, coordinate.latitude());
+        Assert.assertEquals(longitude, coordinate.longitude());
+        Assert.assertEquals(accuracy, coordinate.accuracy());
+        Assert.assertEquals(altitude, coordinate.altitude());
+        Assert.assertEquals(altitudeAccuracy, coordinate.altitudeAccuracy());
     }
 
     @Test
     public void testToStringWithLatLong() {
-        SearchLocation location = SearchLocation.builder()
+        CoordinateOptions coordinate = CoordinateOptions.builder()
                 .latitude(latitude)
                 .longitude(longitude)
                 .build();
 
-        Assert.assertEquals(latitude + "," + longitude, location.toString());
+        Assert.assertEquals(latitude + "," + longitude, coordinate.toString());
     }
 
     @Test
     public void testToStringWithLatLongAccuracy() {
-        SearchLocation location = SearchLocation.builder()
+        CoordinateOptions coordinate = CoordinateOptions.builder()
                 .latitude(latitude)
                 .longitude(longitude)
                 .accuracy(accuracy)
                 .build();
 
-        Assert.assertEquals(latitude + "," + longitude + "," + accuracy, location.toString());
+        Assert.assertEquals(latitude + "," + longitude + "," + accuracy, coordinate.toString());
     }
 
     @Test
     public void testToStringWithLatLongAccuracyAltitude() {
-        SearchLocation location = SearchLocation.builder()
+        CoordinateOptions coordinate = CoordinateOptions.builder()
                 .latitude(latitude)
                 .longitude(longitude)
                 .accuracy(accuracy)
@@ -60,13 +59,13 @@ public class SearchLocationTest {
 
         Assert.assertEquals(
                 latitude + "," + longitude + "," + accuracy + "," + altitude,
-                location.toString()
+                coordinate.toString()
         );
     }
 
     @Test
     public void testToStringWithAllFields() {
-        SearchLocation location = SearchLocation.builder()
+        CoordinateOptions coordinate = CoordinateOptions.builder()
                 .latitude(latitude)
                 .longitude(longitude)
                 .accuracy(accuracy)
@@ -77,27 +76,27 @@ public class SearchLocationTest {
         Assert.assertEquals(
                 latitude + "," + longitude + "," + accuracy + "," + altitude + "," +
                         altitudeAccuracy,
-                location.toString()
+                coordinate.toString()
         );
     }
 
     @Test(expected = IllegalStateException.class)
     public void testNonSetLatitudeRaiseException() {
-        SearchLocation.builder()
+        CoordinateOptions.builder()
                 .longitude(longitude)
                 .build();
     }
 
     @Test(expected = IllegalStateException.class)
     public void testNonSetLongitudeRaiseException() {
-        SearchLocation.builder()
+        CoordinateOptions.builder()
                 .latitude(latitude)
                 .build();
     }
 
     @Test
     public void testNonSetNullableValueRaiseNoException() {
-        SearchLocation.builder()
+        CoordinateOptions.builder()
                 .latitude(latitude)
                 .longitude(longitude)
                 .build();
