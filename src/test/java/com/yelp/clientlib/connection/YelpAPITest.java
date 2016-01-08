@@ -7,7 +7,9 @@ import com.squareup.okhttp.mockwebserver.RecordedRequest;
 import com.yelp.clientlib.entities.Business;
 import com.yelp.clientlib.entities.JsonTestUtils;
 import com.yelp.clientlib.entities.SearchResponse;
+import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
 import com.yelp.clientlib.util.AsyncTestUtil;
+import com.yelp.clientlib.util.ErrorTestUtil;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -59,7 +61,7 @@ public class YelpAPITest {
     @Test
     public void testGetBusiness() throws IOException, InterruptedException {
         String testBusinessId = "test-business-id";
-        setUpMockServer(businessJsonNode.toString());
+        setUpMockServerResponse(200, "OK", businessJsonNode.toString());
 
         Call<Business> call = yelpAPI.getBusiness(testBusinessId);
         Business business = call.execute().body();
@@ -71,7 +73,7 @@ public class YelpAPITest {
     @Test
     public void testGetBusinessAsynchronous() throws IOException, InterruptedException {
         String testBusinessId = "test-business-id";
-        setUpMockServer(businessJsonNode.toString());
+        setUpMockServerResponse(200, "OK", businessJsonNode.toString());
 
         final ArrayList<Business> returnedBusinessWrapper = new ArrayList<>();
         Callback<Business> businessCallback = new Callback<Business>() {
@@ -82,7 +84,7 @@ public class YelpAPITest {
 
             @Override
             public void onFailure(Throwable t) {
-
+                Assert.fail("Unexpected failure: " + t.toString());
             }
         };
 
@@ -94,8 +96,28 @@ public class YelpAPITest {
     }
 
     @Test
+    public void testGetBusiness400Response() throws IOException, InterruptedException {
+        String testBusinessId = "test-business-id";
+        String errorResponseBodyString = JsonTestUtils.getJsonNodeFromFile("sampleFailureResponse.json").toString();
+        setUpMockServerResponse(400, "Bad Request", errorResponseBodyString);
+
+        Call<Business> call = yelpAPI.getBusiness(testBusinessId);
+        try {
+            call.execute().body();
+        } catch (BusinessUnavailable e) {
+            ErrorTestUtil.verifyErrorContent(
+                    e,
+                    400,
+                    "Bad Request",
+                    "BUSINESS_UNAVAILABLE",
+                    "Business information is unavailable"
+            );
+        }
+    }
+
+    @Test
     public void testSearchByLocation() throws IOException, InterruptedException {
-        setUpMockServer(searchResponseJsonNode.toString());
+        setUpMockServerResponse(200, "OK", searchResponseJsonNode.toString());
 
         Call<SearchResponse> call = yelpAPI.searchByLocation("food", "Boston");
         SearchResponse searchResponse = call.execute().body();
@@ -115,10 +137,11 @@ public class YelpAPITest {
         Assert.assertEquals(new Integer(searchResponseJsonNode.path("total").asInt()), searchResponse.total());
     }
 
-    private void setUpMockServer(String responseBody) {
+    private void setUpMockServerResponse(int responseCode, String responseMessage, String responseBody) {
         MockResponse mockResponse = new MockResponse()
                 .addHeader("Content-Type", "application/json; charset=utf-8")
-                .setBody(responseBody);
+                .setBody(responseBody)
+                .setStatus(String.format("HTTP/1.1 %s %s", responseCode, responseMessage));
         mockServer.enqueue(mockResponse);
     }
 
