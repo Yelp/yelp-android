@@ -49,9 +49,13 @@ public class ErrorHandlingInterceptor implements Interceptor {
             return new UnexpectedAPIError(code, message);
         }
 
-        JsonNode errorJsonNode = objectMapper.readTree(responseBody);
-        String errorId = errorJsonNode.path("error").path("id").asText();
-        String errorText = errorJsonNode.path("error").path("text").asText();
+        JsonNode errorJsonNode = objectMapper.readTree(responseBody).path("error");
+        String errorId = errorJsonNode.path("id").asText();
+        String errorText = errorJsonNode.path("text").asText();
+
+        if(errorJsonNode.has("field")) {
+            errorText += ": " + errorJsonNode.path("field").asText();
+        }
 
         switch (errorId) {
             case "AREA_TOO_LARGE":
@@ -69,8 +73,6 @@ public class ErrorHandlingInterceptor implements Interceptor {
             case "INVALID_OAUTH_USER":
                 return new InvalidOAuthUser(code, message, errorId, errorText);
             case "INVALID_PARAMETER":
-                String errorField = errorJsonNode.path("error").path("field").asText();
-                errorText += ": " + errorField;
                 return new InvalidParameter(code, message, errorId, errorText);
             case "INVALID_SIGNATURE":
                 return new InvalidSignature(code, message, errorId, errorText);

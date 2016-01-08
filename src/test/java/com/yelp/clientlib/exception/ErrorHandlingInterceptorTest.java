@@ -110,7 +110,7 @@ public class ErrorHandlingInterceptorTest {
     }
 
     @Test
-    public void testParseInvalidParameterError() throws IOException {
+    public void testParseErrorWithField() throws IOException {
         int errorCode = 400;
         String errorMessage = "Bad Request";
         String errorId = "INVALID_PARAMETER";
