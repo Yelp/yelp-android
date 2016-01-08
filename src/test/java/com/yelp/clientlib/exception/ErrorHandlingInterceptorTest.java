@@ -8,6 +8,7 @@ import com.squareup.okhttp.Response;
 import com.squareup.okhttp.ResponseBody;
 import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
 import com.yelp.clientlib.exception.exceptions.InternalError;
+import com.yelp.clientlib.exception.exceptions.InvalidParameter;
 import com.yelp.clientlib.exception.exceptions.UnexpectedAPIError;
 import com.yelp.clientlib.util.ErrorTestUtil;
 
@@ -109,6 +110,27 @@ public class ErrorHandlingInterceptorTest {
     }
 
     @Test
+    public void testParseErrorWithField() throws IOException {
+        int errorCode = 400;
+        String errorMessage = "Bad Request";
+        String errorId = "INVALID_PARAMETER";
+        String errorText = "One or more parameters are invalid in request";
+        String errorField = "phone";
+        String expectedErrorText = String.format("%s: %s", errorText, errorField);
+        String errorJsonBody = generateErrorJsonString(errorId, errorText, errorField);
+
+        Interceptor.Chain mockChain = mockChainWithErrorResponse(errorCode, errorMessage, errorJsonBody);
+        try {
+            errorHandlingInterceptor.intercept(mockChain);
+        } catch (InvalidParameter error) {
+            ErrorTestUtil.verifyErrorContent(error, errorCode, errorMessage, errorId, expectedErrorText);
+            return;
+        }
+
+        Assert.fail("Expected failure not returned.");
+    }
+
+    @Test
     public void testParseUnexpectedAPIError() throws IOException {
         int errorCode = 400;
         String errorMessage = "Bad Request";
@@ -161,5 +183,10 @@ public class ErrorHandlingInterceptorTest {
     private String generateErrorJsonString(String errorId, String text) {
         String errorJsonStringFormat = "{\"error\": {\"id\": \"%s\", \"text\": \"%s\"}}";
         return String.format(errorJsonStringFormat, errorId, text);
+    }
+
+    private String generateErrorJsonString(String errorId, String text, String field) {
+        String errorJsonStringFormat = "{\"error\": {\"id\": \"%s\", \"text\": \"%s\", \"field\": \"%s\"}}";
+        return String.format(errorJsonStringFormat, errorId, text, field);
     }
 }

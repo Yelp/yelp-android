@@ -4,9 +4,21 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.Response;
+import com.yelp.clientlib.exception.exceptions.AreaTooLarge;
+import com.yelp.clientlib.exception.exceptions.BadCategory;
 import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
+import com.yelp.clientlib.exception.exceptions.ExceededReqs;
 import com.yelp.clientlib.exception.exceptions.InternalError;
+import com.yelp.clientlib.exception.exceptions.InvalidOAuthCredentials;
+import com.yelp.clientlib.exception.exceptions.InvalidOAuthUser;
+import com.yelp.clientlib.exception.exceptions.InvalidParameter;
+import com.yelp.clientlib.exception.exceptions.InvalidSignature;
+import com.yelp.clientlib.exception.exceptions.MissingParameter;
+import com.yelp.clientlib.exception.exceptions.MultipleLocations;
+import com.yelp.clientlib.exception.exceptions.SSLRequired;
+import com.yelp.clientlib.exception.exceptions.UnavailableForLocation;
 import com.yelp.clientlib.exception.exceptions.UnexpectedAPIError;
+import com.yelp.clientlib.exception.exceptions.UnspecifiedLocation;
 import com.yelp.clientlib.exception.exceptions.YelpAPIError;
 
 import java.io.IOException;
@@ -37,25 +49,45 @@ public class ErrorHandlingInterceptor implements Interceptor {
             return new UnexpectedAPIError(code, message);
         }
 
-        JsonNode errorJsonNode = objectMapper.readTree(responseBody);
-        return newError(
-                code,
-                message,
-                errorJsonNode.path("error").path("id").asText(),
-                errorJsonNode.path("error").path("text").asText()
-        );
-    }
+        JsonNode errorJsonNode = objectMapper.readTree(responseBody).path("error");
+        String errorId = errorJsonNode.path("id").asText();
+        String errorText = errorJsonNode.path("text").asText();
 
-    private YelpAPIError newError(int code, String message, String errorId, String text) {
-        // TODO: Add more Exceptions.
+        if(errorJsonNode.has("field")) {
+            errorText += ": " + errorJsonNode.path("field").asText();
+        }
 
         switch (errorId) {
+            case "AREA_TOO_LARGE":
+                return new AreaTooLarge(code, message, errorId, errorText);
+            case "BAD_CATEGORY":
+                return new BadCategory(code, message, errorId, errorText);
             case "BUSINESS_UNAVAILABLE":
-                return new BusinessUnavailable(code, message, errorId, text);
+                return new BusinessUnavailable(code, message, errorId, errorText);
+            case "EXCEEDED_REQS":
+                return new ExceededReqs(code, message, errorId, errorText);
             case "INTERNAL_ERROR":
-                return new InternalError(code, message, errorId, text);
+                return new InternalError(code, message, errorId, errorText);
+            case "INVALID_OAUTH_CREDENTIALS":
+                return new InvalidOAuthCredentials(code, message, errorId, errorText);
+            case "INVALID_OAUTH_USER":
+                return new InvalidOAuthUser(code, message, errorId, errorText);
+            case "INVALID_PARAMETER":
+                return new InvalidParameter(code, message, errorId, errorText);
+            case "INVALID_SIGNATURE":
+                return new InvalidSignature(code, message, errorId, errorText);
+            case "MISSING_PARAMETER":
+                return new MissingParameter(code, message, errorId, errorText);
+            case "MULTIPLE_LOCATIONS":
+                return new MultipleLocations(code, message, errorId, errorText);
+            case "SSL_REQUIRED":
+                return new SSLRequired(code, message, errorId, errorText);
+            case "UNAVAILABLE_FOR_LOCATION":
+                return new UnavailableForLocation(code, message, errorId, errorText);
+            case "UNSPECIFIED_LOCATION":
+                return new UnspecifiedLocation(code, message, errorId, errorText);
             default:
-                return new UnexpectedAPIError(code, message, errorId, text);
+                return new UnexpectedAPIError(code, message, errorId, errorText);
         }
     }
 }
