@@ -3,8 +3,10 @@ package com.yelp.clientlib.integration;
 import com.yelp.clientlib.connection.YelpAPI;
 import com.yelp.clientlib.connection.YelpAPIFactory;
 import com.yelp.clientlib.entities.Business;
-import com.yelp.clientlib.entities.options.BusinessOptions;
+import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
+import com.yelp.clientlib.exception.exceptions.YelpAPIError;
 import com.yelp.clientlib.util.AsyncTestUtil;
+import com.yelp.clientlib.util.ErrorTestUtil;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,6 +14,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -52,15 +56,14 @@ public class BusinessIntegrationTest {
     }
 
     @Test
-    public void testGetBusinessWithOptions() throws IOException {
-        BusinessOptions options = BusinessOptions.builder()
-                .language("en")
-                .countryCode("US")
-                .languageFilter(true)
-                .languageFilter(true)
-                .build();
+    public void testGetBusinessWithParams() throws IOException {
+        Map<String, String> params = new HashMap<>();
+        params.put("cc", "US");
+        params.put("lang", "en");
+        params.put("lang_filter", "true");
+        params.put("actionlinks", "true");
 
-        Call<Business> call = yelpAPI.getBusiness(businessId, options);
+        Call<Business> call = yelpAPI.getBusiness(businessId, params);
         Response<Business> response = call.execute();
         Assert.assertEquals(200, response.code());
 
@@ -80,7 +83,7 @@ public class BusinessIntegrationTest {
 
             @Override
             public void onFailure(Throwable t) {
-
+                Assert.fail("Unexpected failure: " + t.toString());
             }
         };
 
@@ -93,5 +96,48 @@ public class BusinessIntegrationTest {
         Business business = response.body();
         Assert.assertNotNull(business);
         Assert.assertEquals(businessId, business.id());
+    }
+
+    @Test
+    public void testGetBusinessWith400Response() throws IOException {
+        Call<Business> call = yelpAPI.getBusiness("I-dont-think-this-biz-really-exists");
+
+        try {
+            call.execute();
+        } catch (YelpAPIError apiError) {
+            Assert.assertTrue(apiError instanceof BusinessUnavailable);
+            ErrorTestUtil.verifyErrorContent(
+                    apiError,
+                    400,
+                    "Bad Request",
+                    "BUSINESS_UNAVAILABLE",
+                    "Business information is unavailable"
+            );
+        }
+    }
+
+    @Test
+    public void testGetBusinessAsynchronousWith400Response() throws IOException {
+        Callback<Business> businessCallback = new Callback<Business>() {
+            @Override
+            public void onResponse(Response<Business> response, Retrofit retrofit) {
+                Assert.fail("Expected failure not returned.");
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Assert.assertTrue(t instanceof BusinessUnavailable);
+                ErrorTestUtil.verifyErrorContent(
+                        (YelpAPIError) t,
+                        400,
+                        "Bad Request",
+                        "BUSINESS_UNAVAILABLE",
+                        "Business information is unavailable"
+                );
+            }
+        };
+
+        Call<Business> call = yelpAPI.getBusiness("I-dont-think-this-biz-really-exists");
+        call.enqueue(businessCallback);
     }
 }

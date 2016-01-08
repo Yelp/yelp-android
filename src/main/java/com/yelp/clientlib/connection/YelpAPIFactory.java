@@ -1,6 +1,7 @@
 package com.yelp.clientlib.connection;
 
 import com.squareup.okhttp.OkHttpClient;
+import com.yelp.clientlib.exception.ErrorHandlingInterceptor;
 
 import retrofit.JacksonConverterFactory;
 import retrofit.Retrofit;
@@ -28,6 +29,7 @@ public class YelpAPIFactory {
         consumer.setTokenWithSecret(token, tokenSecret);
         this.httpClient = new OkHttpClient();
         this.httpClient.interceptors().add(new SigningInterceptor(consumer));
+        this.httpClient.interceptors().add(new ErrorHandlingInterceptor());
     }
 
     public YelpAPI createAPI() {

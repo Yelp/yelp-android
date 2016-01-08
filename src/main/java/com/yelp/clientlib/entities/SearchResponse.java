@@ -18,6 +18,7 @@ public abstract class SearchResponse implements Serializable {
 
     public abstract ArrayList<Business> businesses();
 
+    @Nullable
     public abstract Region region();
 
     public abstract Integer total();
