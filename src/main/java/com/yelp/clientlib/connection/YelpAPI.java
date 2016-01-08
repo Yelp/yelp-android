@@ -27,13 +27,35 @@ public interface YelpAPI {
      * Make a request to the business endpoint.
      *
      * @param businessId The business id.
-     * @param params     Key, value pairs as business API params. Key and value will be URL encoded by {@link
+     * @param params     Key, value pairs as business API params. Keys and values will be URL encoded by {@link
      *                   QueryMap}.
      * @return Object to execute the request.
      * @see <a href = https://www.yelp.com/developers/documentation/v2/business>https://www.yelp.com/developers/documentation/v2/business</a>
      */
     @GET("/v2/business/{businessId}")
     Call<Business> getBusiness(@Path("businessId") String businessId, @QueryMap Map<String, String> params);
+
+    /**
+     * Make a request to the phone search endpoint.
+     *
+     * @param phone Business phone number to search for.
+     * @return Object to execute the request.
+     * @see <a href = https://www.yelp.com/developers/documentation/v2/phone_search>https://www.yelp.com/developers/documentation/v2/phone_search</a>
+     */
+    @GET("/v2/phone_search")
+    Call<SearchResponse> getPhoneSearch(@Query("phone") String phone);
+
+    /**
+     * Make a request to the phone search endpoint.
+     *
+     * @param phone  Business phone number to search for.
+     * @param params Key, value pairs as phone search API params. Keys and values will be URL encoded by {@link
+     *               QueryMap}.
+     * @return Object to execute the request.
+     * @see <a href = https://www.yelp.com/developers/documentation/v2/phone_search>https://www.yelp.com/developers/documentation/v2/phone_search</a>
+     */
+    @GET("/v2/phone_search")
+    Call<SearchResponse> getPhoneSearch(@Query("phone") String phone, @QueryMap Map<String, String> params);
 
     /**
      * TODO: This is a temporary endpoint to test Retrofit with query params. It will be refactored in later branches.

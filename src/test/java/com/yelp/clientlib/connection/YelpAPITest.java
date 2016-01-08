@@ -157,6 +157,86 @@ public class YelpAPITest {
     }
 
     @Test
+    public void testGetPhoneSearch() throws IOException, InterruptedException {
+        String testPhone = "1234567899";
+        setUpMockServer(searchResponseJsonNode.toString());
+
+        Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone);
+        SearchResponse searchResponse = call.execute().body();
+
+        verifyRequestForGetPhoneSearch(testPhone);
+        verifyResponseDeserializationForSearchResponse(searchResponse);
+    }
+
+    @Test
+    public void testGetPhoneSearchAsynchronous() throws InterruptedException {
+        String testPhone = "1234567899";
+        setUpMockServer(searchResponseJsonNode.toString());
+
+        final ArrayList<SearchResponse> responseWrapper = new ArrayList<>();
+        Callback<SearchResponse> businessCallback = new Callback<SearchResponse>() {
+            @Override
+            public void onResponse(Response<SearchResponse> response, Retrofit retrofit) {
+                responseWrapper.add(response.body());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Assert.fail("Unexpected failure: " + t.toString());
+            }
+        };
+
+        Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone);
+        call.enqueue(businessCallback);
+
+        verifyRequestForGetPhoneSearch(testPhone);
+        verifyResponseDeserializationForSearchResponse(responseWrapper.get(0));
+    }
+
+    @Test
+    public void testGetPhoneSearchWithParams() throws IOException, InterruptedException {
+        setUpMockServer(searchResponseJsonNode.toString());
+
+        String testPhone = "1234567899";
+        Map<String, String> params = new HashMap<>();
+        params.put("category", "restaurant");
+        params.put("cc", "US");
+
+        Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone, params);
+        SearchResponse searchResponse = call.execute().body();
+
+        verifyRequestForGetPhoneSearch(testPhone, params);
+        verifyResponseDeserializationForSearchResponse(searchResponse);
+    }
+
+    @Test
+    public void testGetPhoneSearchWithEmptyParams() throws IOException, InterruptedException {
+        setUpMockServer(searchResponseJsonNode.toString());
+
+        String testPhone = "1234567899";
+        Map<String, String> params = new HashMap<>();
+
+        Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone, params);
+        SearchResponse searchResponse = call.execute().body();
+
+        verifyRequestForGetPhoneSearch(testPhone);
+        verifyResponseDeserializationForSearchResponse(searchResponse);
+    }
+
+    @Test
+    public void testGetPhoneSearchWithNullParams() throws IOException, InterruptedException {
+        setUpMockServer(searchResponseJsonNode.toString());
+
+        String testPhone = "1234567899";
+
+        Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone, null);
+        SearchResponse searchResponse = call.execute().body();
+
+        verifyRequestForGetPhoneSearch(testPhone);
+        verifyResponseDeserializationForSearchResponse(searchResponse);
+    }
+
+    @Test
     public void testSearchByLocation() throws IOException, InterruptedException {
         setUpMockServer(searchResponseJsonNode.toString());
 
@@ -186,25 +266,38 @@ public class YelpAPITest {
     }
 
     private void verifyRequestForGetBusiness(String businessId) throws InterruptedException {
-        RecordedRequest recordedRequest = mockServer.takeRequest();
-        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
-
-        Assert.assertEquals("GET", recordedRequest.getMethod());
-        Assert.assertEquals("/v2/business/" + businessId, recordedRequest.getPath());
-        Assert.assertEquals(0, recordedRequest.getBodySize());
+        verifyRequestForGetBusiness(businessId, null);
     }
 
     private void verifyRequestForGetBusiness(String businessId, Map<String, String> params)
             throws InterruptedException {
+        verifyRequest("/v2/business/" + businessId, params);
+    }
+
+    private void verifyRequestForGetPhoneSearch(String phone) throws InterruptedException {
+        verifyRequestForGetPhoneSearch(phone, null);
+    }
+
+    private void verifyRequestForGetPhoneSearch(String phone, Map<String, String> params)
+            throws InterruptedException {
+        params = (params == null) ? new HashMap<String, String>() : new HashMap<>(params);
+        params.put("phone", phone);
+
+        verifyRequest("/v2/phone_search", params);
+    }
+
+    private void verifyRequest(String pathPrefix, Map<String, String> params) throws InterruptedException {
         RecordedRequest recordedRequest = mockServer.takeRequest();
         verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
 
         Assert.assertEquals("GET", recordedRequest.getMethod());
 
         String path = recordedRequest.getPath();
-        Assert.assertTrue(path.startsWith("/v2/business/" + businessId));
-        for (Map.Entry<String, String> param : params.entrySet()) {
-            Assert.assertTrue(path.contains(param.getKey() + "=" + param.getValue()));
+        Assert.assertTrue(path.startsWith(pathPrefix));
+        if (params != null) {
+            for (Map.Entry<String, String> param : params.entrySet()) {
+                Assert.assertTrue(path.contains(param.getKey() + "=" + param.getValue()));
+            }
         }
 
         Assert.assertEquals(0, recordedRequest.getBodySize());
@@ -212,6 +305,10 @@ public class YelpAPITest {
 
     private void verifyResponseDeserializationForGetBusiness(Business business) {
         Assert.assertEquals(businessJsonNode.path("id").textValue(), business.id());
+    }
+
+    private void verifyResponseDeserializationForSearchResponse(SearchResponse searchResponse) {
+        Assert.assertEquals(new Integer(searchResponseJsonNode.path("total").asInt()), searchResponse.total());
     }
 
     private void verifyAuthorizationHeader(String authHeader) {
