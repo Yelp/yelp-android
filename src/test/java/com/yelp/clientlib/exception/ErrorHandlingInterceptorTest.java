@@ -116,7 +116,7 @@ public class ErrorHandlingInterceptorTest {
         String errorId = "INVALID_PARAMETER";
         String errorText = "One or more parameters are invalid in request";
         String errorField = "phone";
-        String expectedErrorText = "One or more parameters are invalid in request: " + errorField;
+        String expectedErrorText = String.format("%s: %s", errorText, errorField);
         String errorJsonBody = generateErrorJsonString(errorId, errorText, errorField);
 
         Interceptor.Chain mockChain = mockChainWithErrorResponse(errorCode, errorMessage, errorJsonBody);
