@@ -43,10 +43,10 @@ public abstract class CoordinateOptions {
      */
     @Override
     public String toString() {
-        Double[] fields = new Double[]{accuracy(), altitude(), altitudeAccuracy()};
+        Double[] optionalFields = new Double[]{accuracy(), altitude(), altitudeAccuracy()};
 
         String coordinate = latitude() + "," + longitude();
-        for (Double field : fields) {
+        for (Double field : optionalFields) {
             coordinate = String.format("%s,%s", coordinate, (field == null) ? "" : field.toString());
         }
 
