@@ -30,7 +30,6 @@ public abstract class SearchResponse implements Serializable {
 
         public abstract Builder businesses(ArrayList<Business> businesses);
 
-        @Nullable
         public abstract Builder region(Region region);
 
         public abstract Builder total(Integer total);
