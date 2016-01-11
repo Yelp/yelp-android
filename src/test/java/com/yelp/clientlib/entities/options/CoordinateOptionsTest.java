@@ -34,7 +34,7 @@ public class CoordinateOptionsTest {
                 .longitude(longitude)
                 .build();
 
-        Assert.assertEquals(latitude + "," + longitude, coordinate.toString());
+        Assert.assertEquals(latitude + "," + longitude + ",,,", coordinate.toString());
     }
 
     @Test
@@ -45,7 +45,18 @@ public class CoordinateOptionsTest {
                 .accuracy(accuracy)
                 .build();
 
-        Assert.assertEquals(latitude + "," + longitude + "," + accuracy, coordinate.toString());
+        Assert.assertEquals(latitude + "," + longitude + "," + accuracy + ",,", coordinate.toString());
+    }
+
+    @Test
+    public void testToStringWithLatLongAltitude() {
+        CoordinateOptions coordinate = CoordinateOptions.builder()
+                .latitude(latitude)
+                .longitude(longitude)
+                .altitude(altitude)
+                .build();
+
+        Assert.assertEquals(latitude + "," + longitude + ",," + altitude + ",", coordinate.toString());
     }
 
     @Test
@@ -58,7 +69,7 @@ public class CoordinateOptionsTest {
                 .build();
 
         Assert.assertEquals(
-                latitude + "," + longitude + "," + accuracy + "," + altitude,
+                latitude + "," + longitude + "," + accuracy + "," + altitude + ",",
                 coordinate.toString()
         );
     }

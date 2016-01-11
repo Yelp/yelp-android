@@ -35,24 +35,21 @@ public abstract class CoordinateOptions {
     public abstract Double altitudeAccuracy();
 
     /**
-     * String presentation for {@link CoordinateOptions}. The generated string is comma separated and be showed in the
-     * order of latitude, longitude, accuracy, altitude and altitudeAccuracy till any one of the attribute is not set.
-     * This method is used by {@link retrofit.http.QueryMap} to generate the values of query parameters.
+     * String presentation for {@link CoordinateOptions}. The generated string is comma separated. It is encoded in the
+     * order of latitude, longitude, accuracy, altitude and altitudeAccuracy. This method is used by {@link retrofit
+     * .http.QueryMap} to generate the values of query parameters.
      *
      * @return String presentation for {@link CoordinateOptions}
      */
     @Override
     public String toString() {
-        String coordinate = latitude() + "," + longitude();
         Double[] fields = new Double[]{accuracy(), altitude(), altitudeAccuracy()};
 
+        String coordinate = latitude() + "," + longitude();
         for (Double field : fields) {
-            if (field == null) {
-                return coordinate;
-            } else {
-                coordinate = coordinate + "," + field;
-            }
+            coordinate = String.format("%s,%s", coordinate, (field == null) ? "" : field.toString());
         }
+
         return coordinate;
     }
 
