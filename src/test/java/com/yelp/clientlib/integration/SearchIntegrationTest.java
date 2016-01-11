@@ -69,14 +69,14 @@ public class SearchIntegrationTest {
 
     @Test
     public void testSearchByCoordinateOptions() throws IOException {
-        CoordinateOptions location = CoordinateOptions.builder()
+        CoordinateOptions coordinate = CoordinateOptions.builder()
                 .latitude(37.7867703362929)
                 .longitude(-122.399958372115).build();
 
         Map<String, String> params = new HashMap<>();
         params.put("term", "yelp");
 
-        Call<SearchResponse> call = yelpAPI.search(location, params);
+        Call<SearchResponse> call = yelpAPI.search(coordinate, params);
         Response<SearchResponse> response = call.execute();
         Assert.assertEquals(200, response.code());
 
