@@ -7,6 +7,7 @@ import com.squareup.okhttp.mockwebserver.RecordedRequest;
 import com.yelp.clientlib.entities.Business;
 import com.yelp.clientlib.entities.JsonTestUtils;
 import com.yelp.clientlib.entities.SearchResponse;
+import com.yelp.clientlib.entities.options.CoordinateOptions;
 import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
 import com.yelp.clientlib.util.AsyncTestUtil;
 import com.yelp.clientlib.util.ErrorTestUtil;
@@ -262,23 +263,40 @@ public class YelpAPITest {
     public void testSearchByLocation() throws IOException, InterruptedException {
         setUpMockServerResponse(200, "OK", searchResponseJsonNode.toString());
 
-        Call<SearchResponse> call = yelpAPI.searchByLocation("food", "Boston");
+        Map<String, String> params = new HashMap<>();
+        params.put("term", "yelp");
+
+        Call<SearchResponse> call = yelpAPI.search("Boston", params);
         SearchResponse searchResponse = call.execute().body();
 
-        RecordedRequest recordedRequest = mockServer.takeRequest();
-        verifyAuthorizationHeader(recordedRequest.getHeaders().get("Authorization"));
+        Map<String, String> expectedCalledParams = new HashMap<>(params);
+        expectedCalledParams.put("location", "Boston");
 
-        // Verify basic HTTP elements.
-        Assert.assertEquals("GET", recordedRequest.getMethod());
-        String path = recordedRequest.getPath();
-        Assert.assertTrue(path.startsWith("/v2/search"));
-        Assert.assertTrue(path.contains("term=food"));
-        Assert.assertTrue(path.contains("location=Boston"));
-        Assert.assertEquals(0, recordedRequest.getBodySize());
-
-        // Verify the deserialized response.
-        Assert.assertEquals(new Integer(searchResponseJsonNode.path("total").asInt()), searchResponse.total());
+        verifyRequestForSearch(expectedCalledParams);
+        verifyResponseDeserializationForSearchResponse(searchResponse);
     }
+
+    @Test
+    public void testSearchByCoordinateOptions() throws IOException, InterruptedException {
+        setUpMockServerResponse(200, "OK", searchResponseJsonNode.toString());
+
+        Map<String, String> params = new HashMap<>();
+        params.put("term", "yelp");
+
+        CoordinateOptions coordinate = CoordinateOptions.builder()
+                .latitude(11.111111)
+                .longitude(22.222222)
+                .build();
+
+        Call<SearchResponse> call = yelpAPI.search(coordinate, params);
+        SearchResponse searchResponse = call.execute().body();
+
+        Map<String, String> expectedCalledParams = new HashMap<>(params);
+        expectedCalledParams.put("ll", "11.111111,22.222222");
+        verifyRequestForSearch(expectedCalledParams);
+        verifyResponseDeserializationForSearchResponse(searchResponse);
+    }
+
 
     private void setUpMockServerResponse(int responseCode, String responseMessage, String responseBody) {
         MockResponse mockResponse = new MockResponse()
@@ -301,12 +319,15 @@ public class YelpAPITest {
         verifyRequestForGetPhoneSearch(phone, null);
     }
 
-    private void verifyRequestForGetPhoneSearch(String phone, Map<String, String> params)
-            throws InterruptedException {
+    private void verifyRequestForGetPhoneSearch(String phone, Map<String, String> params) throws InterruptedException {
         params = (params == null) ? new HashMap<String, String>() : new HashMap<>(params);
         params.put("phone", phone);
 
         verifyRequest("/v2/phone_search", params);
+    }
+
+    private void verifyRequestForSearch(Map<String, String> params) throws InterruptedException {
+        verifyRequest("/v2/search", params);
     }
 
     private void verifyRequest(String pathPrefix, Map<String, String> params) throws InterruptedException {

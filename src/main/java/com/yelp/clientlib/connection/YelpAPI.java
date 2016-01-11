@@ -2,6 +2,7 @@ package com.yelp.clientlib.connection;
 
 import com.yelp.clientlib.entities.Business;
 import com.yelp.clientlib.entities.SearchResponse;
+import com.yelp.clientlib.entities.options.CoordinateOptions;
 
 import java.util.Map;
 
@@ -58,10 +59,28 @@ public interface YelpAPI {
     Call<SearchResponse> getPhoneSearch(@Query("phone") String phone, @QueryMap Map<String, String> params);
 
     /**
-     * TODO: This is a temporary endpoint to test Retrofit with query params. It will be refactored in later branches.
+     * Make a request to the search endpoint. Specify a location by neighborhood, address, or city.
+     *
+     * @param location Location by neighborhood, address, or city.
+     * @param params   Key, value pairs as search API params. Keys and values will be URL encoded by {@link QueryMap}.
+     * @return Object to execute the request.
+     * @see <a href = https://www.yelp.com/developers/documentation/v2/search_api#searchNAC>https://www.yelp.com/developers/documentation/v2/search_api#searchNAC</a>
      */
     @GET("/v2/search")
-    Call<SearchResponse> searchByLocation(@Query("term") String term, @Query("location") String location);
+    Call<SearchResponse> search(@Query("location") String location, @QueryMap Map<String, String> params);
 
+    /**
+     * Make a request to the search endpoint by geographic coordinate. Specify a latitude and longitude with optional
+     * accuracy, altitude, and altitude_accuracy in {@link CoordinateOptions}.
+     *
+     * @param coordinate Geographic coordinate to search near.
+     * @param params     Key, value pairs as search API params. Keys and values will be URL encoded by {@link QueryMap}.
+     * @return Object to execute the request.
+     * @see <a href = http://www.yelp.com/developers/documentation/v2/search_api#searchGC>http://www.yelp.com/developers/documentation/v2/search_api#searchGC</a>
+     */
+    @GET("/v2/search")
+    Call<SearchResponse> search(@Query("ll") CoordinateOptions coordinate, @QueryMap Map<String, String> params);
+
+    //TODO: Add search by BoundingBox later, it requires some tweak to converts "|" in URL string.
 }
 
