@@ -74,8 +74,7 @@ public class CoordinateOptionsTest {
                 .build();
 
         Assert.assertEquals(
-                latitude + "," + longitude + "," + accuracy + "," + altitude + "," +
-                        altitudeAccuracy,
+                latitude + "," + longitude + "," + accuracy + "," + altitude + "," + altitudeAccuracy,
                 coordinate.toString()
         );
     }
