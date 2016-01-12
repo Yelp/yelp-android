@@ -7,6 +7,7 @@ import com.squareup.okhttp.mockwebserver.RecordedRequest;
 import com.yelp.clientlib.entities.Business;
 import com.yelp.clientlib.entities.JsonTestUtils;
 import com.yelp.clientlib.entities.SearchResponse;
+import com.yelp.clientlib.entities.options.BoundingBoxOptions;
 import com.yelp.clientlib.entities.options.CoordinateOptions;
 import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
 import com.yelp.clientlib.util.AsyncTestUtil;
@@ -297,6 +298,28 @@ public class YelpAPITest {
         verifyResponseDeserializationForSearchResponse(searchResponse);
     }
 
+    @Test
+    public void testSearchByBoundingBoxOptions() throws IOException, InterruptedException {
+        setUpMockServerResponse(200, "OK", searchResponseJsonNode.toString());
+
+        Map<String, String> params = new HashMap<>();
+        params.put("term", "yelp");
+
+        BoundingBoxOptions bounds = BoundingBoxOptions.builder()
+                .swLatitude(11.111111)
+                .swLongitude(22.222222)
+                .neLatitude(33.333333)
+                .neLongitude(44.444444)
+                .build();
+
+        Call<SearchResponse> call = yelpAPI.search(bounds, params);
+        SearchResponse searchResponse = call.execute().body();
+
+        Map<String, String> expectedCalledParams = new HashMap<>(params);
+        expectedCalledParams.put("bounds", "11.111111,22.222222|33.333333,44.444444");
+        verifyRequestForSearch(expectedCalledParams);
+        verifyResponseDeserializationForSearchResponse(searchResponse);
+    }
 
     private void setUpMockServerResponse(int responseCode, String responseMessage, String responseBody) {
         MockResponse mockResponse = new MockResponse()

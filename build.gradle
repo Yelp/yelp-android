@@ -11,9 +11,10 @@ dependencies {
     compile 'com.squareup.retrofit:converter-jackson:2.0.0-beta2'
     compile 'oauth.signpost:signpost-core:1.2.1.2'
     compile 'se.akerfeldt:okhttp-signpost:1.0.0'
+    compile 'com.squareup.okhttp:okhttp:2.7.0'
 
     testCompile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.6.3'
-    testCompile 'com.squareup.okhttp:mockwebserver:2.6.0'
+    testCompile 'com.squareup.okhttp:mockwebserver:2.7.0'
     testCompile 'org.easymock:easymock:3.4'
     testCompile 'org.powermock:powermock-api-easymock:1.6.4'
     testCompile 'org.powermock:powermock-module-junit4:1.6.4'

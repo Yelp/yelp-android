@@ -2,6 +2,7 @@ package com.yelp.clientlib.connection;
 
 import com.yelp.clientlib.entities.Business;
 import com.yelp.clientlib.entities.SearchResponse;
+import com.yelp.clientlib.entities.options.BoundingBoxOptions;
 import com.yelp.clientlib.entities.options.CoordinateOptions;
 
 import java.util.Map;
@@ -81,6 +82,19 @@ public interface YelpAPI {
     @GET("/v2/search")
     Call<SearchResponse> search(@Query("ll") CoordinateOptions coordinate, @QueryMap Map<String, String> params);
 
-    //TODO: Add search by BoundingBox later, it requires some tweak to converts "|" in URL string.
+    /**
+     * Make a request to the search endpoint by bounding box. Specify a southwest latitude/longitude and a northeast
+     * latitude/longitude in {@link BoundingBoxOptions}.
+     *
+     * @param boundingBox Bounding box to search in.
+     * @param params      Key, value pairs as search API params. Keys and values will be URL encoded by {@link QueryMap}.
+     * @return Object to execute the request.
+     * @see <a href = http://www.yelp.com/developers/documentation/v2/search_api#searchGBB>http://www.yelp.com/developers/documentation/v2/search_api#searchGBB</a>
+     */
+    @GET("/v2/search")
+    Call<SearchResponse> search(
+            @Query(value = "bounds") BoundingBoxOptions boundingBox,
+            @QueryMap Map<String, String> params
+    );
 }
 
