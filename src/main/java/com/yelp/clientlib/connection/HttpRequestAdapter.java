@@ -10,30 +10,29 @@ import se.akerfeldt.okhttp.signpost.OkHttpRequestAdapter;
 /**
  * A {@link HttpRequest} implementation that wraps an OkHttp {@link Request} object. This is used by oauth-signpost to
  * read the {@link Request} and sign it.
+ *
+ * The default behavior of {@link OkHttpRequestAdapter#getRequestUrl()} doesn't handle characters required for encoding
+ * {@link com.yelp.clientlib.entities.options.BoundingBoxOptions}. This adapter encodes those characters so
+ * oauth-signpost can sign it correctly.
  */
 public class HttpRequestAdapter extends OkHttpRequestAdapter {
-
-    private Request request;
-
     public HttpRequestAdapter(Request request) {
         super(request);
-        this.request = request;
     }
 
     /**
      * Get encoded URL of the request.
      *
-     * <p>This method converts URI back to URL. Since uri() forbids certain characters like '[' and '|', the URI
-     * returned by uri() may escape more characters than directly using {@link Request#httpUrl()}.</p>
+     * {@link OkHttpRequestAdapter#getRequestUrl()} doesn't handle characters required for encoding {@link com.yelp
+     * .clientlib.entities.options.BoundingBoxOptions}. This method encodes those characters so oauth-signpost can sign
+     * it correctly.
      *
      * @return encoded request URL.
      */
     @Override
     public String getRequestUrl() {
-        try {
-            return request.uri().toString();
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
+        String url = super.getRequestUrl();
+
+        return url.replace("|", "%7C");
     }
 }
