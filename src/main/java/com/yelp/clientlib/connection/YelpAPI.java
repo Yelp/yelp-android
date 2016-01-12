@@ -86,7 +86,7 @@ public interface YelpAPI {
      * Make a request to the search endpoint by bounding box. Specify a southwest latitude/longitude and a northeast
      * latitude/longitude in {@link BoundingBoxOptions}.
      *
-     * @param boundingBox Bounding box to search in.
+     * @param boundingBox Geographical bounding box to search in.
      * @param params      Key, value pairs as search API params. Keys and values will be URL encoded by {@link QueryMap}.
      * @return Object to execute the request.
      * @see <a href = http://www.yelp.com/developers/documentation/v2/search_api#searchGBB>http://www.yelp.com/developers/documentation/v2/search_api#searchGBB</a>

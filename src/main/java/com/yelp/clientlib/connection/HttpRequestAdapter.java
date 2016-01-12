@@ -2,6 +2,8 @@ package com.yelp.clientlib.connection;
 
 import com.squareup.okhttp.Request;
 
+import java.io.IOException;
+
 import oauth.signpost.http.HttpRequest;
 import se.akerfeldt.okhttp.signpost.OkHttpRequestAdapter;
 
@@ -21,12 +23,17 @@ public class HttpRequestAdapter extends OkHttpRequestAdapter {
     /**
      * Get encoded URL of the request.
      *
+     * <p>This method converts URI back to URL. Since uri() forbids certain characters like '[' and '|', the URI
+     * returned by uri() may escape more characters than directly using {@link Request#httpUrl()}.</p>
+     *
      * @return encoded request URL.
      */
     @Override
     public String getRequestUrl() {
-        // Because URI forbids certain characters like '[' and '|', using uri() may escape more characters than the
-        // original URL.
-        return request.httpUrl().uri().toString();
+        try {
+            return request.uri().toString();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 }

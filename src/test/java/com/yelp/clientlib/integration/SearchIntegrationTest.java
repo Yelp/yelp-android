@@ -78,7 +78,6 @@ public class SearchIntegrationTest {
         params.put("term", "yelp");
 
         Call<SearchResponse> call = yelpAPI.search(coordinate, params);
-
         Response<SearchResponse> response = call.execute();
         Assert.assertEquals(200, response.code());
 

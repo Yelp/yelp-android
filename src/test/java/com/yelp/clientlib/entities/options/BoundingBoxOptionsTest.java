@@ -42,7 +42,7 @@ public class BoundingBoxOptionsTest {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testNonNeLatitudeRaiseException() {
+    public void testNonSetNeLatitudeRaiseException() {
         BoundingBoxOptions.builder()
                 .swLatitude(swLatitude)
                 .swLongitude(swLongitude)
