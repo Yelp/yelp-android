@@ -316,7 +316,7 @@ public class YelpAPITest {
         SearchResponse searchResponse = call.execute().body();
 
         Map<String, String> expectedCalledParams = new HashMap<>(params);
-        expectedCalledParams.put("bounds", "11.111111,22.222222|33.333333,44.444444");
+        expectedCalledParams.put("bounds", "11.111111,22.222222%7C33.333333,44.444444");
         verifyRequestForSearch(expectedCalledParams);
         verifyResponseDeserializationForSearchResponse(searchResponse);
     }

@@ -25,7 +25,7 @@ public class YelpAPIFactory {
     private OkHttpClient httpClient;
 
     public YelpAPIFactory(String consumerKey, String consumerSecret, String token, String tokenSecret) {
-        HttpOAuthConsumer consumer = new HttpOAuthConsumer(consumerKey, consumerSecret);
+        OkHttpOAuthConsumer consumer = new OkHttpOAuthConsumer(consumerKey, consumerSecret);
         consumer.setTokenWithSecret(token, tokenSecret);
         this.httpClient = new OkHttpClient();
         this.httpClient.interceptors().add(new SigningInterceptor(consumer));

@@ -86,6 +86,9 @@ public interface YelpAPI {
      * Make a request to the search endpoint by bounding box. Specify a southwest latitude/longitude and a northeast
      * latitude/longitude in {@link BoundingBoxOptions}.
      *
+     * <p>{@link BoundingBoxOptions} is already encoded in {@link BoundingBoxOptions#toString()} for the special URI
+     * character it uses, "encoded" is set to true so Retrofit doesn't encode it again.<p/>
+     *
      * @param boundingBox Geographical bounding box to search in.
      * @param params      Key, value pairs as search API params. Keys and values will be URL encoded by {@link QueryMap}.
      * @return Object to execute the request.
@@ -93,7 +96,7 @@ public interface YelpAPI {
      */
     @GET("/v2/search")
     Call<SearchResponse> search(
-            @Query(value = "bounds") BoundingBoxOptions boundingBox,
+            @Query(value = "bounds", encoded = true) BoundingBoxOptions boundingBox,
             @QueryMap Map<String, String> params
     );
 }

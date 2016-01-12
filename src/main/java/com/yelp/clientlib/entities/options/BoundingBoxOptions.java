@@ -26,15 +26,19 @@ public abstract class BoundingBoxOptions {
     public abstract Double neLongitude();
 
     /**
-     * String presentation for {@link BoundingBoxOptions}. The generated string is formatted as "swLatitude,
-     * swLongitude|neLatitude,neLongitude". This method is used by {@link retrofit.http.QueryMap} to generate the
-     * values of query parameters.
+     * String presentation for {@link BoundingBoxOptions}. The generated string is encoded as
+     * "swLatitude,swLongitude%7CneLatitude,neLongitude". This method is used by {@link retrofit.http.Query} to
+     * generate the values of query parameters.
+     *
+     * BoundingBox query param value contains non-suggested URI character '|' which doesn't fit into most of the
+     * signature functions, we encode it here into "%7C" so it's not passed through http client.
      *
      * @return String presentation for {@link BoundingBoxOptions}
+     * @see <a href=https://www.yelp.com/developers/documentation/v2/search_api#searchGBB>https://www.yelp.com/developers/documentation/v2/search_api#searchGBB</a>
      */
     @Override
     public String toString() {
-        return String.format("%f,%f|%f,%f", swLatitude(), swLongitude(), neLatitude(), neLongitude());
+        return String.format("%f,%f%%7C%f,%f", swLatitude(), swLongitude(), neLatitude(), neLongitude());
     }
 
     @AutoValue.Builder
