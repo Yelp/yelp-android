@@ -7,6 +7,10 @@ import se.akerfeldt.okhttp.signpost.OkHttpOAuthConsumer;
 
 /**
  * {@link HttpOAuthConsumer} is an {@link oauth.signpost.OAuthConsumer} implementation to sign OkHttp {@link Request}s.
+ *
+ * {@link OkHttpOAuthConsumer} doesn't handle characters required for encoding {@link com.yelp.clientlib.entities
+ * .options.BoundingBoxOptions}, {@link HttpRequestAdapter} encodes those characters so oauth-signpost can sign
+ * requests correctly.
  */
 public class HttpOAuthConsumer extends OkHttpOAuthConsumer {
 
