@@ -10,10 +10,6 @@ import se.akerfeldt.okhttp.signpost.OkHttpRequestAdapter;
 /**
  * A {@link HttpRequest} implementation that wraps an OkHttp {@link Request} object. This is used by oauth-signpost to
  * read the {@link Request} and sign it.
- *
- * The default behavior of {@link OkHttpRequestAdapter#getRequestUrl()} doesn't handle characters required for encoding
- * {@link com.yelp.clientlib.entities.options.BoundingBoxOptions}. This adapter encodes those characters so
- * oauth-signpost can sign it correctly.
  */
 public class HttpRequestAdapter extends OkHttpRequestAdapter {
     public HttpRequestAdapter(Request request) {

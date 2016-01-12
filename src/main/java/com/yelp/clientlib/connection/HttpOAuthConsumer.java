@@ -14,11 +14,10 @@ public class HttpOAuthConsumer extends OkHttpOAuthConsumer {
         super(consumerKey, consumerSecret);
     }
 
-
     /**
-     * {@link OkHttpOAuthConsumer} doesn't handle characters required for encoding {@link com.yelp.clientlib.entities
-     * .options.BoundingBoxOptions}, {@link HttpRequestAdapter} encodes those characters so oauth-signpost can sign
-     * requests correctly.
+     * {@link OkHttpOAuthConsumer#wrap(Object)} doesn't handle characters required for encoding {@link com.yelp
+     * .clientlib.entities.options.BoundingBoxOptions}, {@link HttpRequestAdapter} encodes those characters so
+     * oauth-signpost can sign requests correctly.
      *
      * @param request the native HTTP request instance
      * @return the adapted request
