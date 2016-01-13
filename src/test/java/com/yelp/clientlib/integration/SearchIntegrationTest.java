@@ -3,6 +3,7 @@ package com.yelp.clientlib.integration;
 import com.yelp.clientlib.connection.YelpAPI;
 import com.yelp.clientlib.connection.YelpAPIFactory;
 import com.yelp.clientlib.entities.SearchResponse;
+import com.yelp.clientlib.entities.options.BoundingBoxOptions;
 import com.yelp.clientlib.entities.options.CoordinateOptions;
 import com.yelp.clientlib.util.AsyncTestUtil;
 
@@ -77,6 +78,26 @@ public class SearchIntegrationTest {
         params.put("term", "yelp");
 
         Call<SearchResponse> call = yelpAPI.search(coordinate, params);
+        Response<SearchResponse> response = call.execute();
+        Assert.assertEquals(200, response.code());
+
+        SearchResponse searchResponse = response.body();
+        Assert.assertNotNull(searchResponse);
+    }
+
+    @Test
+    public void testSearchByBoundingBoxOptions() throws IOException {
+        BoundingBoxOptions bounds = BoundingBoxOptions.builder()
+                .swLatitude(37.900000)
+                .swLongitude(-122.500000)
+                .neLatitude(37.788022)
+                .neLongitude(-122.399797)
+                .build();
+
+        Map<String, String> params = new HashMap<>();
+        params.put("term", "yelp");
+
+        Call<SearchResponse> call = yelpAPI.search(bounds, params);
         Response<SearchResponse> response = call.execute();
         Assert.assertEquals(200, response.code());
 
