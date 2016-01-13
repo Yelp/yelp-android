@@ -15,9 +15,10 @@ YelpAPI yelpAPI = apiFactory.createAPI();
 ```
 
 ### [Search API](http://www.yelp.com/developers/documentation/v2/search_api)
-Once you have a yelpAPI you can use `search` to make a request to the Search API.
+Once you have a YelpAPI object you can use `search` to make a request to the Search API.
 
-The general params and locale options should be pass to the method as a `Map<String, String>`.
+The general params and locale options should be passed to the method as a `Map<String, String>`. The full list of 
+parameters can be found in the [Search API Documentation](https://www.yelp.com/developers/documentation/v2/search_api).
 ```
 Map<String, String> params = new HashMap<>();
 
@@ -32,7 +33,23 @@ Call<SearchResponse> call = yelpAPI.search('San Francisco', params);
 call.execute();
 ```
 
-The full list of parameters can be found in the [Search API Documentation](https://www.yelp.com/developers/documentation/v2/search_api).
+You can also pass in a Callback object to send the request asynchronously. Read more at [Asynchrounos Requests](#asynchronous-requests)
+```
+Callback<SearchResponse> callback = new Callback<SearchResponse>() {
+    @Override
+    public void onResponse(Response<SearchResponse> response, Retrofit retrofit) {
+        SearchResponse searchResposne = response.body();
+        // Update UI text with the result.
+    }
+    @Override
+    public void onFailure(Throwable t) {
+        // HTTP error happened. Do something to handle it.
+    }
+};
+
+Call<SearchResponse> call = yelpAPI.search('San Francisco', params);
+call.enqueue(callback);
+```
 
 Additionally there are two more search methods for searching by a bounding box or for geographical coordinates:
 ```
@@ -85,8 +102,8 @@ call.execute();
 ```
 
 ### Asynchronous Requests
-This library uses [Retrofit](http://square.github.io/retrofit/) as the HTTP client, use enqueue() of Call objects to 
-enqueue Callback functions for asynchronous requests.
+This library uses [Retrofit](http://square.github.io/retrofit/) as the HTTP client, use enqueue() of Call object to 
+enqueue a Callback function for an asynchronous request.
 ```
 Callback<Business> callback = new Callback<Business>() {
     @Override
