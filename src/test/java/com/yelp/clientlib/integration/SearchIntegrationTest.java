@@ -4,7 +4,7 @@ import com.yelp.clientlib.connection.YelpAPI;
 import com.yelp.clientlib.connection.YelpAPIFactory;
 import com.yelp.clientlib.entities.SearchResponse;
 import com.yelp.clientlib.entities.options.CoordinateOptions;
-import com.yelp.clientlib.util.AsyncTestUtil;
+import com.yelp.clientlib.util.AsyncTestUtils;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,7 +34,7 @@ public class SearchIntegrationTest {
         );
 
         // Make API requests to be executed in main thread so we can verify it easily.
-        yelpAPIFactory = AsyncTestUtil.setToRunInMainThread(yelpAPIFactory);
+        yelpAPIFactory = AsyncTestUtils.setToRunInMainThread(yelpAPIFactory);
 
         yelpAPI = yelpAPIFactory.createAPI();
     }

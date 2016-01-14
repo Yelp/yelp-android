@@ -3,7 +3,7 @@ package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.yelp.clientlib.util.JsonTestUtils;
-import com.yelp.clientlib.util.SerializationTestUtil;
+import com.yelp.clientlib.util.SerializationTestUtils;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,8 +34,8 @@ public class ReviewTest {
         JsonNode reviewNode = JsonTestUtils.getBusinessResponseJsonNode().path("reviews").get(0);
         Review review = JsonTestUtils.deserializeJson(reviewNode.toString(), Review.class);
 
-        byte[] bytes = SerializationTestUtil.serialize(review);
-        Assert.assertEquals(review, SerializationTestUtil.deserialize(bytes, Review.class));
+        byte[] bytes = SerializationTestUtils.serialize(review);
+        Assert.assertEquals(review, SerializationTestUtils.deserialize(bytes, Review.class));
     }
 
     @Test(expected = IllegalStateException.class)

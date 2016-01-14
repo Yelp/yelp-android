@@ -2,7 +2,7 @@ package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.yelp.clientlib.util.JsonTestUtils;
-import com.yelp.clientlib.util.SerializationTestUtil;
+import com.yelp.clientlib.util.SerializationTestUtils;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class DealTest {
         JsonNode dealNode = JsonTestUtils.getBusinessResponseJsonNode().path("deals").get(0);
         Deal deal = JsonTestUtils.deserializeJson(dealNode.toString(), Deal.class);
 
-        byte[] bytes = SerializationTestUtil.serialize(deal);
-        Assert.assertEquals(deal, SerializationTestUtil.deserialize(bytes, Deal.class));
+        byte[] bytes = SerializationTestUtils.serialize(deal);
+        Assert.assertEquals(deal, SerializationTestUtils.deserialize(bytes, Deal.class));
     }
 }

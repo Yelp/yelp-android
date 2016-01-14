@@ -4,7 +4,7 @@ import com.yelp.clientlib.exception.exceptions.YelpAPIError;
 
 import org.junit.Assert;
 
-public class ErrorTestUtil {
+public class ErrorTestUtils {
 
     /**
      * Verify a {@link YelpAPIError} contains correct information.

@@ -2,7 +2,7 @@ package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.yelp.clientlib.util.JsonTestUtils;
-import com.yelp.clientlib.util.SerializationTestUtil;
+import com.yelp.clientlib.util.SerializationTestUtils;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,8 +26,8 @@ public class UserTest {
         JsonNode userNode = JsonTestUtils.getBusinessResponseJsonNode().path("reviews").get(0).path("user");
         User user = JsonTestUtils.deserializeJson(userNode.toString(), User.class);
 
-        byte[] bytes = SerializationTestUtil.serialize(user);
-        Assert.assertEquals(user, SerializationTestUtil.deserialize(bytes, User.class));
+        byte[] bytes = SerializationTestUtils.serialize(user);
+        Assert.assertEquals(user, SerializationTestUtils.deserialize(bytes, User.class));
     }
 
     @Test(expected = IllegalStateException.class)

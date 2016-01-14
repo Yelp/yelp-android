@@ -3,7 +3,7 @@ package com.yelp.clientlib.entities;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.yelp.clientlib.util.JsonTestUtils;
-import com.yelp.clientlib.util.SerializationTestUtil;
+import com.yelp.clientlib.util.SerializationTestUtils;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -86,8 +86,8 @@ public class BusinessTest {
         JsonNode businessNode = JsonTestUtils.getBusinessResponseJsonNode();
         Business business = JsonTestUtils.deserializeJson(businessNode.toString(), Business.class);
 
-        byte[] bytes = SerializationTestUtil.serialize(business);
-        Assert.assertEquals(business, SerializationTestUtil.deserialize(bytes, Business.class));
+        byte[] bytes = SerializationTestUtils.serialize(business);
+        Assert.assertEquals(business, SerializationTestUtils.deserialize(bytes, Business.class));
     }
 
     @Test

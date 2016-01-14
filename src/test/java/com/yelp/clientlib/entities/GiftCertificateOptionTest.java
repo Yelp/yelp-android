@@ -2,7 +2,7 @@ package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.yelp.clientlib.util.JsonTestUtils;
-import com.yelp.clientlib.util.SerializationTestUtil;
+import com.yelp.clientlib.util.SerializationTestUtils;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -40,10 +40,10 @@ public class GiftCertificateOptionTest {
                 GiftCertificateOption.class
         );
 
-        byte[] bytes = SerializationTestUtil.serialize(giftCertificateOption);
+        byte[] bytes = SerializationTestUtils.serialize(giftCertificateOption);
         Assert.assertEquals(
                 giftCertificateOption,
-                SerializationTestUtil.deserialize(bytes, GiftCertificateOption.class)
+                SerializationTestUtils.deserialize(bytes, GiftCertificateOption.class)
         );
     }
 }

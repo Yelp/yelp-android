@@ -7,7 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-public class SerializationTestUtil {
+public class SerializationTestUtils {
 
     /**
      * Serialize an object into a byte array. The object has to implement {@link Serializable} interface.

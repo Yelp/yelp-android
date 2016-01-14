@@ -3,7 +3,7 @@ package com.yelp.clientlib.entities;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.yelp.clientlib.util.JsonTestUtils;
-import com.yelp.clientlib.util.SerializationTestUtil;
+import com.yelp.clientlib.util.SerializationTestUtils;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,8 +32,8 @@ public class CategoryTest {
         JsonNode categoryNode = JsonTestUtils.getBusinessResponseJsonNode().path("categories").get(0);
         Category category = JsonTestUtils.deserializeJson(categoryNode.toString(), Category.class);
 
-        byte[] bytes = SerializationTestUtil.serialize(category);
-        Assert.assertEquals(category, SerializationTestUtil.deserialize(bytes, Category.class));
+        byte[] bytes = SerializationTestUtils.serialize(category);
+        Assert.assertEquals(category, SerializationTestUtils.deserialize(bytes, Category.class));
     }
 
     @Test(expected = IllegalStateException.class)

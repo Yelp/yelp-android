@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import junitx.util.PrivateAccessor;
 
-public class AsyncTestUtil {
+public class AsyncTestUtils {
 
     /**
      * Make a {@link YelpAPIFactory} to send HTTP requests in main thread so we can verify the test results easily.
