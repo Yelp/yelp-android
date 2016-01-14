@@ -9,7 +9,7 @@ parsing for Java/Android developers using the Yelp API. This clientlib requires 
 
 ### Basic usage
 This library uses an API object to query against the API. Make an API object by using `YelpAPIFactory` to create a
-`YelpAPI` with you API keys.
+`YelpAPI` with your API keys.
 ```
 YelpAPIFactory apiFactory = new YelpAPIFactory(consumerKey, consumerSecret, token, tokenSecret);
 YelpAPI yelpAPI = apiFactory.createAPI();
@@ -38,7 +38,7 @@ Now you can execute the Call object to send the request.
 Response<SearchResponse> response = call.execute();
 ```
 
-You can also pass in a Callback object to send the request asynchronously. For more see [Asynchronous Requests Section](#asynchronous-requests).
+You can also pass in a Callback object to send request asynchronously. For more see [Asynchronous Requests Section](#asynchronous-requests).
 ```
 Callback<SearchResponse> callback = new Callback<SearchResponse>() {
     @Override
@@ -108,18 +108,18 @@ Response<SearchResponse> response = call.execute();
 ```
 
 ### Asynchronous Requests
-This library uses [Retrofit](http://square.github.io/retrofit/) as HTTP client, use `enqueue()` on a `Call` object to set a 
-`Callback` function for an asynchronous request.
+This library uses [Retrofit](http://square.github.io/retrofit/) as HTTP client. To send a request asynchronously use 
+`Call.enqueue()` to set `Callback` function for an asynchronous request.
 ```
 Callback<Business> callback = new Callback<Business>() {
     @Override
     public void onResponse(Response<Business> response, Retrofit retrofit) {
         Business business = response.body();
-        // Update UI text with the result.
+        // Update UI text with the Business object.
     }
     @Override
     public void onFailure(Throwable t) {
-        // HTTP error happened. Do something to handle it.
+        // HTTP error happened, do something to handle it.
     }
 };
 
@@ -127,12 +127,13 @@ Call<Business> call = yelpAPI.getBusiness(businessId);
 call.enqueue(callback);
 ```
 
-You can cancel asynchronous requests by simply call cancel() on the Call objects.
+You can cancel asynchronous requests by simply call `cancel()` on `Call` objects. It is important to cancel your calls 
+while your `Activity` is being destroyed to avoid memory leak.
 ```
 Call<Business> call = yelpAPI.getBusiness(businessId);
-call.enqueue(businessCallback);
+call.enqueue(callback);
 
-// The activity is destroyed and the call should be canceled.
+// Activity is being destroyed and the call should be canceled.
 call.cancel();
 ```
 
@@ -151,7 +152,7 @@ int totalNumberOfResult = searchResponse.total();  // 3
 
 ArrayList<Business> businesses = searchResponse.businesses();
 String businessName = businesses.get(0).name();  // "JapaCurry Truck"
-String rating = businesses.get(0).rating();  // 4.0
+Double rating = businesses.get(0).rating();  // 4.0
 ```
 
 Business responses are parsed into `Business` objects directly.
@@ -161,11 +162,11 @@ Response<Business> response = call.execute();
 Business business = response.body();
 
 String businessName = business.name();  // "JapaCurry Truck"
-String rating = business.rating();  // 4.0
+Double rating = business.rating();  // 4.0
 ```
 
 For a full list of available response fields, take a look at the [documentation](https://www.yelp.com/developers/documentation/v2/overview) 
-or the classes defined in [com.yelp.clientlib.entities](../tree/master/src/main/java/com/yelp/clientlib/entities).
+or the classes defined in [com.yelp.clientlib.entities](../../tree/master/src/main/java/com/yelp/clientlib/entities).
 
 ## Contributing
 1. Fork it ( http://github.com/yelp/yelp-android/fork )
