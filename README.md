@@ -16,7 +16,7 @@ YelpAPI yelpAPI = apiFactory.createAPI();
 ```
 
 ### [Search API](http://www.yelp.com/developers/documentation/v2/search_api)
-Once you have a YelpAPI object you can use `search` to generate a Call object which makes a request to the Search API.
+Once you have a `YelpAPI` object you can use `search` to generate a `Call` object which makes a request to the Search API.
 
 The general params and locale options should be passed to the method as a `Map<String, String>`. The full list of 
 parameters can be found in the [Search API Documentation](https://www.yelp.com/developers/documentation/v2/search_api).
@@ -108,8 +108,8 @@ Response<SearchResponse> response = call.execute();
 ```
 
 ### Asynchronous Requests
-This library uses [Retrofit](http://square.github.io/retrofit/) as HTTP client, use enqueue() on a Call object to set a 
-Callback function for an asynchronous request.
+This library uses [Retrofit](http://square.github.io/retrofit/) as HTTP client, use `enqueue()` on a `Call` object to set a 
+`Callback` function for an asynchronous request.
 ```
 Callback<Business> callback = new Callback<Business>() {
     @Override
@@ -139,7 +139,7 @@ call.cancel();
 For more information about the usage of asynchronous requests in Retrofit see [Retrofit documentation](http://square.github.io/retrofit/).
 
 ## Responses
-After the Call object is executed, a response contains parsed Java objects will be returned, use Response.body() to 
+After `Call` object is executed, a `Response` contains parsed Java objects will be returned, use `Response.body()` to 
 get a parsed Java object.
 
 Search and phone search responses are parsed into `SearchResponse` objects.
@@ -147,16 +147,11 @@ Search and phone search responses are parsed into `SearchResponse` objects.
 Call<SearchResponse> call = yelpAPI.search("San Francisco", params);
 SearchResponse searchResponse = call.execute().body();
 
-// 3
-int totalNumberOfResult = searchResponse.total();
+int totalNumberOfResult = searchResponse.total();  // 3
 
 ArrayList<Business> businesses = searchResponse.businesses();
-
-// "JapaCurry Truck"
-String businessName = businesses.get(0).name();
-
-// 4.0
-String rating = businesses.get(0).rating();
+String businessName = businesses.get(0).name();  // "JapaCurry Truck"
+String rating = businesses.get(0).rating();  // 4.0
 ```
 
 Business responses are parsed into `Business` objects directly.
@@ -165,11 +160,8 @@ Call<Business> call = yelpAPI.business("japacurry-truck-san-francisco");
 Response<Business> response = call.execute();
 Business business = response.body();
 
-// "JapaCurry Truck"
-String businessName = business.name();
-
-// 4.0
-String rating = business.rating();
+String businessName = business.name();  // "JapaCurry Truck"
+String rating = business.rating();  // 4.0
 ```
 
 For a full list of available response fields, take a look at the [documentation](https://www.yelp.com/developers/documentation/v2/overview) 
