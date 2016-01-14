@@ -24,8 +24,11 @@ public class SearchResponseTest {
 
     @Test
     public void testSerializable() throws IOException, ClassNotFoundException {
-        JsonNode searchNode = JsonTestUtils.getSearchResponseJsonNode();
-        SearchResponse searchResponse = JsonTestUtils.deserializeJson(searchNode.toString(), SearchResponse.class);
+        JsonNode searchResponseNode = JsonTestUtils.getSearchResponseJsonNode();
+        SearchResponse searchResponse = JsonTestUtils.deserializeJson(
+                searchResponseNode.toString(),
+                SearchResponse.class
+        );
 
         byte[] bytes = SerializationTestUtil.serialize(searchResponse);
         Assert.assertEquals(searchResponse, SerializationTestUtil.deserialize(bytes, SearchResponse.class));
