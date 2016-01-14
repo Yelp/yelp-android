@@ -5,8 +5,8 @@ import com.yelp.clientlib.connection.YelpAPIFactory;
 import com.yelp.clientlib.entities.Business;
 import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
 import com.yelp.clientlib.exception.exceptions.YelpAPIError;
-import com.yelp.clientlib.util.AsyncTestUtils;
-import com.yelp.clientlib.util.ErrorTestUtils;
+import com.yelp.clientlib.utils.AsyncTestUtils;
+import com.yelp.clientlib.utils.ErrorTestUtils;
 
 import org.junit.Assert;
 import org.junit.Before;

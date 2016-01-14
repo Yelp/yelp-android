@@ -5,12 +5,12 @@ import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
 import com.yelp.clientlib.entities.Business;
-import com.yelp.clientlib.util.JsonTestUtils;
+import com.yelp.clientlib.utils.JsonTestUtils;
 import com.yelp.clientlib.entities.SearchResponse;
 import com.yelp.clientlib.entities.options.CoordinateOptions;
 import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
-import com.yelp.clientlib.util.AsyncTestUtils;
-import com.yelp.clientlib.util.ErrorTestUtils;
+import com.yelp.clientlib.utils.AsyncTestUtils;
+import com.yelp.clientlib.utils.ErrorTestUtils;
 
 import org.junit.After;
 import org.junit.Assert;

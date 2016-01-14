@@ -10,7 +10,7 @@ import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
 import com.yelp.clientlib.exception.exceptions.InternalError;
 import com.yelp.clientlib.exception.exceptions.InvalidParameter;
 import com.yelp.clientlib.exception.exceptions.UnexpectedAPIError;
-import com.yelp.clientlib.util.ErrorTestUtils;
+import com.yelp.clientlib.utils.ErrorTestUtils;
 
 import org.easymock.EasyMock;
 import org.junit.Assert;

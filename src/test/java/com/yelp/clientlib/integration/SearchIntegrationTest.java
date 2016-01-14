@@ -4,7 +4,7 @@ import com.yelp.clientlib.connection.YelpAPI;
 import com.yelp.clientlib.connection.YelpAPIFactory;
 import com.yelp.clientlib.entities.SearchResponse;
 import com.yelp.clientlib.entities.options.CoordinateOptions;
-import com.yelp.clientlib.util.AsyncTestUtils;
+import com.yelp.clientlib.utils.AsyncTestUtils;
 
 import org.junit.Assert;
 import org.junit.Before;

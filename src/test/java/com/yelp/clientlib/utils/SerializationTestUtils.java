@@ -1,4 +1,4 @@
-package com.yelp.clientlib.util;
+package com.yelp.clientlib.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

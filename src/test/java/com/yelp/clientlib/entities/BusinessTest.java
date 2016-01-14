@@ -2,8 +2,8 @@ package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.yelp.clientlib.util.JsonTestUtils;
-import com.yelp.clientlib.util.SerializationTestUtils;
+import com.yelp.clientlib.utils.JsonTestUtils;
+import com.yelp.clientlib.utils.SerializationTestUtils;
 
 import org.junit.Assert;
 import org.junit.Test;

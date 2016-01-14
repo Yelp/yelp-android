@@ -1,4 +1,4 @@
-package com.yelp.clientlib.util;
+package com.yelp.clientlib.utils;
 
 import com.squareup.okhttp.Dispatcher;
 import com.squareup.okhttp.OkHttpClient;
