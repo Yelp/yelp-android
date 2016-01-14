@@ -16,12 +16,18 @@ After build successfully, install the built library into your local Maven reposi
 gradle install
 ```
 
-Add dependency to your project by adding the following line into `build.gradle`.
+Add dependency to your project by adding the following lines into `build.gradle`.
 ```
+// Add Maven local repository so your project can find local-built libraries.
+repositories {
+    mavenLocal()
+}
+
+// Add dependency to the library.
 dependencies {
     ...
-    ...
     compile 'com.yelp:yelp-android:1.0-SNAPSHOT'
+    ...
 }
 ```
 
