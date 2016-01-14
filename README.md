@@ -3,7 +3,27 @@ A Java library for the Yelp API. It simplifies the process of authentication, re
 parsing for Java/Android developers using the Yelp API. This clientlib requires Java 7 or Android 2.3.
 
 ## Installation
-// TODO
+We are working on putting this library into Maven central repository. Meanwhile, build it locally so your project can 
+use it.
+
+After git clone this project, build it locally.
+```
+gradle build
+```
+
+After build successfully, install the built library into your local Maven repository so your project can use it.
+```
+gradle install
+```
+
+Add dependency to your project by adding the following line into `build.gradle`.
+```
+dependencies {
+    ...
+    ...
+    compile 'com.yelp:yelp-android:1.0-SNAPSHOT'
+}
+```
 
 ## Usage
 
@@ -33,12 +53,12 @@ params.put("lang", "fr");
 Call<SearchResponse> call = yelpAPI.search("San Francisco", params);
 ```
 
-Now you can execute the Call object to send the request.
+Now you can execute the `Call` object to send the request.
 ```
 Response<SearchResponse> response = call.execute();
 ```
 
-You can also pass in a Callback object to send request asynchronously. For more see [Asynchronous Requests Section](#asynchronous-requests).
+You can also pass in a `Callback` object to send request asynchronously. For more see [Asynchronous Requests Section](#asynchronous-requests).
 ```
 Callback<SearchResponse> callback = new Callback<SearchResponse>() {
     @Override
