@@ -7,10 +7,12 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
 
+import java.io.Serializable;
+
 @AutoValue
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(builder = AutoValue_Coordinate.Builder.class)
-public abstract class Coordinate {
+public abstract class Coordinate implements Serializable {
 
     public abstract Double latitude();
 

@@ -5,7 +5,7 @@ import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
 import com.yelp.clientlib.entities.Business;
-import com.yelp.clientlib.entities.JsonTestUtils;
+import com.yelp.clientlib.util.JsonTestUtils;
 import com.yelp.clientlib.entities.SearchResponse;
 import com.yelp.clientlib.entities.options.CoordinateOptions;
 import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;

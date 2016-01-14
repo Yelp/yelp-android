@@ -1,6 +1,8 @@
 package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.yelp.clientlib.util.JsonTestUtils;
+import com.yelp.clientlib.util.SerializationTestUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,6 +18,15 @@ public class CoordinateTest {
 
         Assert.assertEquals(new Double(coordinateNode.path("latitude").asDouble()), coordinate.latitude());
         Assert.assertEquals(new Double(coordinateNode.path("longitude").asDouble()), coordinate.longitude());
+    }
+
+    @Test
+    public void testSerializable() throws IOException, ClassNotFoundException {
+        JsonNode coordinateNode = JsonTestUtils.getBusinessResponseJsonNode().path("location").path("coordinate");
+        Coordinate coordinate = JsonTestUtils.deserializeJson(coordinateNode.toString(), Coordinate.class);
+
+        byte[] bytes = SerializationTestUtil.serialize(coordinate);
+        Assert.assertEquals(coordinate, SerializationTestUtil.deserialize(bytes, Coordinate.class));
     }
 
     @Test(expected = IllegalStateException.class)

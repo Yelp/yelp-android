@@ -1,6 +1,8 @@
 package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.yelp.clientlib.util.JsonTestUtils;
+import com.yelp.clientlib.util.SerializationTestUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,6 +18,15 @@ public class SpanTest {
 
         Assert.assertEquals(new Double(spanNode.path("latitude_delta").asDouble()), span.latitudeDelta());
         Assert.assertEquals(new Double(spanNode.path("longitude_delta").asDouble()), span.longitudeDelta());
+    }
+
+    @Test
+    public void testSerializable() throws IOException, ClassNotFoundException {
+        JsonNode spanNode = JsonTestUtils.getSearchResponseJsonNode().path("region").path("span");
+        Span span = JsonTestUtils.deserializeJson(spanNode.toString(), Span.class);
+
+        byte[] bytes = SerializationTestUtil.serialize(span);
+        Assert.assertEquals(span, SerializationTestUtil.deserialize(bytes, Span.class));
     }
 
     @Test(expected = IllegalStateException.class)

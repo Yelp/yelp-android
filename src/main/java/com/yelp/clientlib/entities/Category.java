@@ -10,11 +10,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 @AutoValue
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(using = CategoryDeserializer.class)
-public abstract class Category {
+public abstract class Category implements Serializable{
 
     public abstract String alias();
 

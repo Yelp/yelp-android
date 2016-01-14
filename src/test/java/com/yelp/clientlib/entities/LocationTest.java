@@ -1,6 +1,8 @@
 package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.yelp.clientlib.util.JsonTestUtils;
+import com.yelp.clientlib.util.SerializationTestUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,5 +26,14 @@ public class LocationTest {
         Assert.assertEquals(2, location.neighborhoods().size());
         Assert.assertEquals(locationNode.path("postal_code").textValue(), location.postalCode());
         Assert.assertEquals(locationNode.path("state_code").textValue(), location.stateCode());
+    }
+
+    @Test
+    public void testSerializable() throws IOException, ClassNotFoundException {
+        JsonNode locationNode = JsonTestUtils.getBusinessResponseJsonNode().path("location");
+        Location location = JsonTestUtils.deserializeJson(locationNode.toString(), Location.class);
+
+        byte[] bytes = SerializationTestUtil.serialize(location);
+        Assert.assertEquals(location, SerializationTestUtil.deserialize(bytes, Location.class));
     }
 }
