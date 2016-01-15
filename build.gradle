@@ -4,6 +4,31 @@ repositories {
     mavenCentral()
 }
 
+// Set up integrationTest task to execute tests in src/integration-test separately from main build.
+sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/java')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
+}
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+}
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+
+    // Set upToDateWhen to false so integration tests always run when the task is called.
+    outputs.upToDateWhen { false }
+}
+// Makes integration tests not run by default.
+check.dependsOn -= integrationTest
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.google.auto.value:auto-value:1.1'
