@@ -3,15 +3,16 @@ A Java library for the Yelp API. It simplifies the process of authentication, re
 parsing for Java/Android developers using the Yelp API. This clientlib requires Java 7 or Android 2.3.
 
 ## Installation
-We are working on putting this library into Maven central repository. Meanwhile, build it locally so your project can 
-use it.
+We are working on putting this library into Maven central repository. Meanwhile, build it locally by using [Gradle](http://gradle.org/) 
+for your other projects.
 
 After git clone this project, build it locally.
 ```
 gradle build
 ```
 
-After build successfully, install the built library into your local Maven repository so your project can use it.
+After build successfully, install the built library into your local Maven repository so it can be used by other 
+projects.
 ```
 gradle install
 ```
@@ -34,15 +35,16 @@ dependencies {
 ## Usage
 
 ### Basic usage
-This library uses an API object to query against the API. Make an API object by using `YelpAPIFactory` to create a
-`YelpAPI` with your API keys.
+This library uses an `YelpAPI` object to query against the API. Make an `YelpAPI` object by using `YelpAPIFactory` with 
+your API keys.
 ```
 YelpAPIFactory apiFactory = new YelpAPIFactory(consumerKey, consumerSecret, token, tokenSecret);
 YelpAPI yelpAPI = apiFactory.createAPI();
 ```
 
 ### [Search API](http://www.yelp.com/developers/documentation/v2/search_api)
-Once you have a `YelpAPI` object you can use `search` to generate a `Call` object which makes a request to the Search API.
+Once you have a `YelpAPI` object you can use the `search` function to generate a `Call` object which makes a request to 
+the Search API.
 
 The general params and locale options should be passed to the method as a `Map<String, String>`. The full list of 
 parameters can be found in the [Search API Documentation](https://www.yelp.com/developers/documentation/v2/search_api).
@@ -64,7 +66,7 @@ Now you can execute the `Call` object to send the request.
 Response<SearchResponse> response = call.execute();
 ```
 
-You can also pass in a `Callback` object to send request asynchronously. For more see [Asynchronous Requests Section](#asynchronous-requests).
+You can also pass in a `Callback` object to send the request asynchronously. For more see [Asynchronous Requests](#asynchronous-requests) section.
 ```
 Callback<SearchResponse> callback = new Callback<SearchResponse>() {
     @Override
@@ -134,7 +136,7 @@ Response<SearchResponse> response = call.execute();
 ```
 
 ### Asynchronous Requests
-This library uses [Retrofit](http://square.github.io/retrofit/) as HTTP client. To send a request asynchronously use 
+This library uses [Retrofit](http://square.github.io/retrofit/) as HTTP client. To send a request asynchronously, use 
 `Call.enqueue()` to set `Callback` function for an asynchronous request.
 ```
 Callback<Business> callback = new Callback<Business>() {
@@ -163,11 +165,11 @@ call.enqueue(callback);
 call.cancel();
 ```
 
-For more information about the usage of asynchronous requests in Retrofit see [Retrofit documentation](http://square.github.io/retrofit/).
+For more information about the usage of asynchronous requests in Retrofit, see [Retrofit documentation](http://square.github.io/retrofit/).
 
 ## Responses
 After `Call` object is executed, a `Response` contains parsed Java objects will be returned, use `Response.body()` to 
-get a parsed Java object.
+get parsed Java objects.
 
 Search and phone search responses are parsed into `SearchResponse` objects.
 ```
