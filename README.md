@@ -203,4 +203,18 @@ or the classes defined in [com.yelp.clientlib.entities](../../tree/master/src/ma
 4. Push to the branch (git push origin my-new-feature)
 5. Create new Pull Request
 
-//TODO: Add information about test suits.
+## Testing
+Please write tests for any new features. We use JUnit + Gradle so just run `gradle test` to run the full test suite. 
+To know more about running JUnit tests in Gradle, see [Gradle: Java Plugin:Test](https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_test).
+
+If you are adding a new integration test, you will need to connect to the Yelp API. You can set this up by putting 
+your API keys into `src/integration-test/resources/credentials.yaml` in the following format:
+```
+consumer_key: YOUR_CONSUMER_KEY
+consumer_secret: YOUR_CONSUMER_SECRET
+token: YOUR_TOKEN
+token_secret: YOUR_TOKEN_SECRET
+```
+
+To run the integration tests, execute `gradle integrationTest`. Integration tests will not be ran in the build process
+ by executing `gradle build`.
