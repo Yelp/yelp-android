@@ -35,7 +35,7 @@ dependencies {
 ## Usage
 
 ### Basic usage
-This library uses an `YelpAPI` object to query against the API. Make an `YelpAPI` object by using `YelpAPIFactory` with 
+This library uses a `YelpAPI` object to query against the API. Make a `YelpAPI` object by using `YelpAPIFactory` with 
 your API keys.
 ```
 YelpAPIFactory apiFactory = new YelpAPIFactory(consumerKey, consumerSecret, token, tokenSecret);
