@@ -3,15 +3,15 @@ A Java library for the Yelp API. It simplifies the process of authentication, re
 parsing for Java/Android developers using the Yelp API. This clientlib requires Java 7 or Android 2.3.
 
 ## Installation
-We are working on putting this library into Maven central repository. Meanwhile, build it locally by using [Gradle](http://gradle.org/) 
-for your other projects.
+We are working on putting this library into the Maven central repository. Meanwhile, build it locally by using [Gradle]
+(http://gradle.org/) for your other projects.
 
-After git clone this project, build it locally.
+After you git clone this project, build it locally.
 ```
 gradle build
 ```
 
-After build successfully, install the built library into your local Maven repository so it can be used by other 
+After a successful build, install the built library into your local Maven repository so it can be used by other 
 projects.
 ```
 gradle install
@@ -35,8 +35,8 @@ dependencies {
 ## Usage
 
 ### Basic usage
-This library uses a `YelpAPI` object to query against the API. Make a `YelpAPI` object by using `YelpAPIFactory` with 
-your API keys.
+This library uses a `YelpAPI` object to query against the API. Instantiate a `YelpAPI` object by using 
+`YelpAPIFactory` with your API keys.
 ```
 YelpAPIFactory apiFactory = new YelpAPIFactory(consumerKey, consumerSecret, token, tokenSecret);
 YelpAPI yelpAPI = apiFactory.createAPI();
@@ -103,7 +103,7 @@ Response<SearchResponse> response = call.execute();
 ```
 
 ### [Business API](http://www.yelp.com/developers/documentation/v2/business)
-To query the Business API, use the `getBusiness` function with a business id. You can also pass in locale parameters 
+To query the Business API, use the `getBusiness` function with a `business_id`. You can also pass in locale parameters 
 in a `Map<String, String>` as specified in the [Business API Documentation](http://www.yelp.com/developers/documentation/v2/business).
 ```
 Call<Business> call = yelpAPI.getBusiness("yelp-san-francisco");
