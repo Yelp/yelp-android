@@ -1,6 +1,8 @@
 package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.yelp.clientlib.utils.JsonTestUtils;
+import com.yelp.clientlib.utils.SerializationTestUtils;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,6 +28,18 @@ public class GiftCertificateTest {
 
         // GiftCertificateOption is tested in it's own test.
         Assert.assertNotNull(giftCertificate.options().get(0));
+    }
+
+    @Test
+    public void testSerializable() throws IOException, ClassNotFoundException {
+        JsonNode giftCertificatesNode = JsonTestUtils.getBusinessResponseJsonNode().path("gift_certificates").get(0);
+        GiftCertificate giftCertificate = JsonTestUtils.deserializeJson(
+                giftCertificatesNode.toString(),
+                GiftCertificate.class
+        );
+
+        byte[] bytes = SerializationTestUtils.serialize(giftCertificate);
+        Assert.assertEquals(giftCertificate, SerializationTestUtils.deserialize(bytes, GiftCertificate.class));
     }
 
     @Test(expected = IllegalStateException.class)

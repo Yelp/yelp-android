@@ -7,10 +7,12 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
 
+import java.io.Serializable;
+
 @AutoValue
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(builder = AutoValue_Span.Builder.class)
-public abstract class Span {
+public abstract class Span implements Serializable {
 
     public abstract Double latitudeDelta();
 

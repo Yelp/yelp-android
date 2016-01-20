@@ -5,8 +5,8 @@ import com.yelp.clientlib.connection.YelpAPIFactory;
 import com.yelp.clientlib.entities.Business;
 import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
 import com.yelp.clientlib.exception.exceptions.YelpAPIError;
-import com.yelp.clientlib.util.AsyncTestUtil;
-import com.yelp.clientlib.util.ErrorTestUtil;
+import com.yelp.clientlib.utils.AsyncTestUtils;
+import com.yelp.clientlib.utils.ErrorTestUtils;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -39,7 +39,7 @@ public class BusinessIntegrationTest {
         );
 
         // Make API requests to be executed in main thread so we can verify it easily.
-        yelpAPIFactory = AsyncTestUtil.setToRunInMainThread(yelpAPIFactory);
+        yelpAPIFactory = AsyncTestUtils.setToRunInMainThread(yelpAPIFactory);
 
         yelpAPI = yelpAPIFactory.createAPI();
     }
@@ -106,7 +106,7 @@ public class BusinessIntegrationTest {
             call.execute();
         } catch (YelpAPIError apiError) {
             Assert.assertTrue(apiError instanceof BusinessUnavailable);
-            ErrorTestUtil.verifyErrorContent(
+            ErrorTestUtils.verifyErrorContent(
                     apiError,
                     400,
                     "Bad Request",
@@ -127,7 +127,7 @@ public class BusinessIntegrationTest {
             @Override
             public void onFailure(Throwable t) {
                 Assert.assertTrue(t instanceof BusinessUnavailable);
-                ErrorTestUtil.verifyErrorContent(
+                ErrorTestUtils.verifyErrorContent(
                         (YelpAPIError) t,
                         400,
                         "Bad Request",

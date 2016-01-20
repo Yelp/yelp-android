@@ -1,6 +1,8 @@
 package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.yelp.clientlib.utils.JsonTestUtils;
+import com.yelp.clientlib.utils.SerializationTestUtils;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,6 +19,15 @@ public class UserTest {
         Assert.assertEquals(userNode.path("id").textValue(), user.id());
         Assert.assertEquals(userNode.path("image_url").textValue(), user.imageUrl());
         Assert.assertEquals(userNode.path("name").textValue(), user.name());
+    }
+
+    @Test
+    public void testSerializable() throws IOException, ClassNotFoundException {
+        JsonNode userNode = JsonTestUtils.getBusinessResponseJsonNode().path("reviews").get(0).path("user");
+        User user = JsonTestUtils.deserializeJson(userNode.toString(), User.class);
+
+        byte[] bytes = SerializationTestUtils.serialize(user);
+        Assert.assertEquals(user, SerializationTestUtils.deserialize(bytes, User.class));
     }
 
     @Test(expected = IllegalStateException.class)
