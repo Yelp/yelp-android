@@ -2,6 +2,8 @@ package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.yelp.clientlib.utils.JsonTestUtils;
+import com.yelp.clientlib.utils.SerializationTestUtils;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,6 +25,15 @@ public class CategoryTest {
     public void testDeserializationFailedWithNonPairedValue() throws IOException {
         String categoryJsonString = "[\"Restaurant\"]";
         JsonTestUtils.deserializeJson(categoryJsonString, Business.class);
+    }
+
+    @Test
+    public void testSerializable() throws IOException, ClassNotFoundException {
+        JsonNode categoryNode = JsonTestUtils.getBusinessResponseJsonNode().path("categories").get(0);
+        Category category = JsonTestUtils.deserializeJson(categoryNode.toString(), Category.class);
+
+        byte[] bytes = SerializationTestUtils.serialize(category);
+        Assert.assertEquals(category, SerializationTestUtils.deserialize(bytes, Category.class));
     }
 
     @Test(expected = IllegalStateException.class)

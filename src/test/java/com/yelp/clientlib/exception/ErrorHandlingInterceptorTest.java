@@ -10,7 +10,7 @@ import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
 import com.yelp.clientlib.exception.exceptions.InternalError;
 import com.yelp.clientlib.exception.exceptions.InvalidParameter;
 import com.yelp.clientlib.exception.exceptions.UnexpectedAPIError;
-import com.yelp.clientlib.util.ErrorTestUtil;
+import com.yelp.clientlib.utils.ErrorTestUtils;
 
 import org.easymock.EasyMock;
 import org.junit.Assert;
@@ -64,7 +64,7 @@ public class ErrorHandlingInterceptorTest {
         try {
             errorHandlingInterceptor.intercept(mockChain);
         } catch (UnexpectedAPIError error) {
-            ErrorTestUtil.verifyErrorContent(error, errorCode, errorMessage, null, null);
+            ErrorTestUtils.verifyErrorContent(error, errorCode, errorMessage, null, null);
             return;
         }
 
@@ -83,7 +83,7 @@ public class ErrorHandlingInterceptorTest {
         try {
             errorHandlingInterceptor.intercept(mockChain);
         } catch (BusinessUnavailable error) {
-            ErrorTestUtil.verifyErrorContent(error, errorCode, errorMessage, errorId, errorText);
+            ErrorTestUtils.verifyErrorContent(error, errorCode, errorMessage, errorId, errorText);
             return;
         }
 
@@ -102,7 +102,7 @@ public class ErrorHandlingInterceptorTest {
         try {
             errorHandlingInterceptor.intercept(mockChain);
         } catch (InternalError error) {
-            ErrorTestUtil.verifyErrorContent(error, errorCode, errorMessage, errorId, errorText);
+            ErrorTestUtils.verifyErrorContent(error, errorCode, errorMessage, errorId, errorText);
             return;
         }
 
@@ -123,7 +123,7 @@ public class ErrorHandlingInterceptorTest {
         try {
             errorHandlingInterceptor.intercept(mockChain);
         } catch (InvalidParameter error) {
-            ErrorTestUtil.verifyErrorContent(error, errorCode, errorMessage, errorId, expectedErrorText);
+            ErrorTestUtils.verifyErrorContent(error, errorCode, errorMessage, errorId, expectedErrorText);
             return;
         }
 
@@ -142,7 +142,7 @@ public class ErrorHandlingInterceptorTest {
         try {
             errorHandlingInterceptor.intercept(mockChain);
         } catch (UnexpectedAPIError error) {
-            ErrorTestUtil.verifyErrorContent(error, errorCode, errorMessage, errorId, errorText);
+            ErrorTestUtils.verifyErrorContent(error, errorCode, errorMessage, errorId, errorText);
             return;
         }
 

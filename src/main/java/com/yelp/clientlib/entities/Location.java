@@ -8,12 +8,13 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
 import com.yelp.clientlib.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 @AutoValue
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(builder = AutoValue_Location.Builder.class)
-public abstract class Location {
+public abstract class Location implements Serializable {
 
     @Nullable
     public abstract ArrayList<String> address();

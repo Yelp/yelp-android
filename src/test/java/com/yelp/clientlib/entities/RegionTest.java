@@ -1,6 +1,8 @@
 package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.yelp.clientlib.utils.JsonTestUtils;
+import com.yelp.clientlib.utils.SerializationTestUtils;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,6 +19,15 @@ public class RegionTest {
         // Coordinate and Span are tested in their own tests.
         Assert.assertNotNull(region.center());
         Assert.assertNotNull(region.span());
+    }
+
+    @Test
+    public void testSerializable() throws IOException, ClassNotFoundException {
+        JsonNode regionNode = JsonTestUtils.getSearchResponseJsonNode().path("region");
+        Region region = JsonTestUtils.deserializeJson(regionNode.toString(), Region.class);
+
+        byte[] bytes = SerializationTestUtils.serialize(region);
+        Assert.assertEquals(region, SerializationTestUtils.deserialize(bytes, Region.class));
     }
 
     @Test(expected = IllegalStateException.class)

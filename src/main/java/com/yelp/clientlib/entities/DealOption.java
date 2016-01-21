@@ -8,10 +8,12 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
 import com.yelp.clientlib.annotation.Nullable;
 
+import java.io.Serializable;
+
 @AutoValue
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(builder = AutoValue_DealOption.Builder.class)
-public abstract class DealOption {
+public abstract class DealOption implements Serializable {
 
     @Nullable
     public abstract String formattedOriginalPrice();

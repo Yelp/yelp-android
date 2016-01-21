@@ -7,10 +7,12 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
 
+import java.io.Serializable;
+
 @AutoValue
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(builder = AutoValue_Region.Builder.class)
-public abstract class Region {
+public abstract class Region implements Serializable {
 
     public abstract Coordinate center();
 

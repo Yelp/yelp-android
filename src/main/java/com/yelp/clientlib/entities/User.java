@@ -8,10 +8,12 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
 import com.yelp.clientlib.annotation.Nullable;
 
+import java.io.Serializable;
+
 @AutoValue
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(builder = AutoValue_User.Builder.class)
-public abstract class User {
+public abstract class User implements Serializable {
 
     public abstract String id();
 

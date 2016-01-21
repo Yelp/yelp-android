@@ -5,13 +5,13 @@ import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
 import com.yelp.clientlib.entities.Business;
-import com.yelp.clientlib.entities.JsonTestUtils;
+import com.yelp.clientlib.utils.JsonTestUtils;
 import com.yelp.clientlib.entities.SearchResponse;
 import com.yelp.clientlib.entities.options.BoundingBoxOptions;
 import com.yelp.clientlib.entities.options.CoordinateOptions;
 import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
-import com.yelp.clientlib.util.AsyncTestUtil;
-import com.yelp.clientlib.util.ErrorTestUtil;
+import com.yelp.clientlib.utils.AsyncTestUtils;
+import com.yelp.clientlib.utils.ErrorTestUtils;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -49,7 +49,7 @@ public class YelpAPITest {
         );
 
         // Make API requests to be executed in main thread so we can verify it easily.
-        yelpAPIFactory = AsyncTestUtil.setToRunInMainThread(yelpAPIFactory);
+        yelpAPIFactory = AsyncTestUtils.setToRunInMainThread(yelpAPIFactory);
 
         yelpAPI = yelpAPIFactory.createAPI();
 
@@ -250,7 +250,7 @@ public class YelpAPITest {
         try {
             call.execute().body();
         } catch (BusinessUnavailable e) {
-            ErrorTestUtil.verifyErrorContent(
+            ErrorTestUtils.verifyErrorContent(
                     e,
                     400,
                     "Bad Request",

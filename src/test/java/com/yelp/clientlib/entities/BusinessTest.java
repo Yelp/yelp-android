@@ -2,6 +2,8 @@ package com.yelp.clientlib.entities;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.yelp.clientlib.utils.JsonTestUtils;
+import com.yelp.clientlib.utils.SerializationTestUtils;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -77,6 +79,15 @@ public class BusinessTest {
     public void testDeserializationFailedWithMissingAttributes() throws IOException {
         String businessJsonString = "{\"name\":\"Yelp\"}";
         JsonTestUtils.deserializeJson(businessJsonString, Business.class);
+    }
+
+    @Test
+    public void testSerializable() throws IOException, ClassNotFoundException {
+        JsonNode businessNode = JsonTestUtils.getBusinessResponseJsonNode();
+        Business business = JsonTestUtils.deserializeJson(businessNode.toString(), Business.class);
+
+        byte[] bytes = SerializationTestUtils.serialize(business);
+        Assert.assertEquals(business, SerializationTestUtils.deserialize(bytes, Business.class));
     }
 
     @Test
