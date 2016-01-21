@@ -24,6 +24,15 @@ public class YelpAPIFactory {
 
     private OkHttpClient httpClient;
 
+    /**
+     * Construct a new {@code YelpAPIFactory}.
+     *
+     * @param consumerKey    the consumer key.
+     * @param consumerSecret the consumer secret.
+     * @param token          the access token.
+     * @param tokenSecret    the token secret.
+     * @see <a href="https://www.yelp.com/developers/manage_api_keys=>https://www.yelp.com/developers/manage_api_keys</a>
+     */
     public YelpAPIFactory(String consumerKey, String consumerSecret, String token, String tokenSecret) {
         OkHttpOAuthConsumer consumer = new OkHttpOAuthConsumer(consumerKey, consumerSecret);
         consumer.setTokenWithSecret(token, tokenSecret);
@@ -32,6 +41,11 @@ public class YelpAPIFactory {
         this.httpClient.interceptors().add(new ErrorHandlingInterceptor());
     }
 
+    /**
+     * Initiate a {@link YelpAPI} instance.
+     *
+     * @return an instance of {@link YelpAPI}.
+     */
     public YelpAPI createAPI() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(getAPIBaseUrl())
@@ -42,6 +56,11 @@ public class YelpAPIFactory {
         return retrofit.create(YelpAPI.class);
     }
 
+    /**
+     * Get the base URL of Yelp APIs.
+     *
+     * @return the base URL of Yelp APIs.
+     */
     public String getAPIBaseUrl() {
         return YELP_API_BASE_URL;
     }

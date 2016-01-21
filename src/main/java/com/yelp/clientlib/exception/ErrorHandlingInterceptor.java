@@ -30,6 +30,13 @@ public class ErrorHandlingInterceptor implements Interceptor {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * Intercept HTTP responses and raise a {@link YelpAPIError} if the response code is not 2xx.
+     *
+     * @param chain {@link com.squareup.okhttp.Interceptor.Chain} object for sending the HTTP request.
+     * @return response
+     * @throws IOException {@link YelpAPIError} generated depends on the response error id.
+     */
     @Override
     public Response intercept(Chain chain) throws IOException {
         Response response = chain.proceed(chain.request());
@@ -53,7 +60,7 @@ public class ErrorHandlingInterceptor implements Interceptor {
         String errorId = errorJsonNode.path("id").asText();
         String errorText = errorJsonNode.path("text").asText();
 
-        if(errorJsonNode.has("field")) {
+        if (errorJsonNode.has("field")) {
             errorText += ": " + errorJsonNode.path("field").asText();
         }
 
