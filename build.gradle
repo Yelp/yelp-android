@@ -15,10 +15,12 @@ sourceSets {
         resources.srcDir file('src/integration-test/resources')
     }
 }
+
 configurations {
     integrationTestCompile.extendsFrom testCompile
     integrationTestRuntime.extendsFrom testRuntime
 }
+
 task integrationTest(type: Test) {
     testClassesDir = sourceSets.integrationTest.output.classesDir
     classpath = sourceSets.integrationTest.runtimeClasspath
@@ -26,6 +28,7 @@ task integrationTest(type: Test) {
     // Set upToDateWhen to false so integration tests always run when the task is called.
     outputs.upToDateWhen { false }
 }
+
 // Makes integration tests not run by default.
 check.dependsOn -= integrationTest
 
