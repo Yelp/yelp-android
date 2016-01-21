@@ -1,4 +1,10 @@
 apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+group = 'com.yelp.clientlib'
+archivesBaseName = "yelp-android"
+version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -31,6 +37,60 @@ task integrationTest(type: Test) {
 
 // Makes integration tests not run by default.
 check.dependsOn -= integrationTest
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'Yelp Android Clientlib'
+                packaging 'jar'
+                description 'A Java library for the Yelp API. It simplifies the process of authentication, request construction, and response parsing for Java/Android developers using the Yelp API.'
+                url 'https://www.yelp.com/developers'
+
+                scm {
+                    connection 'scm:git:git@github.com:Yelp/yelp-android.git'
+                    developerConnection 'scm:git:git@github.com:Yelp/yelp-android.git'
+                    url 'git@github.com:Yelp/yelp-android.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The MIT License (MIT)'
+                        url 'https://opensource.org/licenses/MIT'
+                    }
+                }
+            }
+        }
+    }
+}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
