@@ -1,4 +1,4 @@
-package com.yelp.clientlib.integration;
+package com.yelp.clientlib;
 
 import com.yelp.clientlib.connection.YelpAPI;
 import com.yelp.clientlib.connection.YelpAPIFactory;
@@ -32,10 +32,10 @@ public class BusinessIntegrationTest {
     @Before
     public void setUp() {
         YelpAPIFactory yelpAPIFactory = new YelpAPIFactory(
-                Credential.getConsumerKey(),
-                Credential.getConsumerSecret(),
-                Credential.getToken(),
-                Credential.getTokenSecret()
+                Credential.consumerKey(),
+                Credential.consumerSecret(),
+                Credential.token(),
+                Credential.tokenSecret()
         );
 
         // Make API requests to be executed in main thread so we can verify it easily.

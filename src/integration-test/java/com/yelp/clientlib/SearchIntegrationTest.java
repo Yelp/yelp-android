@@ -1,4 +1,4 @@
-package com.yelp.clientlib.integration;
+package com.yelp.clientlib;
 
 import com.yelp.clientlib.connection.YelpAPI;
 import com.yelp.clientlib.connection.YelpAPIFactory;
@@ -27,10 +27,10 @@ public class SearchIntegrationTest {
     @Before
     public void setUp() {
         YelpAPIFactory yelpAPIFactory = new YelpAPIFactory(
-                Credential.getConsumerKey(),
-                Credential.getConsumerSecret(),
-                Credential.getToken(),
-                Credential.getTokenSecret()
+                Credential.consumerKey(),
+                Credential.consumerSecret(),
+                Credential.token(),
+                Credential.tokenSecret()
 
         );
 
