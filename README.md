@@ -37,7 +37,7 @@ dependencies {
 ### Basic usage
 This library uses a `YelpAPI` object to query against the API. Instantiate a `YelpAPI` object by using 
 `YelpAPIFactory` with your API keys.
-```
+```java
 YelpAPIFactory apiFactory = new YelpAPIFactory(consumerKey, consumerSecret, token, tokenSecret);
 YelpAPI yelpAPI = apiFactory.createAPI();
 ```
@@ -48,7 +48,7 @@ the Search API.
 
 The general params and locale options should be passed to the method as a `Map<String, String>`. The full list of 
 parameters can be found in the [Search API Documentation](https://www.yelp.com/developers/documentation/v2/search_api).
-```
+```java
 Map<String, String> params = new HashMap<>();
 
 // general params
@@ -62,12 +62,12 @@ Call<SearchResponse> call = yelpAPI.search("San Francisco", params);
 ```
 
 Now you can execute the `Call` object to send the request.
-```
+```java
 Response<SearchResponse> response = call.execute();
 ```
 
 You can also pass in a `Callback` object to send the request asynchronously. For more see [Asynchronous Requests](#asynchronous-requests) section.
-```
+```java
 Callback<SearchResponse> callback = new Callback<SearchResponse>() {
     @Override
     public void onResponse(Response<SearchResponse> response, Retrofit retrofit) {
@@ -84,7 +84,7 @@ call.enqueue(callback);
 ```
 
 Additionally there are two more search methods for searching by a [bounding box](https://www.yelp.com/developers/documentation/v2/search_api#searchGBB) or for [geographical coordinates](https://www.yelp.com/developers/documentation/v2/search_api#searchGC):
-```
+```java
 // bounding box
 BoundingBoxOptions bounds = BoundingBoxOptions.builder()
         .swLatitude(37.7577)
@@ -105,12 +105,12 @@ Response<SearchResponse> response = call.execute();
 ### [Business API](http://www.yelp.com/developers/documentation/v2/business)
 To query the Business API, use the `getBusiness` function with a `business_id`. You can also pass in locale parameters 
 in a `Map<String, String>` as specified in the [Business API Documentation](http://www.yelp.com/developers/documentation/v2/business).
-```
+```java
 Call<Business> call = yelpAPI.getBusiness("yelp-san-francisco");
 Response<Business> response = call.execute();
 ```
 You can pass in locale information as well.
-```
+```java
 Map<String, String> params = new HashMap<>();
 params.put("lang", "fr");
 
@@ -121,12 +121,12 @@ Response<Business> response = call.execute();
 ### [Phone Search API](http://www.yelp.com/developers/documentation/v2/phone_search)
 To query the Phone Search API, use the `getPhoneSearch` function with a phone number. Additional parameters can be
 passed in by using a `Map<String, String>` as specified in the [Phone Search API Documentation](https://www.yelp.com/developers/documentation/v2/phone_search).
-```
+```java
 Call<SearchResponse> call = yelpAPI.getPhoneSearch("+15555555555");
 Response<SearchResponse> response = call.execute();
 ```
 You can pass in country code information as well
-```
+```java
 Map<String, String> params = new HashMap<>();
 params.put("cc", "US");
 params.put("category", "fashion");
@@ -138,7 +138,7 @@ Response<SearchResponse> response = call.execute();
 ### Asynchronous Requests
 This library uses [Retrofit](http://square.github.io/retrofit/) as the HTTP client. To send a request asynchronously,
 use `Call.enqueue()` to set `Callback` function for an asynchronous request.
-```
+```java
 Callback<Business> callback = new Callback<Business>() {
     @Override
     public void onResponse(Response<Business> response, Retrofit retrofit) {
@@ -157,7 +157,7 @@ call.enqueue(callback);
 
 You can cancel asynchronous requests by simply call `cancel()` on `Call` objects. It is important to cancel your calls 
 while your `Activity` is being destroyed to avoid memory leaks.
-```
+```java
 Call<Business> call = yelpAPI.getBusiness(businessId);
 call.enqueue(callback);
 
@@ -172,7 +172,7 @@ After `Call` object is executed, a `Response` contains parsed Java objects will 
 get parsed Java objects.
 
 Search and phone search responses are parsed into `SearchResponse` objects.
-```
+```java
 Call<SearchResponse> call = yelpAPI.search("San Francisco", params);
 SearchResponse searchResponse = call.execute().body();
 
@@ -184,7 +184,7 @@ Double rating = businesses.get(0).rating();  // 4.0
 ```
 
 Business responses are parsed into `Business` objects directly.
-```
+```java
 Call<Business> call = yelpAPI.business("japacurry-truck-san-francisco");
 Response<Business> response = call.execute();
 Business business = response.body();
