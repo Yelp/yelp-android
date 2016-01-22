@@ -1,4 +1,9 @@
 apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'com.yelp.clientlib'
+archivesBaseName = "yelp-android"
+version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
