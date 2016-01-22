@@ -2,15 +2,16 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'signing'
 
-group = 'com.yelp.clientlib'
-archivesBaseName = "yelp-android"
-version = '1.0-SNAPSHOT'
-
 repositories {
     mavenCentral()
 }
 
-// Set up integrationTest task to execute tests in src/integration-test separately from main build.
+/**
+ * Configure integration tests. Set up a new integrationTest task to execute tests in src/integration-test separately
+ * from the main build.
+ *
+ * To run all of the integration tests, run "gradle integrationTest".
+ */
 sourceSets {
     integrationTest {
         java {
@@ -38,6 +39,18 @@ task integrationTest(type: Test) {
 // Makes integration tests not run by default.
 check.dependsOn -= integrationTest
 
+/**
+ * Configure deployment.
+ *
+ * To deploy artifacts to public repository, run "gradle upload". You need to have "ossrhUsername", "ossrhPassword",
+ * "signing.keyId", "signing.password" and "signing.secretKeyRingFile" in your HOME/.gradle/gradle.properties file
+ * to upload archives.
+ *
+ * To deploy artifacts to local Maven repository, run "gradle install".
+ */
+group = 'com.yelp.clientlib'
+archivesBaseName = 'yelp-android'
+
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
     from javadoc
@@ -52,27 +65,38 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
-signing {
-    sign configurations.archives
+task checkOSSRHProperties << {
+    if (project.properties['ossrhUsername'] == null || project.properties['ossrhPassword'] == null) {
+        throw new IllegalStateException('ERROR: you need to have ossrhUsername and ossrhPassword properties' +
+                ' defined in your HOME/.gradle/gradle.properties file to upload archives');
+    }
+    if (project.properties['signing.keyId'] == null || project.properties['signing.password'] == null || project
+            .properties['signing.secretKeyRingFile'] == null) {
+        throw new IllegalStateException('ERROR: you need to have signing.keyId, signing.password and ' +
+                'signing.secretKeyRingFile properties defined in your HOME/.gradle/gradle.properties file to sign ' +
+                'the archives.');
+    }
 }
 
 uploadArchives {
+    dependsOn checkOSSRHProperties
     repositories {
         mavenDeployer {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
+            repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+                authentication(userName: project.properties['ossrhUsername'], password: project.properties['ossrhPassword'])
             }
 
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
+            snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots') {
+                authentication(userName: project.properties['ossrhUsername'], password: project.properties['ossrhPassword'])
             }
 
             pom.project {
                 name 'Yelp Android Clientlib'
                 packaging 'jar'
-                description 'A Java library for the Yelp API. It simplifies the process of authentication, request construction, and response parsing for Java/Android developers using the Yelp API.'
+                description 'A Java library for the Yelp API. It simplifies the process of authentication, request ' +
+                        'construction, and response parsing for Java/Android developers using the Yelp API.'
                 url 'https://www.yelp.com/developers'
 
                 scm {
@@ -92,6 +116,14 @@ uploadArchives {
     }
 }
 
+signing {
+    required { gradle.taskGraph.hasTask('uploadArchives') }
+    sign configurations.archives
+}
+
+/**
+ * Configure package dependencies.
+ */
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.google.auto.value:auto-value:1.1'

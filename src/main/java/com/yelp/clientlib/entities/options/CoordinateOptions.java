@@ -35,11 +35,11 @@ public abstract class CoordinateOptions {
     public abstract Double altitudeAccuracy();
 
     /**
-     * String presentation for {@link CoordinateOptions}. The generated string is comma separated. It is encoded in the
-     * order of latitude, longitude, accuracy, altitude and altitudeAccuracy. This method is used by {@link retrofit
+     * String presentation for {@code CoordinateOptions}. The generated string is comma separated. It is encoded in the
+     * order of latitude, longitude, accuracy, altitude and altitudeAccuracy. This method is used by {@code retrofit
      * .http.QueryMap} to generate the values of query parameters.
      *
-     * @return String presentation for {@link CoordinateOptions}
+     * @return String presentation for {@code CoordinateOptions}
      */
     @Override
     public String toString() {
@@ -92,9 +92,9 @@ public abstract class CoordinateOptions {
         public abstract Builder altitudeAccuracy(Double altitudeAccuracy);
 
         /**
-         * Returns a reference to the object of {@link CoordinateOptions} being constructed by the builder.
+         * Returns a reference to the object of {@code CoordinateOptions} being constructed by the builder.
          *
-         * @return the {@link CoordinateOptions} constructed by the builder.
+         * @return the {@code CoordinateOptions} constructed by the builder.
          */
         public abstract CoordinateOptions build();
     }
