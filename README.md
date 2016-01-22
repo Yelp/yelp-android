@@ -136,8 +136,8 @@ Response<SearchResponse> response = call.execute();
 ```
 
 ### Asynchronous Requests
-This library uses [Retrofit](http://square.github.io/retrofit/) as the HTTP client. To send a request asynchronously, use 
-`Call.enqueue()` to set `Callback` function for an asynchronous request.
+This library uses [Retrofit](http://square.github.io/retrofit/) as the HTTP client. To send a request asynchronously,
+use `Call.enqueue()` to set `Callback` function for an asynchronous request.
 ```
 Callback<Business> callback = new Callback<Business>() {
     @Override
