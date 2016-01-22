@@ -218,4 +218,4 @@ token_secret: YOUR_TOKEN_SECRET
 ```
 
 To run the integration tests, execute `gradle integrationTest`. Integration tests will not be ran in the build process
- by executing `gradle build`.
+by executing `gradle build`.
