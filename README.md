@@ -136,8 +136,8 @@ Response<SearchResponse> response = call.execute();
 ```
 
 ### Asynchronous Requests
-This library uses [Retrofit](http://square.github.io/retrofit/) as HTTP client. To send a request asynchronously, use 
-`Call.enqueue()` to set `Callback` function for an asynchronous request.
+This library uses [Retrofit](http://square.github.io/retrofit/) as the HTTP client. To send a request asynchronously,
+use `Call.enqueue()` to set `Callback` function for an asynchronous request.
 ```
 Callback<Business> callback = new Callback<Business>() {
     @Override
@@ -156,7 +156,7 @@ call.enqueue(callback);
 ```
 
 You can cancel asynchronous requests by simply call `cancel()` on `Call` objects. It is important to cancel your calls 
-while your `Activity` is being destroyed to avoid memory leak.
+while your `Activity` is being destroyed to avoid memory leaks.
 ```
 Call<Business> call = yelpAPI.getBusiness(businessId);
 call.enqueue(callback);
@@ -197,7 +197,7 @@ For a full list of available response fields, take a look at the [documentation]
 or the classes defined in [com.yelp.clientlib.entities](../../tree/master/src/main/java/com/yelp/clientlib/entities).
 
 ## Contributing
-1. Fork it ( http://github.com/yelp/yelp-android/fork )
+1. Fork it (http://github.com/yelp/yelp-android/fork)
 2. Create your feature branch (git checkout -b my-new-feature)
 3. Commit your changes (git commit -am 'Add some feature')
 4. Push to the branch (git push origin my-new-feature)
@@ -218,4 +218,4 @@ token_secret: YOUR_TOKEN_SECRET
 ```
 
 To run the integration tests, execute `gradle integrationTest`. Integration tests will not be ran in the build process
- by executing `gradle build`.
+by executing `gradle build`.
