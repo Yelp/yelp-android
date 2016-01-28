@@ -111,6 +111,19 @@ uploadArchives {
                         url 'https://opensource.org/licenses/MIT'
                     }
                 }
+
+                developers {
+                    developer {
+                        name 'Yelp'
+                        email 'api+android@yelp.com'
+                    }
+
+                    developer {
+                        id 'tzuhanwu'
+                        name 'Tzu-Han Wu'
+                        email 'tzuhanwu@yelp.com'
+                    }
+                }
             }
         }
     }
