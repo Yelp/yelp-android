@@ -3,31 +3,27 @@ A Java library for the Yelp API. It simplifies the process of authentication, re
 parsing for Java/Android developers using the Yelp API. This clientlib requires Java 7 or Android 2.3.
 
 ## Installation
-We are working on putting this library into the Maven central repository. Meanwhile, build it locally by using [Gradle]
-(http://gradle.org/) for your other projects.
 
-After you git clone this project, build it locally.
-```
-gradle build
-```
+Download [the latest JAR](https://search.maven.org/remote_content?g=com.yelp.clientlib&a=yelp-android&v=LATEST) or install by using [Maven](https://maven.apache.org/):
 
-After a successful build, install the built library into your local Maven repository so it can be used by other 
-projects.
-```
-gradle install
+```xml
+<dependency>
+  <groupId>com.yelp.clientlib</groupId>
+  <artifactId>yelp-android</artifactId>
+  <version>1.0.0</version>
+</dependency>
 ```
 
-Add dependency to your project by adding the following lines into `build.gradle`.
-```
-// Add Maven local repository so your project can find local-built libraries.
+or [Gradle](http://gradle.org/):
+
+```groovy
 repositories {
-    mavenLocal()
+    mavenCentral()
 }
 
-// Add dependency to the library.
 dependencies {
     ...
-    compile 'com.yelp:yelp-android:1.0-SNAPSHOT'
+    compile 'com.yelp.clientlib:yelp-android:1.0.0'
     ...
 }
 ```
