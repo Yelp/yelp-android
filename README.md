@@ -4,7 +4,7 @@ parsing for Java/Android developers using the Yelp API. This clientlib requires 
 
 ## Installation
 
-Install by using [Maven](https://maven.apache.org/):
+Download [the latest JAR](https://search.maven.org/remote_content?g=com.yelp.clientlib&a=yelp-android&v=LATEST) or install by using [Maven](https://maven.apache.org/):
 
 ```xml
 <dependency>
