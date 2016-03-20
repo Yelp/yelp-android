@@ -2,8 +2,8 @@ package com.yelp.clientlib.exception;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.Response;
+import okhttp3.Interceptor;
+import okhttp3.Response;
 import com.yelp.clientlib.exception.exceptions.AreaTooLarge;
 import com.yelp.clientlib.exception.exceptions.BadCategory;
 import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;

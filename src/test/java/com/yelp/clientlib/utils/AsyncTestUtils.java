@@ -1,7 +1,7 @@
 package com.yelp.clientlib.utils;
 
-import com.squareup.okhttp.Dispatcher;
-import com.squareup.okhttp.OkHttpClient;
+import okhttp3.Dispatcher;
+import okhttp3.OkHttpClient;
 import com.yelp.clientlib.connection.YelpAPIFactory;
 
 import org.junit.Assert;

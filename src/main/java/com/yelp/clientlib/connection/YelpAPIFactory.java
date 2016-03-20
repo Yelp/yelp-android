@@ -1,10 +1,10 @@
 package com.yelp.clientlib.connection;
 
-import com.squareup.okhttp.OkHttpClient;
+import okhttp3.OkHttpClient;
 import com.yelp.clientlib.exception.ErrorHandlingInterceptor;
 
-import retrofit.JacksonConverterFactory;
-import retrofit.Retrofit;
+import retrofit2.JacksonConverterFactory;
+import retrofit2.Retrofit;
 import se.akerfeldt.okhttp.signpost.OkHttpOAuthConsumer;
 import se.akerfeldt.okhttp.signpost.SigningInterceptor;
 
