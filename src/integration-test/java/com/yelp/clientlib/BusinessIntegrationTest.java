@@ -77,12 +77,12 @@ public class BusinessIntegrationTest {
         final ArrayList<Response<Business>> responseWrapper = new ArrayList<>();
         Callback<Business> businessCallback = new Callback<Business>() {
             @Override
-            public void onResponse(Response<Business> response, Retrofit retrofit) {
+            public void onResponse(Call<Business> call, Response<Business> response) {
                 responseWrapper.add(response);
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Call<Business> call, Throwable t) {
                 Assert.fail("Unexpected failure: " + t.toString());
             }
         };
@@ -120,12 +120,12 @@ public class BusinessIntegrationTest {
     public void testGetBusinessAsynchronousWith400Response() throws IOException {
         Callback<Business> businessCallback = new Callback<Business>() {
             @Override
-            public void onResponse(Response<Business> response, Retrofit retrofit) {
+            public void onResponse(Call<Business> call, Response<Business> response) {
                 Assert.fail("Expected failure not returned.");
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Call<Business> call, Throwable t) {
                 Assert.assertTrue(t instanceof BusinessUnavailable);
                 ErrorTestUtils.verifyErrorContent(
                         (YelpAPIError) t,

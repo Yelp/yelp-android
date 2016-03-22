@@ -75,12 +75,12 @@ public class PhoneSearchIntegrationTest {
         final ArrayList<Response<SearchResponse>> responseWrapper = new ArrayList<>();
         Callback<SearchResponse> searchCallback = new Callback<SearchResponse>() {
             @Override
-            public void onResponse(Response<SearchResponse> response, Retrofit retrofit) {
+            public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
                 responseWrapper.add(response);
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Call<SearchResponse> call, Throwable t) {
                 Assert.fail("Unexpected failure: " + t.toString());
             }
         };
