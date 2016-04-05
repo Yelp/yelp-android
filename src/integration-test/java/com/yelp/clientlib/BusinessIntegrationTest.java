@@ -17,10 +17,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * TODO: Move this class to other directory so src/java/test only contains unit-tests related files.
@@ -77,12 +77,12 @@ public class BusinessIntegrationTest {
         final ArrayList<Response<Business>> responseWrapper = new ArrayList<>();
         Callback<Business> businessCallback = new Callback<Business>() {
             @Override
-            public void onResponse(Response<Business> response, Retrofit retrofit) {
+            public void onResponse(Call<Business> call, Response<Business> response) {
                 responseWrapper.add(response);
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Call<Business> call, Throwable t) {
                 Assert.fail("Unexpected failure: " + t.toString());
             }
         };
@@ -120,12 +120,12 @@ public class BusinessIntegrationTest {
     public void testGetBusinessAsynchronousWith400Response() throws IOException {
         Callback<Business> businessCallback = new Callback<Business>() {
             @Override
-            public void onResponse(Response<Business> response, Retrofit retrofit) {
+            public void onResponse(Call<Business> call, Response<Business> response) {
                 Assert.fail("Expected failure not returned.");
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Call<Business> call, Throwable t) {
                 Assert.assertTrue(t instanceof BusinessUnavailable);
                 ErrorTestUtils.verifyErrorContent(
                         (YelpAPIError) t,

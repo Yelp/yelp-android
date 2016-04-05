@@ -1,7 +1,7 @@
 package com.yelp.clientlib.utils;
 
-import com.squareup.okhttp.Dispatcher;
-import com.squareup.okhttp.OkHttpClient;
+import okhttp3.Dispatcher;
+import okhttp3.OkHttpClient;
 import com.yelp.clientlib.connection.YelpAPIFactory;
 
 import org.junit.Assert;
@@ -26,7 +26,8 @@ public class AsyncTestUtils {
 
         try {
             OkHttpClient httpClient = (OkHttpClient) PrivateAccessor.getField(yelpAPIFactory, "httpClient");
-            httpClient.setDispatcher(synchronousDispatcher);
+            OkHttpClient synchronousHttpClient = httpClient.newBuilder().dispatcher(synchronousDispatcher).build();
+            PrivateAccessor.setField(yelpAPIFactory, "httpClient", synchronousHttpClient);
         } catch (NoSuchFieldException e) {
             Assert.fail(e.toString());
         }

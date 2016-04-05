@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * TODO: Move this class to other directory so src/java/test only contains unit-tests related files.
@@ -75,12 +75,12 @@ public class PhoneSearchIntegrationTest {
         final ArrayList<Response<SearchResponse>> responseWrapper = new ArrayList<>();
         Callback<SearchResponse> searchCallback = new Callback<SearchResponse>() {
             @Override
-            public void onResponse(Response<SearchResponse> response, Retrofit retrofit) {
+            public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
                 responseWrapper.add(response);
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Call<SearchResponse> call, Throwable t) {
                 Assert.fail("Unexpected failure: " + t.toString());
             }
         };

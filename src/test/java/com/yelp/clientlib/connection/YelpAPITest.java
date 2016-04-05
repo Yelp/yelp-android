@@ -1,9 +1,9 @@
 package com.yelp.clientlib.connection;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
-import com.squareup.okhttp.mockwebserver.RecordedRequest;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 import com.yelp.clientlib.entities.Business;
 import com.yelp.clientlib.utils.JsonTestUtils;
 import com.yelp.clientlib.entities.SearchResponse;
@@ -23,10 +23,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class YelpAPITest {
     private MockWebServer mockServer;
@@ -82,12 +81,12 @@ public class YelpAPITest {
         final ArrayList<Business> returnedBusinessWrapper = new ArrayList<>();
         Callback<Business> businessCallback = new Callback<Business>() {
             @Override
-            public void onResponse(Response<Business> response, Retrofit retrofit) {
+            public void onResponse(Call<Business> call, Response<Business> response) {
                 returnedBusinessWrapper.add(response.body());
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Call<Business> call, Throwable t) {
                 Assert.fail("Unexpected failure: " + t.toString());
             }
         };
@@ -147,17 +146,10 @@ public class YelpAPITest {
         verifyResponseDeserializationForGetBusiness(business);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testGetBusinessWithNullParams() throws IOException, InterruptedException {
-        setUpMockServerResponse(200, "OK", businessJsonNode.toString());
-
-        String testBusinessId = "test-business-id";
-
-        Call<Business> call = yelpAPI.getBusiness(testBusinessId, null);
-        Business business = call.execute().body();
-
-        verifyRequestForGetBusiness(testBusinessId);
-        verifyResponseDeserializationForGetBusiness(business);
+        Call<Business> call = yelpAPI.getBusiness("test-business-id", null);
+        call.execute().body();
     }
 
     @Test
@@ -179,13 +171,14 @@ public class YelpAPITest {
 
         final ArrayList<SearchResponse> responseWrapper = new ArrayList<>();
         Callback<SearchResponse> businessCallback = new Callback<SearchResponse>() {
+
             @Override
-            public void onResponse(Response<SearchResponse> response, Retrofit retrofit) {
+            public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
                 responseWrapper.add(response.body());
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Call<SearchResponse> call, Throwable t) {
                 Assert.fail("Unexpected failure: " + t.toString());
             }
         };
@@ -227,17 +220,10 @@ public class YelpAPITest {
         verifyResponseDeserializationForSearchResponse(searchResponse);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testGetPhoneSearchWithNullParams() throws IOException, InterruptedException {
-        setUpMockServerResponse(200, "OK", searchResponseJsonNode.toString());
-
-        String testPhone = "1234567899";
-
-        Call<SearchResponse> call = yelpAPI.getPhoneSearch(testPhone, null);
-        SearchResponse searchResponse = call.execute().body();
-
-        verifyRequestForGetPhoneSearch(testPhone);
-        verifyResponseDeserializationForSearchResponse(searchResponse);
+        Call<SearchResponse> call = yelpAPI.getPhoneSearch("1234567899", null);
+        call.execute().body();
     }
 
     @Test

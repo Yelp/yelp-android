@@ -1,10 +1,10 @@
 package com.yelp.clientlib.connection;
 
-import com.squareup.okhttp.OkHttpClient;
+import okhttp3.OkHttpClient;
 import com.yelp.clientlib.exception.ErrorHandlingInterceptor;
 
-import retrofit.JacksonConverterFactory;
-import retrofit.Retrofit;
+import retrofit2.converter.jackson.JacksonConverterFactory;
+import retrofit2.Retrofit;
 import se.akerfeldt.okhttp.signpost.OkHttpOAuthConsumer;
 import se.akerfeldt.okhttp.signpost.SigningInterceptor;
 
@@ -36,9 +36,11 @@ public class YelpAPIFactory {
     public YelpAPIFactory(String consumerKey, String consumerSecret, String token, String tokenSecret) {
         OkHttpOAuthConsumer consumer = new OkHttpOAuthConsumer(consumerKey, consumerSecret);
         consumer.setTokenWithSecret(token, tokenSecret);
-        this.httpClient = new OkHttpClient();
-        this.httpClient.interceptors().add(new SigningInterceptor(consumer));
-        this.httpClient.interceptors().add(new ErrorHandlingInterceptor());
+
+        this.httpClient = new OkHttpClient.Builder()
+                .addInterceptor(new SigningInterceptor(consumer))
+                .addInterceptor(new ErrorHandlingInterceptor())
+                .build();
     }
 
     /**

@@ -2,8 +2,8 @@ package com.yelp.clientlib.exception;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.Response;
+import okhttp3.Interceptor;
+import okhttp3.Response;
 import com.yelp.clientlib.exception.exceptions.AreaTooLarge;
 import com.yelp.clientlib.exception.exceptions.BadCategory;
 import com.yelp.clientlib.exception.exceptions.BusinessUnavailable;
@@ -33,7 +33,7 @@ public class ErrorHandlingInterceptor implements Interceptor {
     /**
      * Intercept HTTP responses and raise a {@link YelpAPIError} if the response code is not 2xx.
      *
-     * @param chain {@link com.squareup.okhttp.Interceptor.Chain} object for sending the HTTP request.
+     * @param chain {@link okhttp3.Interceptor.Chain} object for sending the HTTP request.
      * @return response
      * @throws IOException {@link YelpAPIError} generated depends on the response error id.
      */

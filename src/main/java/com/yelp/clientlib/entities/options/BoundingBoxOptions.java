@@ -27,7 +27,7 @@ public abstract class BoundingBoxOptions {
 
     /**
      * String presentation for {@link BoundingBoxOptions}. The generated string is encoded as
-     * "swLatitude,swLongitude%7CneLatitude,neLongitude". This method is used by {@link retrofit.http.Query} to
+     * "swLatitude,swLongitude%7CneLatitude,neLongitude". This method is used by {@link retrofit2.http.Query} to
      * generate the values of query parameters.
      *
      * BoundingBox query param value contains non-suggested URI character '|' which doesn't fit into most of the

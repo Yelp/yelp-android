@@ -66,12 +66,12 @@ You can also pass in a `Callback` object to send the request asynchronously. For
 ```java
 Callback<SearchResponse> callback = new Callback<SearchResponse>() {
     @Override
-    public void onResponse(Response<SearchResponse> response, Retrofit retrofit) {
+    public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
         SearchResponse searchResponse = response.body();
         // Update UI text with the searchResponse.
     }
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(Call<SearchResponse> call, Throwable t) {
         // HTTP error happened, do something to handle it.
     }
 };
@@ -137,12 +137,12 @@ use `Call.enqueue()` to set `Callback` function for an asynchronous request.
 ```java
 Callback<Business> callback = new Callback<Business>() {
     @Override
-    public void onResponse(Response<Business> response, Retrofit retrofit) {
+    public void onResponse(Call<Business> call, Response<Business> response) {
         Business business = response.body();
         // Update UI text with the Business object.
     }
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(Call<Business> call, Throwable t) {
         // HTTP error happened, do something to handle it.
     }
 };
