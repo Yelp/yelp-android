@@ -10,7 +10,7 @@ Download [the latest JAR](https://search.maven.org/remote_content?g=com.yelp.cli
 <dependency>
   <groupId>com.yelp.clientlib</groupId>
   <artifactId>yelp-android</artifactId>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
     ...
-    compile 'com.yelp.clientlib:yelp-android:1.0.0'
+    compile 'com.yelp.clientlib:yelp-android:2.0.0'
     ...
 }
 ```
