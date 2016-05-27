@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Yelp/yelp-android.svg?branch=master)](https://travis-ci.org/Yelp/yelp-android)
+
 # yelp-android
 A Java library for the Yelp API. It simplifies the process of authentication, request construction, and response 
 parsing for Java/Android developers using the Yelp API. This clientlib requires Java 7 or Android 2.3.
