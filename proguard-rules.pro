@@ -86,61 +86,9 @@
     public <init>(...); }
 
 #Yelp Serializable objects
--keep public class com.yelp.clientlib.entities.SearchResponse {
-    public *;}
-
--keep public class com.yelp.clientlib.entities.SearchResponse$Builder {
-    public *;
-    public com.yelp.clientlib.entities.SearchResponse$Builder build();}
-
--keep public class com.yelp.clientlib.entities.Region {
-    public *;}
-
--keep public class com.yelp.clientlib.entities.Region$Builder {
-    public *;
-    public com.yelp.clientlib.entities.Region$Builder build();}
-
--keep public class com.yelp.clientlib.entities.Location {
-    public *;}
-
--keep public class com.yelp.clientlib.entities.Location$Builder {
-    public *;
-    public com.yelp.clientlib.entities.Location$Builder build();}
-
--keep public class com.yelp.clientlib.entities.Review {
-    public *;}
-
--keep public class com.yelp.clientlib.entities.Review$Builder {
-    public *;
-    public com.yelp.clientlib.entities.Review$Builder build();}
-
--keep public class com.yelp.clientlib.entities.Business {
-    public *;}
-
--keep public class com.yelp.clientlib.entities.Business$Builder {
-    public *;
-    public com.yelp.clientlib.entities.Business$Builder build();}
-
--keep public class com.yelp.clientlib.entities.Span {
-    public *;}
-
--keep public class com.yelp.clientlib.entities.Span$Builder {
-    public *;
-    public com.yelp.clientlib.entities.Span$Builder build();}
-
--keep public class com.yelp.clientlib.entities.Coordinate {
-    public *;}
-
--keep public class com.yelp.clientlib.entities.Coordinate$Builder {
-    public *;
-    public com.yelp.clientlib.entities.Coordinate$Builder build();}
-
--keep public class com.yelp.clientlib.entities.User {
-    public *;}
-
--keep public class com.yelp.clientlib.entities.User$Builder {
-    public *;
-    public com.yelp.clientlib.entities.User$Builder build();}
+-keep class com.yelp.clientlib.entities.*$* {
+    *;
+}
 
 -printmapping build/outputs/mapping/release/mapping.txt
 
