@@ -33,8 +33,7 @@
 -dontwarn org.jdom.**
 -dontwarn org.java.lang.**
 
--dontwarn retrofit2.Platform$Java8
-
+# OkHttp
 # Ignore warnings: https://github.com/square/okhttp/wiki/FAQs
 -dontwarn com.squareup.okhttp.internal.huc.**
 # Ignore warnings: https://github.com/square/okio/issues/60
@@ -42,20 +41,14 @@
 # Ignore warnings: https://github.com/square/retrofit/issues/435
 -dontwarn com.google.appengine.api.urlfetch.**
 
--keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
-   long producerIndex;
-   long consumerIndex;
-}
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
 
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
-    rx.internal.util.atomic.LinkedQueueNode producerNode;
-}
-
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
-    rx.internal.util.atomic.LinkedQueueNode consumerNode;
-}
-
-# Keep Retrofit
+# Retrofit
+-dontwarn retrofit2.Platform$Java8
 
 -keep class com.google.gson.** { *; }
 -keep class com.google.inject.** { *; }
@@ -79,7 +72,6 @@
 -keep class com.fasterxml.jackson.databind.ObjectWriter {
     public ** writeValueAsString(**);
 }
-
 -keepattributes *Annotation*,EnclosingMethod,Signature
 -keepnames class com.fasterxml.jackson.** { *; }
 
@@ -90,17 +82,16 @@
 -keep class com.fasterxml.jackson.annotation.** { *; }
 -keepclassmembers public final enum org.codehaus.jackson.annotate.JsonAutoDetect$Visibility {
  public static final org.codehaus.jackson.annotate.JsonAutoDetect$Visibility *; }
+-keepclassmembers public class com.fasterxml.jackson.databind.PropertyNamingStrategy$LowerCaseWithUnderscoresStrategy {
+    public <init>(...); }
 
+#Yelp Serializable objects
 -keep public class com.yelp.clientlib.entities.SearchResponse {
     public *;}
 
 -keep public class com.yelp.clientlib.entities.SearchResponse$Builder {
     public *;
-    public com.yelp.clientlib.entities.SearchResponse$Builder build();
-    public com.yelp.clientlib.entities.SearchResponse$Builder businesses(java.util.ArrayList<com.yelp.clientlib.entities.Business>);
-    public com.yelp.clientlib.entities.SearchResponse$Builder region(com.yelp.clientlib.entities.Region);
-    public com.yelp.clientlib.entities.SearchResponse$Builder total(java.lang.Integer);
-    }
+    public com.yelp.clientlib.entities.SearchResponse$Builder build();}
 
 -keep public class com.yelp.clientlib.entities.Region {
     public *;}
@@ -150,17 +141,6 @@
 -keep public class com.yelp.clientlib.entities.User$Builder {
     public *;
     public com.yelp.clientlib.entities.User$Builder build();}
-
--keepclassmembers public class com.fasterxml.jackson.databind.PropertyNamingStrategy$LowerCaseWithUnderscoresStrategy {
-   public <init>(...);
-}
-
-# OkHttp
--keepattributes Signature
--keepattributes *Annotation*
--keep class okhttp3.** { *; }
--keep interface okhttp3.** { *; }
--dontwarn okhttp3.**
 
 -printmapping build/outputs/mapping/release/mapping.txt
 
