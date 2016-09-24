@@ -6,22 +6,22 @@ import com.google.auto.value.AutoValue;
 public abstract class BoundingBoxOptions {
 
     /**
-     * Southwest latitude of bounding box.
+     * @return Southwest latitude of bounding box.
      */
     public abstract Double swLatitude();
 
     /**
-     * Southwest longitude of bounding box.
+     * @return Southwest longitude of bounding box.
      */
     public abstract Double swLongitude();
 
     /**
-     * Northeast latitude of bounding box.
+     * @return Northeast latitude of bounding box.
      */
     public abstract Double neLatitude();
 
     /**
-     * Northeast longitude of bounding box.
+     * @return Northeast longitude of bounding box.
      */
     public abstract Double neLongitude();
 
@@ -45,28 +45,28 @@ public abstract class BoundingBoxOptions {
     public abstract static class Builder {
 
         /**
-         * Sets southwest latitude.
+         * @param latitude Sets southwest latitude.
          *
          * @return this
          */
         public abstract Builder swLatitude(Double latitude);
 
         /**
-         * Sets southwest longitude.
+         * @param longitude Sets southwest longitude.
          *
          * @return this
          */
         public abstract Builder swLongitude(Double longitude);
 
         /**
-         * Sets northeast latitude.
+         * @param latitude Sets northeast latitude.
          *
          * @return this
          */
         public abstract Builder neLatitude(Double latitude);
 
         /**
-         * Sets northeast longitude.
+         * @param longitude Sets northeast longitude.
          *
          * @return this
          */

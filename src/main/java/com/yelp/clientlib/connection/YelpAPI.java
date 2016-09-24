@@ -87,7 +87,7 @@ public interface YelpAPI {
      * latitude/longitude in {@link BoundingBoxOptions}.
      *
      * <p>{@link BoundingBoxOptions} is already encoded in {@link BoundingBoxOptions#toString()} for the special URI
-     * character it uses, "encoded" is set to true so Retrofit doesn't encode it again.<p/>
+     * character it uses, "encoded" is set to true so Retrofit doesn't encode it again.
      *
      * @param boundingBox Geographical bounding box to search in.
      * @param params      Key, value pairs as search API params. Keys and values will be URL encoded by {@link QueryMap}.
