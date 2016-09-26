@@ -71,18 +71,18 @@ public abstract class CoordinateOptions {
         public abstract Builder longitude(Double longitude);
 
         /**
-         * @param latitude Sets accuracy of latitude, longitude.
+         * @param accuracy Sets accuracy of latitude, longitude.
          *
          * @return this
          */
-        public abstract Builder accuracy(Double latitude);
+        public abstract Builder accuracy(Double accuracy);
 
         /**
-         * @param accuracy Sets altitude.
+         * @param altitude Sets altitude.
          *
          * @return this
          */
-        public abstract Builder altitude(Double accuracy);
+        public abstract Builder altitude(Double altitude);
 
         /**
          * @param altitudeAccuracy Sets accuracy of altitude.
