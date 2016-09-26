@@ -7,29 +7,29 @@ import com.yelp.clientlib.annotation.Nullable;
 public abstract class CoordinateOptions {
 
     /**
-     * Latitude of geo-point to search near.
+     * @return Latitude of geo-point to search near.
      */
     public abstract Double latitude();
 
     /**
-     * Longitude of geo-point to search near.
+     * @return Longitude of geo-point to search near.
      */
     public abstract Double longitude();
 
     /**
-     * Optional accuracy of latitude, longitude.
+     * @return Optional accuracy of latitude, longitude.
      */
     @Nullable
     public abstract Double accuracy();
 
     /**
-     * Optional altitude of geo-point to search near.
+     * @return Optional altitude of geo-point to search near.
      */
     @Nullable
     public abstract Double altitude();
 
     /**
-     * Optional accuracy of altitude.
+     * @return Optional accuracy of altitude.
      */
     @Nullable
     public abstract Double altitudeAccuracy();
@@ -57,35 +57,35 @@ public abstract class CoordinateOptions {
     public abstract static class Builder {
 
         /**
-         * Sets latitude.
+         * @param latitude Sets latitude.
          *
          * @return this
          */
         public abstract Builder latitude(Double latitude);
 
         /**
-         * Sets longitude.
+         * @param longitude Sets longitude.
          *
          * @return this
          */
         public abstract Builder longitude(Double longitude);
 
         /**
-         * Sets accuracy of latitude, longitude.
+         * @param accuracy Sets accuracy of latitude, longitude.
          *
          * @return this
          */
-        public abstract Builder accuracy(Double latitude);
+        public abstract Builder accuracy(Double accuracy);
 
         /**
-         * Sets altitude.
+         * @param altitude Sets altitude.
          *
          * @return this
          */
         public abstract Builder altitude(Double altitude);
 
         /**
-         * Sets accuracy of altitude.
+         * @param altitudeAccuracy Sets accuracy of altitude.
          *
          * @return this
          */

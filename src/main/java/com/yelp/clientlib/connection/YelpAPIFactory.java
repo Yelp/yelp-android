@@ -12,9 +12,9 @@ import se.akerfeldt.okhttp.signpost.SigningInterceptor;
 /**
  * Util class to create YelpAPI as the stub to use Yelp API. This is the entry point to use this clientlib.
  * <p>
- * Example:<br />
- * YelpAPIFactory apiFactory = new YelpAPIFactory(consumerKey, consumerSecret, token, tokenSecret);<br />
- * YelpAPI yelpAPI = apiFactory.createAPI();<br />
+ * Example:<br>
+ * YelpAPIFactory apiFactory = new YelpAPIFactory(consumerKey, consumerSecret, token, tokenSecret);<br>
+ * YelpAPI yelpAPI = apiFactory.createAPI();<br>
  * Business business = yelpAPI.getBusiness(businessId).execute();
  * </p>
  */
@@ -31,7 +31,7 @@ public class YelpAPIFactory {
      * @param consumerSecret the consumer secret.
      * @param token          the access token.
      * @param tokenSecret    the token secret.
-     * @see <a href="https://www.yelp.com/developers/manage_api_keys=>https://www.yelp.com/developers/manage_api_keys</a>
+     * @see <a href="https://www.yelp.com/developers/manage_api_keys">https://www.yelp.com/developers/manage_api_keys</a>
      */
     public YelpAPIFactory(String consumerKey, String consumerSecret, String token, String tokenSecret) {
         OkHttpOAuthConsumer consumer = new OkHttpOAuthConsumer(consumerKey, consumerSecret);
