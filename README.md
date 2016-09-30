@@ -29,6 +29,7 @@ dependencies {
     ...
 }
 ```
+Proguard rules for the library can be found [here](https://github.com/Yelp/yelp-android/blob/master/proguard-rules.pro)
 
 ## Usage
 
