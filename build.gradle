@@ -19,8 +19,9 @@ android {
     }
 
     packagingOptions {
-        // Submodules will not be wrapped into the output AAR, we exclude the LICENSE files so it doesn't cause
-        // duplication error when checking com.fasterxml.jackson.core:jackson-databind.
+        // com.fasterxml.jackson.core:jackson-databind includes duplicate licenses in it's own submodule dependencies.
+        // Build fails because of this even though the submodules are not wrapped into the output artifacts. We exclude
+        // the LICENSE files from the build so it doesn't fail the process.
         exclude 'META-INF/LICENSE'
     }
 
