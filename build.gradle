@@ -47,8 +47,15 @@ buildscript {
 sourceSets {
     integrationTest {
         java {
-            java.srcDirs = ['src/integration-test/java', 'src/main/java', 'src/test/java']
-            resources.srcDirs =  ['src/integration-test/resources', 'src/test/resources']
+            java.srcDirs = [
+                    'src/integration-test/java',
+                    'src/main/java',
+                    'src/test/java'
+            ]
+            resources.srcDirs =  [
+                    'src/integration-test/resources',
+                    'src/test/resources'
+            ]
         }
     }
 }
