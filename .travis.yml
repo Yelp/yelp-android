@@ -11,3 +11,4 @@ android:
   # White list of SDK licenses to be accepted.
   licenses:
     - 'android-sdk-license-.+'
+    - 'android-sdk-preview-license-.+'
