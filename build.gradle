@@ -10,11 +10,18 @@ android {
         minSdkVersion 15
         targetSdkVersion 25
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    packagingOptions {
+        // Submodules will not be wrapped into the output AAR, we exclude the LICENSE files so it doesn't cause
+        // duplication error when checking com.fasterxml.jackson.core:jackson-databind.
+        exclude 'META-INF/LICENSE'
     }
 
     lintOptions {
@@ -178,7 +185,7 @@ dependencies {
     compile 'se.akerfeldt:okhttp-signpost:1.1.0'
     compile 'com.squareup.okhttp3:okhttp:3.1.2'
 
-    testCompile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.6.3'
+    testCompile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.7.2'
     testCompile 'com.squareup.okhttp3:mockwebserver:3.2.0'
     testCompile 'org.easymock:easymock:3.4'
     testCompile 'org.powermock:powermock-api-easymock:1.6.4'
@@ -189,5 +196,5 @@ dependencies {
     integrationTestCompile 'com.google.auto.value:auto-value:1.2'
     integrationTestCompile 'com.squareup.retrofit2:converter-jackson:2.0.0'
     integrationTestCompile 'se.akerfeldt:okhttp-signpost:1.1.0'
-    integrationTestCompile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.6.3'
+    integrationTestCompile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.7.2'
 }
