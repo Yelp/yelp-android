@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="InvalidPackage">
+    <!-- Some libraries include non-android compatible functions. Lint complains it even though it's not being called
+    in runtime. Here we mark those libraries to be ignored by Lint. -->
+        <ignore regexp=".*retrofit.*" />
+        <ignore regexp=".*auto.value.*" />
+        <ignore regexp=".*fasterxml.jackson.*" />
+    </issue>
+</lint>

@@ -2,6 +2,8 @@ package com.yelp.clientlib.entities.options;
 
 import com.google.auto.value.AutoValue;
 
+import java.util.Locale;
+
 @AutoValue
 public abstract class BoundingBoxOptions {
 
@@ -38,7 +40,10 @@ public abstract class BoundingBoxOptions {
      */
     @Override
     public String toString() {
-        return String.format("%f,%f%%7C%f,%f", swLatitude(), swLongitude(), neLatitude(), neLongitude());
+        return String.format(
+                Locale.getDefault(),
+                "%f,%f%%7C%f,%f", swLatitude(), swLongitude(), neLatitude(), neLongitude()
+        );
     }
 
     @AutoValue.Builder
