@@ -1,9 +1,34 @@
-apply plugin: 'java'
+apply plugin: 'com.android.library'
 apply plugin: 'maven'
 apply plugin: 'signing'
 
-repositories {
-    mavenCentral()
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 25
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        lintConfig rootProject.file('gradle/lint.xml')
+    }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+    }
 }
 
 /**
@@ -15,11 +40,9 @@ repositories {
 sourceSets {
     integrationTest {
         java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/integration-test/java')
+            java.srcDirs = ['src/integration-test/java', 'src/main/java', 'src/test/java']
+            resources.srcDirs =  ['src/integration-test/resources', 'src/test/resources']
         }
-        resources.srcDir file('src/integration-test/resources')
     }
 }
 
@@ -51,18 +74,23 @@ check.dependsOn -= integrationTest
 group = 'com.yelp.clientlib'
 archivesBaseName = 'yelp-android'
 
-task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from javadoc
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
 }
 
-task sourcesJar(type: Jar) {
+task androidJavadocsJar(type: Jar) {
+    classifier = 'javadoc'
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
     classifier = 'sources'
-    from sourceSets.main.allSource
+    from android.sourceSets.main.java.srcDirs
 }
 
 artifacts {
-    archives javadocJar, sourcesJar
+    archives androidJavadocsJar
+    archives androidSourcesJar
 }
 
 task checkOSSRHProperties << {
@@ -137,9 +165,13 @@ signing {
 /**
  * Configure package dependencies.
  */
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.google.auto.value:auto-value:1.1'
+    compile 'com.google.auto.value:auto-value:1.2'
     compile 'com.squareup.retrofit2:retrofit:2.0.0'
     compile 'com.squareup.retrofit2:converter-jackson:2.0.0'
     compile 'oauth.signpost:signpost-core:1.2.1.2'
@@ -153,4 +185,9 @@ dependencies {
     testCompile 'org.powermock:powermock-module-junit4:1.6.4'
     testCompile 'junit:junit:4.12'
     testCompile 'junit-addons:junit-addons:1.4'
+
+    integrationTestCompile 'com.google.auto.value:auto-value:1.2'
+    integrationTestCompile 'com.squareup.retrofit2:converter-jackson:2.0.0'
+    integrationTestCompile 'se.akerfeldt:okhttp-signpost:1.1.0'
+    integrationTestCompile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.6.3'
 }

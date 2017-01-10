@@ -1,18 +1,21 @@
 [![Build Status](https://travis-ci.org/Yelp/yelp-android.svg?branch=master)](https://travis-ci.org/Yelp/yelp-android)
 
 # yelp-android
-A Java library for the Yelp API. It simplifies the process of authentication, request construction, and response 
-parsing for Java/Android developers using the Yelp API. This clientlib requires Java 7 or Android 2.3.
+An Android library for the [Yelp API v2](https://www.yelp.com/developers/documentation/v2/overview). It simplifies the 
+process of authentication, request construction, and response parsing for Android developers using the 
+[Yelp API v2](https://www.yelp.com/developers/documentation/v2/overview). This clientlib has been tested with 
+applications wrote in Android API level 15 and 25.
 
 ## Installation
 
-Download [the latest JAR](https://search.maven.org/remote_content?g=com.yelp.clientlib&a=yelp-android&v=LATEST) or install by using [Maven](https://maven.apache.org/):
+Download [the latest AAR](https://search.maven.org/remote_content?g=com.yelp.clientlib&a=yelp-android&v=LATEST) or 
+install by using [Maven](https://maven.apache.org/):
 
 ```xml
 <dependency>
   <groupId>com.yelp.clientlib</groupId>
   <artifactId>yelp-android</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 
@@ -25,7 +28,7 @@ repositories {
 
 dependencies {
     ...
-    compile 'com.yelp.clientlib:yelp-android:2.0.0'
+    compile 'com.yelp.clientlib:yelp-android:3.0.0'
     ...
 }
 ```
