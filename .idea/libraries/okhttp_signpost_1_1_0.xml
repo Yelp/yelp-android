@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="okhttp-signpost-1.1.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/se.akerfeldt/okhttp-signpost/1.1.0/544600ae042f8fc113acb612ef30c69144b685d4/okhttp-signpost-1.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/se.akerfeldt/okhttp-signpost/1.1.0/715b0aa66dd7e9c178b905ea88adbe9ef821cbe9/okhttp-signpost-1.1.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
