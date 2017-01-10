@@ -9,6 +9,6 @@ android:
     - build-tools-25.0.2
 
   # White list of SDK licenses to be accepted.
-  licenses:
-    - 'android-sdk-license-.+'
-    - 'android-sdk-preview-license-.+'
+  #  licenses:
+  #  - 'android-sdk-license-.+'
+  #  - 'android-sdk-preview-license-.+'
