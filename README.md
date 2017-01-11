@@ -4,7 +4,7 @@
 An Android library for the [Yelp API v2](https://www.yelp.com/developers/documentation/v2/overview). It simplifies the 
 process of authentication, request construction, and response parsing for Android developers using the 
 [Yelp API v2](https://www.yelp.com/developers/documentation/v2/overview). This clientlib has been tested with 
-applications wrote in Android API level 15 and 25.
+applications written in Android API level 15 and 25.
 
 ## Installation
 
